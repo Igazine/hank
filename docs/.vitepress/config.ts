@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
   title: "HAL",
@@ -9,6 +10,16 @@ export default defineConfig({
   srcExclude: ['**/test/**', '**/node_modules/**', '**/README.md', '**/LICENSE.md', '**/package*.json', '**/*.sh'],
   rewrites: {
     'docs/:rest*': ':rest*'
+  },
+  vite: {
+    resolve: {
+      alias: [
+        {
+          find: /^vue(\/.*)?$/,
+          replacement: fileURLToPath(new URL('../node_modules/vue$1', import.meta.url))
+        }
+      ]
+    }
   },
   themeConfig: {
     logo: {
