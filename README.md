@@ -16,5 +16,9 @@ It serves as a strict, unambiguous, and highly readable alternative to configura
 - `/docs`: Documentation and integration guides.
 - `/test/conformance`: The universal HAL test suite used to verify engine compliance.
 
+## Documentation
+
+HAL documentation: [https://igazine.github.io/hal/](https://igazine.github.io/hal/)
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
