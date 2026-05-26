@@ -1,0 +1,52 @@
+() {
+  log.print("09 Deep Nesting & Closures")
+
+  // 1. Deep Flow Control Nesting
+  res1 = Void
+  ? (1) {
+    ? (0) {
+      res1 = "fail"
+    } : {
+      ? (1) {
+        ? (math.gt(10, 5)) {
+          res1 = "deep success"
+        }
+      }
+    }
+  }
+  ? (math.eq(res1, "deep success")) { log.print("Deep Flow Control Nesting: OK") }
+
+  // 2. Deeply Nested Task Calls
+  res2 = math.add(
+    math.add(1, 2),
+    math.add(
+      math.add(3, 4),
+      math.add(5, 6)
+    )
+  )
+  ? (math.eq(res2, 21)) { log.print("Deeply Nested Task Calls: OK") }
+
+  // 3. Lexical Scope Capture (Closures)
+  // make_adder returns a Task that captures 'base' from outer scope
+  make_adder = (base) {
+    ^ (n) {
+      ^ math.add(base, n)
+    }
+  }
+
+  add_ten = make_adder(10)
+  ? (math.eq(add_ten(5), 15)) { log.print("Closure (Read-only Capture): OK") }
+
+  // 4. Nested Closures
+  make_multiplier = (x) {
+    ^ (y) {
+      ^ (z) {
+        ^ math.mul(x, y, z)
+      }
+    }
+  }
+  m = make_multiplier(2)(3)(4) // x=2, y=3, z=4 -> 24
+  ? (math.eq(m, 24)) { log.print("Deep Nested Closures: OK") }
+
+  log.print("09 Pass")
+}

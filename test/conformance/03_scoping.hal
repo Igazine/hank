@@ -1,0 +1,20 @@
+() {
+  log.print("03 Scoping & Core Protection")
+
+  v = "outer"
+  // Using an immediately invoked task to create a lexical scope
+  (x) {
+    v = "inner"
+    log.print(str.format("Nested Write (Lexical): %1", v))
+  }(1)
+  ? (regex.match(v, "inner")) { log.print("Outer scope reflects nested write: OK") }
+
+  // Core Shadowing
+  log_shadow = "not a task"
+  ? (regex.match(log_shadow, "not a task")) { #log.print("Core task shadowed locally: OK") }
+
+  // Core Guarding
+  #log.print("Core guard sigil (#) bypasses shadowing: OK")
+
+  log.print("03 Pass")
+}

@@ -1,0 +1,5 @@
+@ "recursive_b"
+
+(msg) {
+  recursive_b(msg)
+}

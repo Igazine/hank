@@ -1,0 +1,70 @@
+import { defineConfig } from 'vitepress'
+
+export default defineConfig({
+  title: "HAL",
+  description: "Hybrid Automation Language Documentation",
+  base: '/hal/',
+  cleanUrls: false,
+  srcDir: '../',
+  srcExclude: ['**/test/**', '**/node_modules/**', '**/README.md', '**/LICENSE.md', '**/package*.json', '**/*.sh'],
+  rewrites: {
+    'docs/:rest*': ':rest*'
+  },
+  themeConfig: {
+    logo: {
+      text: 'HAL'
+    },
+    nav: [
+      { text: 'Home', link: '/' },
+      { text: 'Guide', link: '/guide/syntax' },
+      { text: 'Standard Library', link: '/stdlib/overview' },
+      { text: 'Host Integration', link: '/runner/architecture' },
+      { text: 'Playground', link: '/playground' }
+    ],
+    sidebar: {
+      '/guide/': [
+        {
+          text: 'Language Guide',
+          items: [
+            { text: 'Syntax & Types', link: '/guide/syntax' },
+            { text: 'Control Flow', link: '/guide/control-flow' },
+            { text: 'Universal Tasks', link: '/guide/tasks' },
+            { text: 'Macros (@)', link: '/guide/macros' }
+          ]
+        }
+      ],
+      '/stdlib/': [
+        {
+          text: 'Standard Library',
+          items: [
+            { text: 'Overview', link: '/stdlib/overview' },
+            { text: 'Execution & Logging', link: '/stdlib/execution' },
+            { text: 'Data Manipulation', link: '/stdlib/data' },
+            { text: 'Logic & Matching', link: '/stdlib/logic' },
+            { text: 'JSON', link: '/stdlib/json' }
+          ]
+        }
+      ],
+      '/runner/': [
+        {
+          text: 'Host Integration',
+          items: [
+            { text: 'Architecture', link: '/runner/architecture' },
+            { text: 'Building a Runner', link: '/runner/integration' },
+            { text: 'Complex Object Bridge', link: '/runner/bridge' }
+          ]
+        }
+      ]
+    },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/Igazine/hal' }
+    ],
+    footer: {
+      message: 'Released under the MIT License.',
+      copyright: 'Copyright 2026-Present Digigun.net|Igazine'
+    },
+    search: {
+      provider: 'local'
+    }
+  }
+})

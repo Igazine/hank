@@ -1,0 +1,17 @@
+() {
+  log.print("13 Logic Module (and, or)")
+
+  // logic.and tests
+  ? (math.eq(logic.and(1, 2, 3), 3)) { log.print("logic.and(all truthy): OK") }
+  ? (!logic.and(1, Void, 3)) { log.print("logic.and(contains Void): OK") }
+  ? (math.eq(logic.and("hello"), "hello")) { log.print("logic.and(single arg): OK") }
+  ? (!logic.and()) { log.print("logic.and(empty): OK") }
+
+  // logic.or tests
+  ? (math.eq(logic.or(Void, 0, 1), 0)) { log.print("logic.or(finds first truthy, even 0): OK") }
+  ? (math.eq(logic.or("a", "b"), "a")) { log.print("logic.or(first truthy): OK") }
+  ? (!logic.or(Void, Void)) { log.print("logic.or(all Void): OK") }
+  ? (!logic.or()) { log.print("logic.or(empty): OK") }
+
+  log.print("13 Pass")
+}

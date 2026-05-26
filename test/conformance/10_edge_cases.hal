@@ -1,0 +1,37 @@
+() {
+  log.print("10 Edge Cases & Stress")
+
+  // 1. String Stress
+  s1 = "  "
+  s2 = ""
+  ? (math.gt(str.length(s1), 0)) { log.print("Whitespace string length: OK") }
+  ? (!str.length(s2)) { log.print("Empty string length: OK") }
+
+  // 2. Omitted Optional Args Out of Order
+  test_args = (?a, ?b, c = 100) {
+    ^ [a, b, c]
+  }
+  // c should default, a and b should be Void
+  res = test_args()
+  ? (!arr.get(res, 0)) { log.print("Omitted Optional A: OK") }
+  ? (math.eq(arr.get(res, 2), 100)) { log.print("Default Parameter C: OK") }
+
+  // 3. Block Result Stress (using IIFE)
+  res3 = () {
+    x = 10
+    y = 20
+    ^ math.add(x, y)
+  }()
+  ? (math.eq(res3, 30)) { log.print("IIFE execution result: OK") }
+
+  // 4. Regex Stress
+  re1 = /\/\\\s\t/
+  ? (re1) { log.print("Escaped Regex Literal: OK") }
+
+  // 5. Nested Task Calls as Arguments
+  log_task = (val) { ^ val }
+  res4 = log_task(log_task(log_task("recursive")))
+  ? (math.eq(res4, "recursive")) { log.print("Recursive Task-in-Task Arguments: OK") }
+
+  log.print("10 Pass")
+}

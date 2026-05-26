@@ -1,0 +1,4 @@
+(name, ?greeting = "Hello") {
+  log.print(str.format("%1, %2", greeting, name))
+  log.print("08 Pass")
+}

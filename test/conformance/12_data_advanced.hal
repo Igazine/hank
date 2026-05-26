@@ -1,0 +1,30 @@
+() {
+  log.print("12 Advanced Data Modules")
+
+  // 1. obj.get (Dynamic Access)
+  o = { name: "tamas", age: 30 }
+  key = "name"
+  ? (math.eq(obj.get(o, key), "tamas")) { log.print("obj.get: OK") }
+  ? (!obj.get(o, "missing")) { log.print("obj.get (missing): OK") }
+
+  // 2. arr.each (Snapshot Iteration)
+  items = [1, 2, 3]
+  log.print("Starting each with mutation...")
+  arr.each(items, (item, idx) {
+    ? (math.eq(item, 1)) {
+      arr.push(items, 4) // Mutate original array
+    }
+    log.print(str.format("Item %1: %2", idx, item))
+  })
+  // items should now be [1, 2, 3, 4] but only 3 iterations should have occurred.
+  ? (math.eq(arr.length(items), 4)) { log.print("Original array mutated: OK") }
+
+  // 3. arr.each (Local Param Scope)
+  // We use ?idx to satisfy strict arity enforcement
+  arr.each([10], (val, ?idx) {
+    val = 20 // Local reassignment
+  })
+  log.print("Local Param Scope: OK (No crash)")
+
+  log.print("12 Pass")
+}

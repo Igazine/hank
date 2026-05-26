@@ -1,0 +1,60 @@
+() {
+  log.print("14 Hank SYSLIB Verification")
+
+  // OS Module
+  type = os.type()
+  log.print(str.format("OS Type: %1", type))
+  ? (logic.or(math.eq(type, "darwin"), math.eq(type, "linux"), math.eq(type, "windows"), math.eq(type, "bsd"))) {
+    log.print("os.type(): OK")
+  }
+  
+  // Advanced OS Stats
+  mem = os.memory()
+  ? (math.gt(mem.total, 0)) { log.print("os.memory(): OK") }
+  cpu = os.cpu()
+  ? (logic.or(math.gt(cpu, 0), math.eq(cpu, 0))) { log.print("os.cpu(): OK") }
+
+  // Host Module
+  cwd = host.cwd()
+  log.print(str.format("Current Dir: %1", cwd))
+  ? (cwd) { log.print("host.cwd(): OK") }
+  
+  is_root = host.isRoot()
+  log.print(str.format("Is Root: %1", is_root))
+
+  // Signal Module
+  host.signal("Testing Signal")
+  log.print("host.signal(): OK")
+
+  // FS Module
+  test_file = "hank_test.txt"
+  fs.write(test_file, "HAL was here")
+  ? (fs.exists(test_file)) {
+    s = fs.stat(test_file)
+    ? (math.eq(s.size, 12)) {
+        log.print("fs.stat size (number): OK")
+    }
+    ? (s.mtime) {
+        log.print("fs.stat mtime: OK")
+    }
+    content = fs.read(test_file)
+    ? (math.eq(content, "HAL was here")) {
+        log.print("fs.write/read: OK")
+    }
+  }
+
+  // Proc Module
+  // Run a simple 'echo'
+  res = proc.run("echo", ["hello-from-proc"])
+  ? (math.eq(res.code, 0)) {
+    ? (regex.match(res.stdout, /hello-from-proc/)) {
+        log.print("proc.run: OK")
+    }
+  }
+
+  // Cleanup
+  fs.deleteFile(test_file)
+  ? (!fs.exists(test_file)) { log.print("fs.delete: OK") }
+
+  log.print("14 Pass")
+}

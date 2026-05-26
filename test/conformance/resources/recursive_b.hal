@@ -1,0 +1,3 @@
+(msg) {
+  log.print(str.format("Recursive message: %1", msg))
+}

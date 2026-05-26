@@ -1,0 +1,20 @@
+() {
+  log.print("11 Dynamic Regex Compilation")
+
+  // 1. Literal Regex (Sanity Check)
+  re1 = /world/i
+  ? (regex.match("Hello WORLD", re1)) { log.print("Literal Regex: OK") }
+
+  // 2. Dynamic Regex Parse
+  pattern = "hal"
+  re2 = regex.parse(pattern, "i")
+  ? (regex.match("HYBRID AUTOMATION LANGUAGE (HAL)", re2)) { log.print("Dynamic Regex Parse: OK") }
+
+  // 3. Negative Match
+  ? (!regex.match("No match here", re2)) { log.print("Negative Match: OK") }
+
+  // 4. String Pattern Fallback (Implicit Regex)
+  ? (regex.match("foobar", "foo")) { log.print("String Pattern Fallback: OK") }
+
+  log.print("11 Pass")
+}
