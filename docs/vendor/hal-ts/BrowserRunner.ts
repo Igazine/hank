@@ -98,6 +98,28 @@ export class BrowserRunner {
         this.coreScope.set(name, { type: ValueType.Object, value: moduleObj });
     }
 
+    private halEquals(a: Value, b: Value): boolean {
+        if (a.type !== b.type) return false;
+        switch (a.type) {
+            case ValueType.Void: return true;
+            case ValueType.Number: return a.value === b.value;
+            case ValueType.String: return a.value === b.value;
+            case ValueType.Array:
+                if (a.value.length !== b.value.length) return false;
+                for (let i = 0; i < a.value.length; i++) if (!this.halEquals(a.value[i], b.value[i])) return false;
+                return true;
+            case ValueType.Object:
+                if (a.value.size !== b.value.size) return false;
+                for (const [k, v1] of a.value) {
+                    const v2 = b.value.get(k);
+                    if (!v2 || !this.halEquals(v1, v2)) return false;
+                }
+                return true;
+            case ValueType.Opaque: return a.label === b.label && a.value === b.value;
+            default: return false;
+        }
+    }
+
     private registerStd() {
         this.registerModule('log', {
             print: (args) => {
@@ -243,7 +265,7 @@ export class BrowserRunner {
             },
             eq: (args) => {
                 if (args.length < 2) return { type: ValueType.Void };
-                return this.valToString(args[0]) === this.valToString(args[1]) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
+                return this.halEquals(args[0], args[1]) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
             }
         });
 
@@ -262,6 +284,10 @@ export class BrowserRunner {
                     if (a.type !== ValueType.Void) return a;
                 }
                 return { type: ValueType.Void };
+            },
+            eq: (args) => {
+                if (args.length < 2) return { type: ValueType.Void };
+                return this.halEquals(args[0], args[1]) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
             }
         });
 

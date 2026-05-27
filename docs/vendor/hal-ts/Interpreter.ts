@@ -26,7 +26,7 @@ export class Interpreter implements ExecutionContext {
             case 'Assign':
                 const val = this.evalInScope(node.value, scope);
                 scope.set(node.name, val);
-                return { type: ValueType.Void };
+                return val;
             case 'Block':
                 // --- TASK HOISTING PASS ---
                 for (const stmt of node.stmts) {
@@ -34,7 +34,6 @@ export class Interpreter implements ExecutionContext {
                         if (stmt.value.kind === 'FuncDef') {
                             scope.set(stmt.name, this.evalInScope(stmt.value, scope));
                         } else if (stmt.value.kind === 'Assign') {
-                            // Handle nested macro assignments for hoisting
                             const inner = stmt.value;
                             if (inner.value.kind === 'FuncDef') {
                                 scope.set(inner.name, this.evalInScope(inner.value, scope));
