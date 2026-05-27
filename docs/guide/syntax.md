@@ -48,13 +48,16 @@ name = "tamas"
 // Calculation assignment
 sum = math.add(10, 20)
 
+// Chained assignment
+a = b = 6 // both a and b are now 6
+
 // Inline Task definition and assignment
 greet = (msg) {
   log.print(msg)
 }
 ```
 
-Assignments always evaluate to `Void`, ensuring they do not leak values into block results.
+Assignments evaluate to the assigned value. This enables chained assignments but also means that if an assignment is the final statement of a Task or block, that value will be the implicit return result.
 
 ## No Binary Operators
 

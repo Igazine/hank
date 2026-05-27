@@ -81,7 +81,7 @@ AnyCharExceptNewline ::= Char - "\n"
 A compliant Parser MUST emit an AST constructable from the following logical nodes:
 
 *   **`Block(statements)`**: A sequential list of statements. Evaluates to the result of its final statement, or `Void` if empty.
-*   **`Assign(name, expr)`**: Binds the evaluated result of `expr` to `name` in the current scope. **Evaluates to `Void`.**
+*   **`Assign(name, expr)`**: Binds the evaluated result of `expr` to `name` in the current scope. **Evaluates to the assigned value.**
 *   **`Literal(value)`**: A concrete `String`, `Number`, `Array`, or `Object`.
 *   **`Ident(name, isCore)`**: A variable lookup. If `isCore` is true (triggered by `#`), lookup MUST happen exclusively in the `coreScope`.
 *   **`Field(object, fieldName)`**: Property retrieval from an Object, Array, or String.
