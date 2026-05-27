@@ -28,17 +28,18 @@ Returns `Number(1)` if `a == b` (value equality), otherwise `Void`.
 ## `regex` Module
 
 ### `regex.parse(pattern, ?flags = "")`
-Compiles a String into a `Regex` literal at runtime.
+Compiles a String pattern into an **`Opaque`** RegExp handle.
 
 ```hal
 () {
+  // re is now an Opaque handle
   re = regex.parse("hello", "i")
   ? (regex.match("HELLO world", re)) { log.print("Matched!") }
 }
 ```
 
 ### `regex.match(string, pattern)`
-Returns `Number(1)` if the string matches the pattern, otherwise `Void`.
+Returns `Number(1)` if the string matches the pattern, otherwise `Void`. The `pattern` can be a String or an `Opaque` handle returned by `regex.parse`.
 
 ### `regex.replace(string, pattern, replacement)`
 Returns a new string with all occurrences of the pattern replaced.

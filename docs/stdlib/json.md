@@ -22,6 +22,8 @@ Parses a JSON-formatted string and returns the corresponding HAL data structure.
 ### `json.stringify(value)`
 Serializes a HAL value into a JSON string.
 
+> **State Protection**: `Opaque` values (handles to Host state) are **not serializable**. If `stringify` encounters an `Opaque` value, it will either return `Void` or trigger a Host-defined error to prevent leaking internal memory state.
+
 ```hal
 () {
   obj = { x: 10, y: 20 }

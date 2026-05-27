@@ -26,7 +26,7 @@ HAL internally supports seven absolute value types:
 | **String** | UTF-8 character sequence. | `s = "hello"` |
 | **Array** | Ordered list of HAL values. | `a = [1, 2, 3]` |
 | **Object** | Unordered key-value map. | `o = { x: 1, y: 2 }` |
-| **Regex** | Pattern and options. | `r = /test/im` |
+| **Opaque** | Non-serializable Host state handle. | *Returns from Native Tasks* |
 | **Task** | A callable unit of execution. | `t = (x) { ^ x }` |
 
 ## Assignments
@@ -78,7 +78,9 @@ HAL is a **symbol-delimited** language. It does not use semicolons to terminate 
 
 ## Variables & Identifiers
 
-Identifiers consist of alphanumeric characters and underscores `[a-zA-Z0-9_]`. They are case-sensitive.
+Identifiers consist of alphanumeric characters and underscores `[a-zA-Z_][a-zA-Z0-9_]*`. They are case-sensitive.
+
+**Rule**: An identifier MUST begin with a letter or an underscore. It cannot begin with a digit (leading digits are reserved for Number literals).
 
 ### Existence-is-Truth
 HAL uses a simple truthiness rule:

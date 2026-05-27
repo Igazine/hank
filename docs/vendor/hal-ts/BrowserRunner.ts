@@ -21,7 +21,7 @@ export interface BrowserRunnerOptions {
 export class BrowserRunner {
     private coreScope: Scope = new HALScope();
     private options: BrowserRunnerOptions;
-    private astCache: Map<string, any> = new Map(); // Using any for Expr to avoid complex type issues in this surgical edit
+    private astCache: Map<string, any> = new Map();
 
     constructor(options: BrowserRunnerOptions = {}) {
         this.options = options;
@@ -71,15 +71,7 @@ export class BrowserRunner {
         const ast = this.astCache.get(id);
 
         const interpreter = new Interpreter(undefined, this.coreScope);
-        const scriptTask = interpreter.run(ast);
-
-        if (scriptTask.type !== ValueType.Task) {
-            throw new Error("HAL Error: Script must evaluate to a Task definition.");
-        }
-
-        const res = interpreter.call(scriptTask, args, interpreter.globalScope);
-        if (res.kind === 'Error') throw new Error(res.message);
-        return res.value;
+        return interpreter.call(interpreter.run(ast), args);
     }
 
     private valToString(v: Value): string {
@@ -89,7 +81,7 @@ export class BrowserRunner {
             case ValueType.Void: return 'null';
             case ValueType.Array: return '[Array]';
             case ValueType.Object: return '{Object}';
-            case ValueType.Regex: return '[Regex]';
+            case ValueType.Opaque: return `[Opaque:${v.label || 'Unknown'}]`;
             case ValueType.Task: return '[Task]';
             default: return 'null';
         }
@@ -100,7 +92,7 @@ export class BrowserRunner {
         for (const [tName, func] of Object.entries(tasks)) {
             moduleObj.set(tName, {
                 type: ValueType.Task,
-                task: { isNative: true, name: `${name}.${tName}`, func }
+                task: { isNative: true, name: `${name}.${tName}`, native: func }
             });
         }
         this.coreScope.set(name, { type: ValueType.Object, value: moduleObj });
@@ -193,15 +185,15 @@ export class BrowserRunner {
                 if (flags.includes('i')) jsFlags += "i";
                 if (flags.includes('m')) jsFlags += "m";
                 try {
-                    return { type: ValueType.Regex, pattern, flags, engine: new RegExp(pattern, jsFlags) };
+                    return { type: ValueType.Opaque, label: 'RegExp', value: new RegExp(pattern, jsFlags) };
                 } catch (e) { return { type: ValueType.Void }; }
             },
             match: (args) => {
                 if (args.length < 2) return { type: ValueType.Void };
                 const s = this.valToString(args[0]);
                 const pattern = args[1];
-                if (pattern.type === ValueType.Regex) {
-                    return pattern.engine?.test(s) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
+                if (pattern.type === ValueType.Opaque && pattern.label === 'RegExp') {
+                    return pattern.value.test(s) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
                 }
                 return s.includes(this.valToString(pattern)) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
             },
@@ -210,10 +202,8 @@ export class BrowserRunner {
                 const s = this.valToString(args[0]);
                 const pattern = args[1];
                 const repl = this.valToString(args[2]);
-                if (pattern.type === ValueType.Regex && pattern.engine) {
-                    // Note: Regex in HAL doesn't have a 'g' flag yet in spec, but for replace we usually want it.
-                    // For now, follow the engine's behavior.
-                    return { type: ValueType.String, value: s.replace(pattern.engine, repl) };
+                if (pattern.type === ValueType.Opaque && pattern.label === 'RegExp') {
+                    return { type: ValueType.String, value: s.replace(pattern.value, repl) };
                 }
                 return { type: ValueType.String, value: s.split(this.valToString(pattern)).join(repl) };
             }
@@ -327,7 +317,17 @@ export class BrowserRunner {
                     return this.mapAnyToHal(data);
                 } catch (e) { return { type: ValueType.Void }; }
             },
-            stringify: (args) => (args.length > 0) ? { type: ValueType.String, value: JSON.stringify(this.mapHalToAny(args[0])) } : { type: ValueType.Void }
+            stringify: (args) => {
+                if (args.length === 0) return { type: ValueType.Void };
+                const checkOpaque = (val: Value): boolean => {
+                    if (val.type === ValueType.Opaque) return true;
+                    if (val.type === ValueType.Array) return val.value.some((i: any) => checkOpaque(i));
+                    if (val.type === ValueType.Object) return Array.from(val.value.values()).some((v: any) => checkOpaque(v));
+                    return false;
+                };
+                if (checkOpaque(args[0])) return { type: ValueType.Void };
+                return { type: ValueType.String, value: JSON.stringify(this.mapHalToAny(args[0])) };
+            }
         });
 
         this.registerModule('browser', {

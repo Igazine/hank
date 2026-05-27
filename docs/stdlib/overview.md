@@ -12,8 +12,8 @@ Official HAL implementations provide the standard library as an **optional, inje
 
 Variables in HAL are purely inert memory containers. They do not have methods. All operations on data types must be performed by passing the variable to the appropriate module task.
 
-- **Incorrect**: `my_string.match(/pattern/)`
-- **Correct**: `str.match(my_string, /pattern/)`
+- **Incorrect**: `my_string.match("pattern")`
+- **Correct**: `str.match(my_string, "pattern")`
 
 ## Module Namespacing
 
