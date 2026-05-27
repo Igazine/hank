@@ -24,11 +24,7 @@
   }()
   ? (math.eq(res3, 30)) { log.print("IIFE execution result: OK") }
 
-  // 4. Regex Stress
-  re1 = /\/\\\s\t/
-  ? (re1) { log.print("Escaped Regex Literal: OK") }
-
-  // 5. Nested Task Calls as Arguments
+  // 4. Nested Task Calls as Arguments
   log_task = (val) { ^ val }
   res4 = log_task(log_task(log_task("recursive")))
   ? (math.eq(res4, "recursive")) { log.print("Recursive Task-in-Task Arguments: OK") }

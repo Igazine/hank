@@ -1,20 +1,26 @@
 () {
-  log.print("11 Dynamic Regex Compilation")
+  log.print("11 Dynamic Regex & Opaque Type")
 
-  // 1. Literal Regex (Sanity Check)
-  re1 = /world/i
-  ? (regex.match("Hello WORLD", re1)) { log.print("Literal Regex: OK") }
-
-  // 2. Dynamic Regex Parse
+  // 1. Opaque Creation (Dynamic Regex Parse)
   pattern = "hal"
-  re2 = regex.parse(pattern, "i")
-  ? (regex.match("HYBRID AUTOMATION LANGUAGE (HAL)", re2)) { log.print("Dynamic Regex Parse: OK") }
+  re1 = regex.parse(pattern, "i")
+  
+  // 2. Opaque Semantics (Truthy & Non-Empty)
+  ? (re1) { log.print("Opaque handle creation: OK") }
 
-  // 3. Negative Match
-  ? (!regex.match("No match here", re2)) { log.print("Negative Match: OK") }
+  // 3. Regex Matching (using Opaque)
+  ? (regex.match("HYBRID AUTOMATION LANGUAGE (HAL)", re1)) { log.print("Regex match with Opaque: OK") }
 
-  // 4. String Pattern Fallback (Implicit Regex)
+  // 4. Negative Match
+  ? (!regex.match("No match here", re1)) { log.print("Negative Match: OK") }
+
+  // 5. String Pattern Fallback (Implicit Regex)
   ? (regex.match("foobar", "foo")) { log.print("String Pattern Fallback: OK") }
+
+  // 6. Opaque Coercion (Debugging)
+  // Note: Host implementations are encouraged to label this [Opaque:RegExp]
+  s = str.format("%1", re1)
+  ? (regex.match(s, "Opaque")) { log.print("Opaque string coercion: OK") }
 
   log.print("11 Pass")
 }

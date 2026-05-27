@@ -16,8 +16,5 @@
   obj = { key: "value", nested: { a: 1 } }
   ? (obj.key) { log.print("Objects: OK") }
 
-  re = /test/im
-  ? (re) { log.print("Regex Literals: OK") }
-
   log.print("01 Pass")
 }

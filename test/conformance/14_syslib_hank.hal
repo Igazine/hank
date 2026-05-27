@@ -43,11 +43,9 @@
     }
   }
 
-  // Proc Module
-  // Run a simple 'echo'
   res = proc.run("echo", ["hello-from-proc"])
   ? (math.eq(res.code, 0)) {
-    ? (regex.match(res.stdout, /hello-from-proc/)) {
+    ? (regex.match(res.stdout, "hello-from-proc")) {
         log.print("proc.run: OK")
     }
   }

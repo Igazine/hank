@@ -24,7 +24,18 @@
   arr.each([10], (val, ?idx) {
     val = 20 // Local reassignment
   })
-  log.print("Local Param Scope: OK (No crash)")
+  // 4. JSON & Opaque State (Non-serializability)
+  re = regex.parse("test")
+  json_res = json.stringify({ key: re })
+  // Should either evaluate to Void or the object without the opaque key
+  ? (!json_res) {
+    log.print("Opaque non-serializability (Void): OK")
+  } : {
+    // If it returns a string, it must not contain the opaque reference in a way that breaks parity
+    ? (!regex.match(json_res, "test")) {
+        log.print("Opaque non-serializability (Omitted): OK")
+    }
+  }
 
   log.print("12 Pass")
 }
