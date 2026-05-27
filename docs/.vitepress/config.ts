@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig({
   title: "Hank",
   description: "Hybrid Automation Language Documentation",
-  base: '/hal/',
+  base: '/hank/',
   cleanUrls: false,
   srcDir: '../',
   srcExclude: ['**/test/**', '**/node_modules/**', '**/README.md', '**/LICENSE.md', '**/package*.json', '**/*.sh'],
@@ -71,7 +71,7 @@ export default defineConfig({
       ]
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/Igazine/hal' }
+      { icon: 'github', link: 'https://github.com/Igazine/hank' }
     ],
     footer: {
       message: 'Released under the MIT License.',
