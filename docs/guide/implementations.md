@@ -1,6 +1,6 @@
 # Official Implementations
 
-HAL is a language specification. To use HAL in your project, you must embed one of the official language-specific engines. 
+HAL is an open language specification. While anyone is free to implement the HAL engine in any language, we provide several official, spec-compliant implementations to ensure maximum parity and ease of use.
 
 All official implementations follow the same bit-perfect execution model and include the spec-compliant [Standard Library](/stdlib/overview).
 
