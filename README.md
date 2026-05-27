@@ -28,7 +28,8 @@ HAL is designed to be embedded in any host environment. The following implementa
 
 ## Documentation
 
-HAL documentation: [https://igazine.github.io/hal/](https://igazine.github.io/hal/)
+- **Philosophy & Vision**: [The HAL API Multiverse](https://igazine.github.io/hal/guide/philosophy)
+- **Technical Docs**: [https://igazine.github.io/hal/](https://igazine.github.io/hal/)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

@@ -28,7 +28,7 @@ HAL is a purely symbolic, instruction-oriented, embeddable language designed for
 
 ## Core Philosophy
 
-HAL is built on three unbreakable pillars that ensure absolute predictability across different host environments.
+HAL is built on three unbreakable pillars that ensure absolute predictability across different host environments. [Read the full Philosophy & Vision &rarr;](/guide/philosophy)
 
 ### 1. The Air Gap Principle
 HAL is target-agnostic and has zero built-in I/O capabilities. It cannot read files, access the network, or interact with the operating system on its own. All environmental mutations are deferred to host-provided Native Tasks.

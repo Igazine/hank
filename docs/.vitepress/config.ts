@@ -38,6 +38,7 @@ export default defineConfig({
         {
           text: 'Language Guide',
           items: [
+            { text: 'Philosophy & Vision', link: '/guide/philosophy' },
             { text: 'Syntax & Types', link: '/guide/syntax' },
             { text: 'Control Flow', link: '/guide/control-flow' },
             { text: 'Universal Tasks', link: '/guide/tasks' },
