@@ -1,5 +1,5 @@
 # HAL Standard Library Specification
-**Version:** 1.0.0-alpha
+**Version:** 1.1.0-alpha
 
 ## 1. Overview
 This document defines the official HAL Standard Library. Official language implementations (Go, Rust, TS, Haxe) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
@@ -87,4 +87,4 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 *   **`stringify(value)`**: Serializes a HAL `Value` into a JSON-formatted String.
 
 ---
-*Status: v1.0.0-alpha (Strict Procedural Purity)*
+*Status: v1.1.0-alpha (Strict Procedural Purity)*

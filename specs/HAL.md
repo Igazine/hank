@@ -70,6 +70,7 @@ AnyCharExceptNewline ::= Char - "\n"
 
 ### Grammar Disambiguation & Notes
 *   **The Entry Point**: Every valid HAL script is a `TaskDef` (a single task). It may be preceded by zero or more `@` Macro headers. There is no concept of "loose" code outside of the main task.
+*   **Identifiers**: As defined in the EBNF, identifiers MUST begin with a letter (`a-z`, `A-Z`) or an underscore (`_`). They cannot begin with a digit. Leading digits are strictly reserved for `Number` literals.
 *   **Comments**: `//` comments are ignored by the Lexer and have no AST representation.
 *   **String Quotes**: Both double (`"`) and single (`'`) quotes are permitted. The string must terminate with the matching quote character.
 *   **Number Literals**: The Lexer **MUST** greedily consume a leading `-` followed immediately by a `Digit` as part of a `Number` literal, regardless of triggering context.
