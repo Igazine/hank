@@ -24,6 +24,7 @@ Provides interaction with the HAL virtual machine itself.
 ### 2.3 `log` Module
 Provides unified output capabilities.
 *   **`print(...args)`**: Serializes arguments and outputs to the standard stream.
+    - **Recommended Serialization**: Implementations SHOULD represent `Void` as the string `"Void"` and remove trailing `.0` from Numbers to maintain ecosystem consistency. Arrays and Objects MAY be represented by type labels (e.g., `"[Array]"`) or full JSON serialization depending on Host complexity.
 *   **`error(...args)`**: Outputs to the error stream.
 *   **`warn(...args)`**: Outputs with a "warning" decoration.
 
