@@ -30,7 +30,7 @@ The Dart engine brings HAL to the mobile and desktop application world. It is de
 *   **Best for**: Dynamic logic in Flutter apps (iOS/Android/Desktop), allowing you to update app behavior without submitting a new binary to app stores.
 
 ## Haxe
-A versatile, multi-target engine that can be embedded in C++, JS, Java, and more. It powers the original [Hank Orchestrator](https://github.com/Igazine/hank).
+A versatile, multi-target engine that can be embedded in C++, JS, Java, and more.
 
 *   **Repository**: [Igazine/hal-haxe](https://github.com/Igazine/hal-haxe)
 *   **Best for**: Multi-platform tools, performance-critical Haxe applications, and cross-target automation.
