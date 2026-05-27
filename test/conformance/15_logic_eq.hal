@@ -1,0 +1,48 @@
+() {
+  // String equality
+  log.print("Test 1: logic.eq(\"abc\", \"abc\")")
+  ? (logic.eq("abc", "abc")) {
+    log.print("PASS")
+  } : {
+    log.error("FAIL")
+  }
+
+  log.print("Test 2: logic.eq(\"abc\", \"def\")")
+  ? (logic.eq("abc", "def")) {
+    log.error("FAIL")
+  } : {
+    log.print("PASS")
+  }
+
+  // Number equality
+  log.print("Test 3: logic.eq(123, 123)")
+  ? (logic.eq(123, 123)) {
+    log.print("PASS")
+  } : {
+    log.error("FAIL")
+  }
+
+  // Deep equality (Array)
+  log.print("Test 4: logic.eq([1, 2], [1, 2])")
+  ? (logic.eq([1, 2], [1, 2])) {
+    log.print("PASS")
+  } : {
+    log.error("FAIL")
+  }
+
+  // Deep equality (Object)
+  log.print("Test 5: logic.eq({x: 1}, {x: 1})")
+  ? (logic.eq({x: 1}, {x: 1})) {
+    log.print("PASS")
+  } : {
+    log.error("FAIL")
+  }
+
+  // Backward compatibility (math.eq)
+  log.print("Test 6: math.eq(\"xyz\", \"xyz\")")
+  ? (math.eq("xyz", "xyz")) {
+    log.print("PASS")
+  } : {
+    log.error("FAIL")
+  }
+}

@@ -66,7 +66,7 @@ Provides unified output capabilities.
 *   **`div(a, b)`**: Returns `a / b`.
 *   **`gt(a, b)`**: Returns `1` if `a > b`, otherwise `Void`.
 *   **`lt(a, b)`**: Returns `1` if `a < b`, otherwise `Void`.
-*   **`eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`.
+*   **`eq(a, b)`**: (Deprecated) Alias for `logic.eq`.
 
 ### 4.2 `regex` Module
 *   **`parse(pattern, ?flags = "")`**: Compiles a raw String pattern into an **`Opaque`** (RegExp) handle.
@@ -77,6 +77,7 @@ Provides unified output capabilities.
 Provides functional logical composition. Note: These tasks do NOT support short-circuiting.
 *   **`and(...args)`**: Returns the last argument if all are truthy (not `Void`), otherwise returns `Void`.
 *   **`or(...args)`**: Returns the first truthy argument (not `Void`), otherwise returns `Void`.
+*   **`eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`. Supports all primitive types.
 
 ---
 
