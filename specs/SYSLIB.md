@@ -1,5 +1,5 @@
 # HAL System Library (SYSLIB) Specification
-**Version:** 1.2.0-alpha2
+**Version:** 1.2.0-alpha3
 
 ## 1. Overview
 The HAL System Library provides system-level primitives for high-performance automation. Unlike the Standard Library (STDLIB), these modules are closely tied to the Host Operating System and may not be available in restricted or browser-based environments.

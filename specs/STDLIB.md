@@ -1,5 +1,5 @@
 # HAL Standard Library Specification
-**Version:** 1.2.0-alpha2
+**Version:** 1.2.0-alpha3
 
 ## 1. Overview
 This document defines the official HAL Standard Library. Official language implementations (Go, Rust, TS, Haxe) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
