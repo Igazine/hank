@@ -1,15 +1,16 @@
-# HAL (Hybrid Automation Language) Specification
-**Version:** 1.2.0-alpha3
+# Hank Specification
+**Version:** 1.3.0-alpha1
 
 ## 1. Philosophy & Purpose
-HAL is a purely symbolic, instruction-oriented language designed for automation and orchestration. It is not a general-purpose programming language. It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML. 
+Hank is a purely symbolic, instruction-oriented language designed for automation and orchestration. It is not a general-purpose programming language. It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML. 
 
-HAL bridges declarative configuration with imperative execution by treating data types as primitive memory containers and deferring all environmental mutations to host-provided "Native Tasks".
+Hank bridges declarative configuration with imperative execution by treating data types as primitive memory containers and deferring all environmental mutations to host-provided "Native Tasks".
 
 ### Core Tenets
 1. **"Everything is an Identifier":** There are no reserved keywords for values (no `true`, `false`, `null`). 
 2. **Existence-is-Truth:** A variable evaluating to a concrete value (including `0`, `""`, or `[]`) is Truthy. An unassigned/empty identifier evaluates to `Void`, which is strictly Falsy.
-3. **No Inline Arithmetic or Concatenation:** HAL lacks binary operators (`+`, `-`, `*`, `/`). There is no built-in syntax for String or Array concatenation. All data manipulation is handled via explicit task calls (e.g., `math.add()`, `str.concat()`).
+3. **No Inline Arithmetic or Concatenation:** Hank lacks binary operators (`+`, `-`, `*`, `/`). There is no built-in syntax for String or Array concatenation. All data manipulation is handled via explicit task calls (e.g., `math.add()`, `str.concat()`).
+
 
 ## 2. Type System
 An implementation MUST internally support the following seven absolute value types:
@@ -19,8 +20,8 @@ An implementation MUST internally support the following seven absolute value typ
 4. **Array**: Ordered list of Values.
 5. **Object**: Unordered key-value map (`String` -> `Value`).
 6. **Opaque**: Represents a black-box handle to volatile Host State (e.g., a compiled Regex engine, a File handle, or a Network Socket).
-    - **Generation**: HAL scripts cannot instantiate `Opaque` values directly. They are created and returned exclusively by Host-provided Native Tasks.
-    - **Semantics**: `Opaque` values are strictly Truthy. They are inert and impenetrable to the HAL Interpreter; they can only be passed as arguments back to Native Tasks.
+    - **Generation**: Hank scripts cannot instantiate `Opaque` values directly. They are created and returned exclusively by Host-provided Native Tasks.
+    - **Semantics**: `Opaque` values are strictly Truthy. They are inert and impenetrable to the Hank Interpreter; they can only be passed as arguments back to Native Tasks.
     - **Labeling**: When a Host creates an `Opaque` value, it SHOULD provide a short string label (e.g., `"RegExp"`) for debugging and string coercion purposes.
     - **Serialization**: `Opaque` values represent volatile runtime state and are NOT serializable across the Air Gap.
 7. **Task**: A callable unit of execution (Native or User-defined).
@@ -66,7 +67,7 @@ AnyCharExceptNewline ::= Char - "\n"
 ```
 
 ### Grammar Disambiguation & Notes
-*   **The Entry Point**: Every valid HAL script is a `TaskDef` (a single task). It may be preceded by zero or more `@` Macro headers. There is no concept of "loose" code outside of the main task.
+*   **The Entry Point**: Every valid Hank script is a `TaskDef` (a single task). It may be preceded by zero or more `@` Macro headers. There is no concept of "loose" code outside of the main task.
 *   **Identifiers**: As defined in the EBNF, identifiers MUST begin with a letter (`a-z`, `A-Z`) or an underscore (`_`). They cannot begin with a digit. Leading digits are strictly reserved for `Number` literals.
 *   **Comments**: `//` comments are ignored by the Lexer and have no AST representation.
 *   **String Quotes**: Both double (`"`) and single (`'`) quotes are permitted. The string must terminate with the matching quote character.
@@ -93,7 +94,7 @@ A compliant Parser MUST emit an AST constructable from the following logical nod
 ## 5. Execution Semantics
 
 ### 5.1 Scoping & Core Protection
-HAL enforces strict lexical scoping.
+Hank enforces strict lexical scoping.
 *   A `Scope` maps identifiers to values. Every `Scope` (except the root) has a `parentScope`.
 *   When resolving an identifier, the Interpreter searches the current scope, then the parent, recursively. If not found, it returns `Void`.
 *   **Lexical Scopes**: New lexical scopes are created **only** by `FuncDef` bodies and `FlowControl` branches.
@@ -130,10 +131,11 @@ The `@` sigil is strict Parse-Time Macro Expansion.
 *   **Syntax**: `@ "path/to/script"` or `@scriptName`
 *   **Mechanism**: When the Parser encounters this sigil, it MUST request the raw string content of the resource from the Runner.
 *   **Identifier Shorthand**: If an `Identifier` is provided instead of a `String` (e.g., `@mytask`), it is treated strictly as a shorthand for a literal string path (e.g., `@ "mytask"`).
-*   **Task Name Derivation**: The identifier assigned to the task is the final segment of the path, strictly stripped of any `.hal` extension (e.g., `@ "a/b/c.hal"` -> `c`, `@mytask` -> `mytask`).
-*   **Structure**: Every imported `.hal` file MUST follow the `Script` grammar (zero-or-more macro headers followed by exactly one task).
+*   **Task Name Derivation**: The identifier assigned to the task is the final segment of the path, strictly stripped of any **`.hank`** extension (e.g., `@ "a/b/c.hank"` -> `c`, `@mytask` -> `mytask`).
+*   **Structure**: Every imported **`.hank`** file MUST follow the `Script` grammar (zero-or-more macro headers followed by exactly one task).
 *   **Injection**: The Parser parses the resource and injects an `Assign` node into the lexical block where the `@` directive appeared.
 *   **Hoisting Compatibility**: Assignments produced by `@` macro expansion participate in Pass 1 (Hoisting) on equal terms with user-written assignments.
-*   **Scoping**: Any tasks imported via macro headers in a `.hal` file are injected into the **same lexical block** as the parent task.
+*   **Scoping**: Any tasks imported via macro headers in a **`.hank`** file are injected into the **same lexical block** as the parent task.
+
 *   **Recursion**: Macro headers MUST be expanded recursively by the Parser during the initial transformation.
 *   **Circular Dependencies**: A compliant Parser **MUST** detect circular macro dependencies and throw a fatal parse-time error.

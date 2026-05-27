@@ -1,8 +1,8 @@
-# HAL Runner Specification
-**Version:** 1.2.0-alpha3
+# Hank Runner Specification
+**Version:** 1.3.0-alpha1
 
 ## 1. The Runner Role
-The Runner is the environment-specific host that encapsulates the HAL Interpreter. It provides the "bridge" between the pure, memory-only HAL instruction set and the host's Operating System, filesystem, and network.
+The Runner is the environment-specific host that encapsulates the Hank Interpreter. It provides the "bridge" between the pure, memory-only Hank instruction set and the host's Operating System, filesystem, and network.
 
 ### 1.1 The Air Gap Principle
 A compliant Runner MUST enforce a strict separation of concerns:
@@ -31,7 +31,7 @@ When a Runner is asked to execute a script, it MUST perform a recursive pre-proc
     *   Value = The content associated with the resolved absolute path in `pathCache`.
 
 ### 2.2 Handshake
-The Runner MUST provide the completed `macroMap` to the HAL Parser. This ensures that when the Parser encounters a token like `@ "utils"`, it can retrieve the pre-loaded content without performing I/O.
+The Runner MUST provide the completed `macroMap` to the Hank Parser. This ensures that when the Parser encounters a token like `@ "utils"`, it can retrieve the pre-loaded content without performing I/O.
 
 ## 3. The Core Handshake (Injection)
 The Runner MUST initialize the Interpreter with a `coreScope` pre-populated with Native Tasks.
@@ -40,29 +40,29 @@ The Runner MUST initialize the Interpreter with a `coreScope` pre-populated with
 A Native Task is a function defined in the host language with the following signature:
 `function(Arguments: Array<Value>, Context: ExecutionContext) -> Value`
 
-*   **Arguments**: An array of HAL values provided by the caller.
+*   **Arguments**: An array of Hank values provided by the caller.
 *   **ExecutionContext**: A bridge object providing:
-    *   **`parse(Source: String) -> Expr`**: Lexes and parses a HAL source string. If the source is invalid HAL, it **MUST** throw a host exception (serialized and catchable by a `~` rescue block).
-    *   **`eval(Node: Expr) -> Value`**: Evaluates a pre-parsed HAL AST node using the **current state** of the scope.
-    *   **`call(Task: Value, Arguments: Array<Value>) -> Value`**: Invokes a HAL Task value. If the invoked task throws a runtime error, this method **MUST** throw a host exception (serialized and catchable by a `~` rescue block at the site of the Native Task's invocation).
+    *   **`parse(Source: String) -> Expr`**: Lexes and parses a Hank source string. If the source is invalid Hank, it **MUST** throw a host exception (serialized and catchable by a `~` rescue block).
+    *   **`eval(Node: Expr) -> Value`**: Evaluates a pre-parsed Hank AST node using the **current state** of the scope.
+    *   **`call(Task: Value, Arguments: Array<Value>) -> Value`**: Invokes a Hank Task value. If the invoked task throws a runtime error, this method **MUST** throw a host exception (serialized and catchable by a `~` rescue block at the site of the Native Task's invocation).
     *   **`scope`**: Provides access to the lexical Scope.
         *   **Read**: Native tasks may retrieve values from the scope.
         *   **Write**: Native tasks may bind values to the scope. All writes are **strictly local** to the current scope.
         *   **Interaction**: Evaluations performed via `eval()` will see any modifications previously made to the `scope` by the Native Task during the same invocation.
 
 ### 3.2 Standard Library & Extensibility
-*   **The Standard Library**: A Runner is **NOT** required to implement the standard library. The HAL ecosystem provides a standardized set of foundational modules defined in `specs/STDLIB.md`. Official language implementations (Go, Rust, TS, Haxe) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or define entirely custom modules (e.g., `str.customTask()`) as their domain requires.
-*   **Module Tasks**: By convention, tasks are grouped into objects to avoid polluting the root namespace. These are represented as `Object` values in `coreScope` containing further `Task` values. Accessed via `Field` retrieval, this is strictly consistent with HAL's "Everything is an Identifier" and "Immutable Objects" rules.
+*   **The Standard Library**: A Runner is **NOT** required to implement the standard library. The Hank ecosystem provides a standardized set of foundational modules defined in `specs/STDLIB.md`. Official language implementations (Go, Rust, TS, Haxe, Dart) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or define entirely custom modules (e.g., `str.customTask()`) as their domain requires.
+*   **Module Tasks**: By convention, tasks are grouped into objects to avoid polluting the root namespace. These are represented as `Object` values in `coreScope` containing further `Task` values. Accessed via `Field` retrieval, this is strictly consistent with Hank's "Everything is an Identifier" and "Immutable Objects" rules.
 *   **Global Tasks**: While module namespacing is the standard convention, custom Host implementations **MAY** inject their own tasks directly into the `coreScope` root (e.g., `my_custom_task`) if desired.
 
 ## 4. Execution Lifecycle
 
 ### 4.1 Working Directory (CWD)
-The Runner MUST establish a clear root for script execution. By convention, the Runner SHOULD set the process working directory to the location of the main `.hal` script before starting Pass 1 (Hoisting).
+The Runner MUST establish a clear root for script execution. By convention, the Runner SHOULD set the process working directory to the location of the main `.hank` script before starting Pass 1 (Hoisting).
 
 ### 4.2 Script Invocation
-1.  **Parse**: The Runner parses the main `.hal` file, which yields a single `Task` value (evaluating any `@` macro assignments in the process).
-2.  **Args**: The Host environment (e.g., an Orchestrator or Host event loop) provides an array of HAL `Value`s as arguments.
+1.  **Parse**: The Runner parses the main `.hank` file, which yields a single `Task` value (evaluating any `@` macro assignments in the process).
+2.  **Args**: The Host environment (e.g., an Orchestrator or Host event loop) provides an array of Hank `Value`s as arguments.
 3.  **Call**: The Runner executes the script by invoking `call(parsedTask, hostArguments)`.
 
 ### 4.3 Exit Results
@@ -80,16 +80,16 @@ When a Host-level failure occurs during a Native Task, the Runner MUST NOT allow
 **Note on Portability**: The format of the serialized error string is Runner-defined. Scripts that perform pattern-matching on `err` content (e.g., using `match()`) are not guaranteed to be portable across different Runner implementations.
 
 ## 6. The Complex Object Bridge
-Native host objects (Class instances, Structs, Sockets, UI components) are strictly forbidden from entering HAL memory. This preserves the Air Gap and ensures 100% serializability of Data.
+Native host objects (Class instances, Structs, Sockets, UI components) are strictly forbidden from entering Hank memory. This preserves the Air Gap and ensures 100% serializability of Data.
 
-### 6.1 Data Flattening (IHALSerializable)
-To bridge complex host data into HAL, the Host application MUST flatten the data before it touches the Engine. It is RECOMMENDED that Host SDKs provide an `IHALSerializable` interface (or equivalent) that produces a HAL **String** (e.g., JSON).
+### 6.1 Data Flattening (IHANSerializable)
+To bridge complex host data into Hank, the Host application MUST flatten the data before it touches the Engine. It is RECOMMENDED that Host SDKs provide an `IHANSerializable` interface (or equivalent) that produces a Hank **String** (e.g., JSON).
 
 ### 6.2 State Bridging (Opaque)
 While complex data MUST be flattened to maintain serializability, Host environments MAY pass live memory handles using the **`Opaque`** type.
-*   **Opaque Definition**: `Opaque` values are tokens representing living Host State. They are strictly Truthy and inert to the HAL Interpreter.
+*   **Opaque Definition**: `Opaque` values are tokens representing living Host State. They are strictly Truthy and inert to the Hank Interpreter.
 *   **Non-Serializable**: `Opaque` values represent volatile runtime state and MUST NOT be serialized into the data stream (e.g., by `json.stringify`).
-*   **Unidirectional**: HAL scripts cannot inspect or mutate `Opaque` handles; they serve strictly as handles to be passed back to Native Tasks for Host-side resolution.
+*   **Unidirectional**: Hank scripts cannot inspect or mutate `Opaque` handles; they serve strictly as handles to be passed back to Native Tasks for Host-side resolution.
 
 ---
-*Status: v1.2.0-alpha2 (Clean Room Validation Phase)*
+*Status: v1.3.0-alpha1 (The Hank Era)*

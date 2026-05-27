@@ -1,6 +1,6 @@
 # Runner Architecture
 
-The Runner is the environment-specific host that encapsulates the HAL Interpreter and manages its interaction with the outside world.
+The Runner is the environment-specific host that encapsulates the Hank Interpreter and manages its interaction with the outside world.
 
 ## The Air Gap Principle
 
@@ -23,4 +23,4 @@ The Runner feeds the raw string content (and the macro map) into the Parser. Thi
 The Runner initializes the `coreScope` with Native Tasks (modules like `log`, `host`, `str`) and ensures the `#` sigil protection is operational.
 
 ### 4. Invocation
-The Runner executes the script task, passing Host Arguments as an array of HAL values. The final return value of the script task is returned to the Runner for post-processing.
+The Runner executes the script task, passing Host Arguments as an array of Hank values. The final return value of the script task is returned to the Runner for post-processing.

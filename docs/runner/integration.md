@@ -1,14 +1,14 @@
 # Building a Runner
 
-Building a compliant HAL Runner requires implementing the formal **Hybrid Automation Language Specifications**. These documents provide the ironclad behavioral contracts necessary for cross-engine parity.
+Building a compliant Hank Runner requires implementing the formal **Hybrid Automation Language Specifications**. These documents provide the ironclad behavioral contracts necessary for cross-engine parity.
 
-- **`HAL.md`**: Grammar, Lexical Rules, and AST Contract.
+- **`Hank.md`**: Grammar, Lexical Rules, and AST Contract.
 - **`RUNNER.md`**: The Host Handshake, Macro Pre-processing, and Execution Lifecycle.
 - **`STDLIB.md`**: The Functional Specification for foundational modules.
 
 ## Native Task Interface
 
-Every native task in HAL follows a strict function signature.
+Every native task in Hank follows a strict function signature.
 
 ```typescript
 // Example in TypeScript
@@ -20,7 +20,7 @@ function myNativeTask(args: Value[], ctx: ExecutionContext): Value {
   const path = valToString(args[0]);
   const content = fs.readFileSync(path, 'utf8');
 
-  // 3. Return a HAL value
+  // 3. Return a Hank value
   return VString(content);
 }
 ```
@@ -29,9 +29,9 @@ function myNativeTask(args: Value[], ctx: ExecutionContext): Value {
 
 The `ExecutionContext` provided to every native task allows the host to interact safely with the engine during execution.
 
-- **`parse(source)`**: Dynamically parse new HAL code.
+- **`parse(source)`**: Dynamically parse new Hank code.
 - **`eval(node)`**: Evaluate a pre-parsed node in the current scope.
-- **`call(task, args)`**: Invoke a HAL task (native or user-defined).
+- **`call(task, args)`**: Invoke a Hank task (native or user-defined).
 - **`scope`**: Read or write to the local lexical scope.
 
 ## Registering Modules
@@ -55,12 +55,12 @@ runner.coreScope.set("log", VObject(logModule));
 
 ## Handling Host Arguments
 
-The Host environment is responsible for capturing inputs and mapping them to HAL primitives before invoking the main script task.
+The Host environment is responsible for capturing inputs and mapping them to Hank primitives before invoking the main script task.
 
 ```typescript
 const cliArgs = process.argv.slice(2);
 const halArgs = cliArgs.map(s => VString(s));
 
 // The runner executes the script task with these arguments
-const result = runner.run("deploy.hal", halArgs);
+const result = runner.run("deploy.hank", halArgs);
 ```

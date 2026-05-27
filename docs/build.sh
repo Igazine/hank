@@ -1,3 +1,3 @@
 #!/bin/sh
-# Rebuild the HAL documentation safely
+# Rebuild the Hank documentation safely
 npx vitepress build .

@@ -1,6 +1,6 @@
-# HAL: Hybrid Automation Language
+# Hank
 
-HAL is a purely symbolic, instruction-oriented, embeddable language designed for high-performance automation and orchestration. 
+Hank is a purely symbolic, instruction-oriented, embeddable language designed for high-performance automation and orchestration. 
 
 It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML, while maintaining an air-gapped, host-agnostic design.
 
@@ -13,23 +13,23 @@ It serves as a strict, unambiguous, and highly readable alternative to configura
 
 ## Officially Supported Implementations
 
-HAL is designed to be embedded in any host environment. The following implementations are maintained as Tier-1 libraries:
+Hank is designed to be embedded in any host environment. The following implementations are maintained as Tier-1 libraries:
 
-- **Go**: [github.com/Igazine/hal-go](https://github.com/Igazine/hal-go)
-- **Rust**: [github.com/Igazine/hal-rust](https://github.com/Igazine/hal-rust) (Includes **WebAssembly** support)
-- **TypeScript**: [github.com/Igazine/hal-ts](https://github.com/Igazine/hal-ts)
-- **Dart**: [github.com/Igazine/hal-dart](https://github.com/Igazine/hal-dart)
-- **Haxe**: [github.com/Igazine/hal-haxe](https://github.com/Igazine/hal-haxe)
+- **Go**: [github.com/Igazine/hank-go](https://github.com/Igazine/hank-go)
+- **Rust**: [github.com/Igazine/hank-rust](https://github.com/Igazine/hank-rust) (Includes **WebAssembly** support)
+- **TypeScript**: [github.com/Igazine/hank-ts](https://github.com/Igazine/hank-ts)
+- **Dart**: [github.com/Igazine/hank-dart](https://github.com/Igazine/hank-dart)
+- **Haxe**: [github.com/Igazine/hank-haxe](https://github.com/Igazine/hank-haxe)
 
 ## Project Structure
 - `/specs`: The formal language and library specifications.
 - `/docs`: Documentation and integration guides.
-- `/test/conformance`: The universal HAL test suite used to verify engine compliance.
+- `/test/conformance`: The universal Hank test suite used to verify engine compliance.
 
 ## Documentation
 
-- **Philosophy & Vision**: [The HAL API Multiverse](https://igazine.github.io/hal/guide/philosophy)
-- **Technical Docs**: [https://igazine.github.io/hal/](https://igazine.github.io/hal/)
+- **Philosophy & Vision**: [The Hank API Multiverse](https://igazine.github.io/hank/guide/philosophy)
+- **Technical Docs**: [https://igazine.github.io/hank/](https://igazine.github.io/hank/)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

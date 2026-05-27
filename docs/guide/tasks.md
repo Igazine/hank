@@ -1,6 +1,6 @@
 # Universal Tasks
 
-In HAL, every script and imported resource is a Task. This architectural decision unifies the execution model and provides built-in validation for host inputs.
+In Hank, every script and imported resource is a Task. This architectural decision unifies the execution model and provides built-in validation for host inputs.
 
 ## Defining Tasks
 
@@ -31,7 +31,7 @@ Parameters are bound from left to right. A default expression may reference any 
 
 ## Arity Enforcement
 
-HAL strictly enforces arity. If a caller provides more arguments than parameters defined in the task's signature, the host will throw a runtime error. This ensures that the interface between the script and its environment remains rigid and documented.
+Hank strictly enforces arity. If a caller provides more arguments than parameters defined in the task's signature, the host will throw a runtime error. This ensures that the interface between the script and its environment remains rigid and documented.
 
 ## Returning Values
 
@@ -50,12 +50,12 @@ If execution reaches the end of a task's body without hitting a `^` operator, th
 
 ## Inline Task Definitions
 
-Every HAL script is a single **Main Task** that acts as a structural container. Modularity is achieved by defining **inline tasks** within this container and assigning them to identifiers.
+Every Hank script is a single **Main Task** that acts as a structural container. Modularity is achieved by defining **inline tasks** within this container and assigning them to identifiers.
 
 Architecturally, this structure mirrors a **Class and its Methods**: the Main Task provides the environment context, while inline tasks provide localized units of logic.
 
 ### Hoisting
-Because HAL uses a two-pass execution model, inline tasks are hoisted. You can call a task before its definition appears in the script.
+Because Hank uses a two-pass execution model, inline tasks are hoisted. You can call a task before its definition appears in the script.
 
 ```hal
 () {

@@ -1,9 +1,9 @@
 # Environment & Runtime
 
-These modules provide the core communication and control channels between the HAL script and the execution engine.
+These modules provide the core communication and control channels between the Hank script and the execution engine.
 
 ## `env` Module (State Bridge)
-The `env` module is a shared key-value map between the Host and the HAL script. It serves as a "State Bridge" for configuration, session data, and Inter-Script Communication.
+The `env` module is a shared key-value map between the Host and the Hank script. It serves as a "State Bridge" for configuration, session data, and Inter-Script Communication.
 
 ### `env.get(key)`
 Returns the value associated with the specified key, or `Void` if it doesn't exist.
@@ -17,13 +17,13 @@ Returns an Array of Strings representing all available keys in the environment m
 ---
 
 ## `runtime` Module (Engine Control)
-Handles the internal state and lifecycle of the HAL machine.
+Handles the internal state and lifecycle of the Hank machine.
 
-### `runtime.halt(?code = 0)`
+### `runtime.hankt(?code = 0)`
 Immediately stops script execution. The provided `code` is returned to the Host Runner.
 
 ### `runtime.elapsedTime()`
-Returns the number of milliseconds (Number) elapsed since the HAL engine was initialized.
+Returns the number of milliseconds (Number) elapsed since the Hank engine was initialized.
 
 ---
 

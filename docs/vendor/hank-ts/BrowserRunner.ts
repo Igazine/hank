@@ -1,4 +1,4 @@
-import { Lexer, Parser, Interpreter, Value, ValueType, HALScope, Scope, ExecutionContext } from './index.js';
+import { Lexer, Parser, Interpreter, Value, ValueType, HankScope, Scope, ExecutionContext } from './index.js';
 
 /**
  * Options for the BrowserRunner, allowing hooks into host-environment behaviors.
@@ -15,11 +15,11 @@ export interface BrowserRunnerOptions {
 }
 
 /**
- * A browser-compatible HAL runner that executes scripts in memory.
+ * A browser-compatible Hank runner that executes scripts in memory.
  * Redirects execution-time effects to callbacks for UI integration.
  */
 export class BrowserRunner {
-    private coreScope: Scope = new HALScope();
+    private coreScope: Scope = new HankScope();
     private options: BrowserRunnerOptions;
     private astCache: Map<string, any> = new Map();
 
@@ -30,10 +30,10 @@ export class BrowserRunner {
 
     /**
      * Pre-parses and caches a script.
-     * @param source The HAL source code.
+     * @param source The Hank source code.
      * @param id A unique identifier for the script (e.g. filename).
      */
-    load(source: string, id: string = 'dynamic.hal'): string {
+    load(source: string, id: string = 'dynamic.hank'): string {
         if (this.astCache.has(id)) return id;
 
         const lexer = new Lexer(source);
@@ -61,8 +61,8 @@ export class BrowserRunner {
     }
 
     /**
-     * Executes a HAL script from source string.
-     * @param source The HAL source code.
+     * Executes a Hank script from source string.
+     * @param source The Hank source code.
      * @param args Arguments to pass to the script's main task.
      * @returns The final result of the script.
      */
@@ -83,7 +83,7 @@ export class BrowserRunner {
             case ValueType.Object: return '{Object}';
             case ValueType.Opaque: return `[Opaque:${v.label || 'Unknown'}]`;
             case ValueType.Task: return '[Task]';
-            default: return 'null';
+            default: return 'Void';
         }
     }
 
@@ -98,7 +98,7 @@ export class BrowserRunner {
         this.coreScope.set(name, { type: ValueType.Object, value: moduleObj });
     }
 
-    private halEquals(a: Value, b: Value): boolean {
+    private hankEquals(a: Value, b: Value): boolean {
         if (a.type !== b.type) return false;
         switch (a.type) {
             case ValueType.Void: return true;
@@ -106,13 +106,13 @@ export class BrowserRunner {
             case ValueType.String: return a.value === b.value;
             case ValueType.Array:
                 if (a.value.length !== b.value.length) return false;
-                for (let i = 0; i < a.value.length; i++) if (!this.halEquals(a.value[i], b.value[i])) return false;
+                for (let i = 0; i < a.value.length; i++) if (!this.hankEquals(a.value[i], b.value[i])) return false;
                 return true;
             case ValueType.Object:
                 if (a.value.size !== b.value.size) return false;
                 for (const [k, v1] of a.value) {
                     const v2 = b.value.get(k);
-                    if (!v2 || !this.halEquals(v1, v2)) return false;
+                    if (!v2 || !this.hankEquals(v1, v2)) return false;
                 }
                 return true;
             case ValueType.Opaque: return a.label === b.label && a.value === b.value;
@@ -265,7 +265,7 @@ export class BrowserRunner {
             },
             eq: (args) => {
                 if (args.length < 2) return { type: ValueType.Void };
-                return this.halEquals(args[0], args[1]) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
+                return this.hankEquals(args[0], args[1]) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
             }
         });
 
@@ -287,7 +287,7 @@ export class BrowserRunner {
             },
             eq: (args) => {
                 if (args.length < 2) return { type: ValueType.Void };
-                return this.halEquals(args[0], args[1]) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
+                return this.hankEquals(args[0], args[1]) ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
             }
         });
 
@@ -340,7 +340,7 @@ export class BrowserRunner {
                 if (args.length === 0) return { type: ValueType.Void };
                 try {
                     const data = JSON.parse(this.valToString(args[0]));
-                    return this.mapAnyToHal(data);
+                    return this.mapAnyToHank(data);
                 } catch (e) { return { type: ValueType.Void }; }
             },
             stringify: (args) => {
@@ -352,14 +352,14 @@ export class BrowserRunner {
                     return false;
                 };
                 if (checkOpaque(args[0])) return { type: ValueType.Void };
-                return { type: ValueType.String, value: JSON.stringify(this.mapHalToAny(args[0])) };
+                return { type: ValueType.String, value: JSON.stringify(this.mapHankToAny(args[0])) };
             }
         });
 
         this.registerModule('browser', {
             log: (args) => {
                 if (args.length > 0) {
-                    console.log("[HAL]", ...args.map(a => this.mapHalToAny(a)));
+                    console.log("[Hank]", ...args.map(a => this.mapHankToAny(a)));
                 }
                 return { type: ValueType.Void };
             },
@@ -372,28 +372,28 @@ export class BrowserRunner {
         });
     }
 
-    private mapAnyToHal(v: any): Value {
+    private mapAnyToHank(v: any): Value {
         if (v === null || v === undefined) return { type: ValueType.Void };
         if (typeof v === 'number') return { type: ValueType.Number, value: v };
         if (typeof v === 'string') return { type: ValueType.String, value: v };
         if (typeof v === 'boolean') return v ? { type: ValueType.Number, value: 1 } : { type: ValueType.Void };
-        if (Array.isArray(v)) return { type: ValueType.Array, value: v.map(i => this.mapAnyToHal(i)) };
+        if (Array.isArray(v)) return { type: ValueType.Array, value: v.map(i => this.mapAnyToHank(i)) };
         if (typeof v === 'object') {
             const map = new Map<string, Value>();
-            for (const [k, val] of Object.entries(v)) map.set(k, this.mapAnyToHal(val));
+            for (const [k, val] of Object.entries(v)) map.set(k, this.mapAnyToHank(val));
             return { type: ValueType.Object, value: map };
         }
         return { type: ValueType.Void };
     }
 
-    private mapHalToAny(v: Value): any {
+    private mapHankToAny(v: Value): any {
         switch (v.type) {
             case ValueType.Number: return v.value;
             case ValueType.String: return v.value;
-            case ValueType.Array: return v.value.map(i => this.mapHalToAny(i));
+            case ValueType.Array: return v.value.map(i => this.mapHankToAny(i));
             case ValueType.Object:
                 const obj: any = {};
-                v.value.forEach((val, k) => { obj[k] = this.mapHalToAny(val); });
+                v.value.forEach((val, k) => { obj[k] = this.mapHankToAny(val); });
                 return obj;
             default: return null;
         }

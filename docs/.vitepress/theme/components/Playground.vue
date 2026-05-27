@@ -1,11 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { BrowserRunner } from '../../../vendor/hal-ts/index.ts'
+import { BrowserRunner } from '../../../vendor/hank-ts/index.ts'
 
 const activeTab = ref('script')
 
 const code = ref(`() {
-  log.print("Hello from HAL Playground!")
+  log.print("Hello from the Hank Playground!")
   
   sum = math.add(10, 25)
   log.print(str.format("10 + 25 = %1", sum))
@@ -83,11 +83,11 @@ const clearOutput = () => {
       </div>
       
       <div v-show="activeTab === 'script'">
-        <textarea v-model="code" class="code-editor" spellcheck="false" placeholder="Enter HAL Task here..."></textarea>
+        <textarea v-model="code" class="code-editor" spellcheck="false" placeholder="Enter Hank Task here..."></textarea>
       </div>
       
       <div v-show="activeTab === 'vfs'">
-        <div class="vfs-hint">Define a JSON map of filename -> HAL source code. These can be included via <code>@</code>.</div>
+        <div class="vfs-hint">Define a JSON map of filename -> Hank source code. These can be included via <code>@</code>.</div>
         <textarea v-model="vfsCode" class="code-editor vfs-editor" spellcheck="false"></textarea>
       </div>
     </div>

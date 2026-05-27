@@ -1,13 +1,13 @@
-# HAL Playground
+# Hank Playground
 
-Experiment with HAL syntax and the standard library directly in your browser.
+Experiment with Hank syntax and the standard library directly in your browser.
 
 <ClientOnly>
   <Playground />
 </ClientOnly>
 
 ## How to use
-1. Enter your HAL script in the editor above.
+1. Enter your Hank script in the editor above.
 2. Click **Run Task** to execute.
 3. View the results in the **Output** terminal.
 

@@ -1,25 +1,25 @@
-# HAL Standard Library Specification
-**Version:** 1.2.0-alpha4
+# Hank Standard Library Specification
+**Version:** 1.3.0-alpha1
 
 ## 1. Overview
-This document defines the official HAL Standard Library. Official language implementations (Go, Rust, TS, Haxe) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
+This document defines the official Hank Standard Library. Official language implementations (Go, Rust, TS, Haxe, Dart) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
 
-**Strict Procedural Purity**: Variables in HAL are purely inert memory containers. They do not have methods. All operations on data types MUST be performed by passing the variable to the appropriate module task (e.g., `str.match(my_string, pattern_handle)`, **not** `my_string.match(pattern_handle)`).
+**Strict Procedural Purity**: Variables in Hank are purely inert memory containers. They do not have methods. All operations on data types MUST be performed by passing the variable to the appropriate module task (e.g., `str.match(my_string, pattern_handle)`, **not** `my_string.match(pattern_handle)`).
 
 ---
 
 ## 2. Environment & Runtime
 
 ### 2.1 `env` Module (State Bridge)
-Provides a key-value state bridge between the HAL script and the Host Runner. This is the primary mechanism for Inter-Script Communication and signaling.
+Provides a key-value state bridge between the Hank script and the Host Runner. This is the primary mechanism for Inter-Script Communication and signaling.
 *   **`get(key)`**: Returns the value associated with `key`, or `Void`.
 *   **`set(key, value)`**: Updates the value associated with `key` in the Host's environment. Triggers a Host-defined side effect (callback). Returns `Void`.
 *   **`keys()`**: Returns an Array of all available keys (Strings).
 
 ### 2.2 `runtime` Module (Engine Control)
-Provides interaction with the HAL virtual machine itself.
+Provides interaction with the Hank virtual machine itself.
 *   **`halt(?code = 0)`**: Immediately terminates script execution. The `code` (Number) is returned to the Host.
-*   **`elapsedTime()`**: Returns a high-precision monotonic timestamp (HAL Number) in **milliseconds** relative to the start of the engine.
+*   **`elapsedTime()`**: Returns a high-precision monotonic timestamp (Hank Number) in **milliseconds** relative to the start of the engine.
 
 ### 2.3 `log` Module
 Provides unified output capabilities.
@@ -85,12 +85,8 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 ## 5. Serialization
 
 ### 5.1 `json` Module
-*   **`parse(string)`**: Parses a JSON-formatted string and returns the corresponding HAL `Object`, `Array`, `Number`, `String`, or `Void`.
-*   **`stringify(value)`**: Serializes a HAL `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
+*   **`parse(string)`**: Parses a JSON-formatted string and returns the corresponding Hank `Object`, `Array`, `Number`, `String`, or `Void`.
+*   **`stringify(value)`**: Serializes a Hank `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
 
 ---
-*Status: v1.2.0-alpha2 (Strict Procedural Purity)*
-lue)`**: Serializes a HAL `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
-
----
-*Status: v1.2.0-alpha2 (Strict Procedural Purity)*
+*Status: v1.3.0-alpha1 (The Hank Era)*

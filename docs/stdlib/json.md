@@ -4,12 +4,12 @@ The `json` module provides the foundational tools for the Complex Object Bridge 
 
 ## Purpose
 
-Since complex host objects are bridged into HAL as flattened Strings, the `json` module allows script authors to reconstruct that data into traversable HAL Objects.
+Since complex host objects are bridged into Hank as flattened Strings, the `json` module allows script authors to reconstruct that data into traversable Hank Objects.
 
 ## Tasks
 
 ### `json.parse(string)`
-Parses a JSON-formatted string and returns the corresponding HAL data structure.
+Parses a JSON-formatted string and returns the corresponding Hank data structure.
 
 ```hal
 () {
@@ -20,7 +20,7 @@ Parses a JSON-formatted string and returns the corresponding HAL data structure.
 ```
 
 ### `json.stringify(value)`
-Serializes a HAL value into a JSON string.
+Serializes a Hank value into a JSON string.
 
 > **State Protection**: `Opaque` values (handles to Host state) are **not serializable**. If `stringify` encounters an `Opaque` value, it will either return `Void` or trigger a Host-defined error to prevent leaking internal memory state.
 

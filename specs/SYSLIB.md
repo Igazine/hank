@@ -1,8 +1,8 @@
-# HAL System Library (SYSLIB) Specification
-**Version:** 1.2.0-alpha3
+# Hank System Library (SYSLIB) Specification
+**Version:** 1.3.0-alpha1
 
 ## 1. Overview
-The HAL System Library provides system-level primitives for high-performance automation. Unlike the Standard Library (STDLIB), these modules are closely tied to the Host Operating System and may not be available in restricted or browser-based environments.
+The Hank System Library provides system-level primitives for high-performance automation. Unlike the Standard Library (STDLIB), these modules are closely tied to the Host Operating System and may not be available in restricted or browser-based environments.
 
 Implementations are encouraged to use these signatures to maintain ecosystem predictability for automation scripts.
 
@@ -10,11 +10,11 @@ Implementations are encouraged to use these signatures to maintain ecosystem pre
 
 ## 2. Foundation Modules
 ### 2.1 `host` Module (The Current Process)
-Provides metadata and control over the HAL Runner's own process.
+Provides metadata and control over the Hank Runner's own process.
 *   **`cwd()`**: Returns the absolute path String of the current working directory.
 *   **`isRoot()`**: Returns `1` if the process has administrative/root privileges, otherwise `Void`.
 *   **`pid()`**: Returns the Process ID (Number) of the host process.
-*   **`signal(value)`**: Emits an event signal to the Host Runner with the provided HAL value. Returns `Void`.
+*   **`signal(value)`**: Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
 
 ### 2.2 `proc` Module (External Processes)
 Provides capabilities to manage and execute other processes.
@@ -57,4 +57,4 @@ All paths are relative to `host.cwd()` unless absolute.
 *   **`stat(path)`**: Returns an Object `{ size: Number, isDir: Number/Void, mtime: Number }`.
 
 ---
-*Status: v1.2.0-alpha2 (System-Bound)*
+*Status: v1.3.0-alpha1 (The Hank Era)*

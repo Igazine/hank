@@ -1,10 +1,10 @@
-import { Interpreter, HALScope } from './Interpreter.js';
+import { Interpreter, HankScope } from './Interpreter.js';
 import { Lexer, TokenType } from './Lexer.js';
 import { Parser } from './Parser.js';
 import { Value, ValueType, Scope, NativeFunc, Expr } from './Types.js';
 
 /**
- * A base class for HAL Host Runners.
+ * A base class for Hank Host Runners.
  * Handles script loading, macro resolution, and AST caching.
  * Must be extended by environment-specific implementations (e.g. Node, Browser).
  */
@@ -12,7 +12,7 @@ export abstract class Runner {
     private pathCache: Map<string, string> = new Map();
     private astCache: Map<string, Expr> = new Map();
     private macroMap: Map<string, string> = new Map();
-    public coreScope: Scope = new HALScope();
+    public coreScope: Scope = new HankScope();
 
     constructor() {}
 
@@ -70,7 +70,7 @@ export abstract class Runner {
     }
 
     /**
-     * Executes a HAL script.
+     * Executes a Hank script.
      */
     run(scriptPath: string, args: Value[] = []): Value {
         const absPath = this.load(scriptPath);
@@ -80,7 +80,7 @@ export abstract class Runner {
         const scriptTask = interpreter.run(ast);
 
         if (scriptTask.type !== ValueType.Task) {
-            throw new Error("HAL Error: Script must evaluate to a Task definition.");
+            throw new Error("Hank Error: Script must evaluate to a Task definition.");
         }
 
         return interpreter.call(scriptTask, args);

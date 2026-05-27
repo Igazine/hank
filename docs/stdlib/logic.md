@@ -49,7 +49,7 @@ Returns a new string with all occurrences of the pattern replaced.
 ## `logic` Module
 Provides functional logical composition. 
 
-> **Important**: These tasks are standard HAL functions and do **not** support short-circuiting. All arguments are evaluated before the task is called.
+> **Important**: These tasks are standard Hank functions and do **not** support short-circuiting. All arguments are evaluated before the task is called.
 
 ### `logic.and(...args)`
 Returns the last argument if all provided arguments are truthy (not `Void`). If any argument is `Void`, returns `Void`.

@@ -6,7 +6,7 @@ The `@` sigil represents a parse-time dependency. It is not an execution-time "i
 
 ```hal
 @ "utils"
-@ "path/to/script.hal"
+@ "path/to/script.hank"
 ```
 
 If an identifier is provided instead of a string (e.g., `@utils`), it is treated as a shorthand for a literal string path.
@@ -23,7 +23,7 @@ When the Parser encounters a `@` macro, it performs the following steps:
 
 The Runner is responsible for resolving macro paths. By convention:
 - Relative paths are resolved against the directory of the file currently being processed.
-- If a path has no extension, the Runner should check for `.hal`.
+- If a path has no extension, the Runner should check for `.hank`.
 
 ## Recursive Expansion
 

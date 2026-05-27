@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
-  title: "HAL",
+  title: "Hank",
   description: "Hybrid Automation Language Documentation",
   base: '/hal/',
   cleanUrls: false,
@@ -23,7 +23,7 @@ export default defineConfig({
   },
   themeConfig: {
     logo: {
-      text: 'HAL'
+      text: 'Hank'
     },
     nav: [
       { text: 'Home', link: '/' },

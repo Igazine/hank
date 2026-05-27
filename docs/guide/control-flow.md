@@ -1,6 +1,6 @@
 # Control Flow
 
-HAL provides a clean, unified syntax for conditional branching and error management.
+Hank provides a clean, unified syntax for conditional branching and error management.
 
 ## Unified Gates
 
@@ -43,4 +43,4 @@ The `!` operator evaluates the falsiness of an expression.
 
 ## Evaluation Results
 
-Control flow structures are expressions in HAL. They evaluate to the result of whichever branch was executed. If no branch matches and no fallback exists, the structure evaluates to `Void`.
+Control flow structures are expressions in Hank. They evaluate to the result of whichever branch was executed. If no branch matches and no fallback exists, the structure evaluates to `Void`.

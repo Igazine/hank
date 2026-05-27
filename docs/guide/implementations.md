@@ -1,6 +1,6 @@
 # Official Implementations
 
-HAL is an open language specification. While anyone is free to implement the HAL engine in any language, we provide several official, spec-compliant implementations to ensure maximum parity and ease of use.
+Hank is an open language specification. While anyone is free to implement the Hank engine in any language, we provide several official, spec-compliant implementations to ensure maximum parity and ease of use.
 
 All official implementations follow the same bit-perfect execution model and include the spec-compliant [Standard Library](/stdlib/overview).
 
@@ -24,7 +24,7 @@ An environment-agnostic engine designed for the JavaScript ecosystem. It runs pe
 *   **Best for**: Web-based configuration editors, serverless functions (Lambdas), and cross-platform desktop apps (Electron).
 
 ## Dart
-The Dart engine brings HAL to the mobile and desktop application world. It is designed with Flutter integration in mind.
+The Dart engine brings Hank to the mobile and desktop application world. It is designed with Flutter integration in mind.
 
 *   **Repository**: [Igazine/hal-dart](https://github.com/Igazine/hal-dart)
 *   **Best for**: Dynamic logic in Flutter apps (iOS/Android/Desktop), allowing you to update app behavior without submitting a new binary to app stores.

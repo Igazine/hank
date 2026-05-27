@@ -1,16 +1,16 @@
 # Syntax & Types
 
-HAL uses a strict EBNF grammar to ensure unambiguous parsing across all certified engine implementations.
+Hank uses a strict EBNF grammar to ensure unambiguous parsing across all certified engine implementations.
 
 ## The Entry Point
 
-Every valid HAL script is a single **Main Task**. This outermost block serves as the interface between the script and the host environment.
+Every valid Hank script is a single **Main Task**. This outermost block serves as the interface between the script and the host environment.
 
 ### Host Arguments
 The parameters defined in the Main Task are **Host Arguments**. These are values passed into the script by the engine when it is invoked (e.g., CLI flags, API parameters, or environment data).
 
 ```hal
-// Example: deploy.hal
+// Example: deploy.hank
 @ "utils"
 
 (target, ?verbose = 0) {
@@ -25,14 +25,14 @@ Architecturally, this functions similarly to a **Class and its Methods**: the Ma
 
 ## Primitive Types
 
-HAL internally supports seven absolute value types:
+Hank internally supports seven absolute value types:
 
 | Type | Description | Example |
 | --- | --- | --- |
 | **Void** | Represents the absence of a value. | `v = missing_id` |
 | **Number** | 64-bit floating point. | `n = 123.45` |
 | **String** | UTF-8 character sequence. | `s = "hello"` |
-| **Array** | Ordered list of HAL values. | `a = [1, 2, 3]` |
+| **Array** | Ordered list of Hank values. | `a = [1, 2, 3]` |
 | **Object** | Unordered key-value map. | `o = { x: 1, y: 2 }` |
 | **Opaque** | Non-serializable Host state handle. | *Returns from Native Tasks* |
 | **Task** | A callable unit of execution. | `t = (x) { ^ x }` |
@@ -61,7 +61,7 @@ Assignments evaluate to the assigned value. This enables chained assignments but
 
 ## No Binary Operators
 
-To maintain procedural purity and absolute predictability, HAL lacks binary operators for arithmetic or string manipulation.
+To maintain procedural purity and absolute predictability, Hank lacks binary operators for arithmetic or string manipulation.
 
 - **No Arithmetic**: `1 + 2` is a syntax error. Use `math.add(1, 2)`.
 - **No Concatenation**: `"a" + "b"` is a syntax error. Use `str.concat("a", "b")`.
@@ -71,7 +71,7 @@ This constraint forces every data transformation to be explicit, making the scri
 
 ## Whitespace & Semicolons
 
-HAL is a **symbol-delimited** language. It does not use semicolons to terminate statements, and it is largely whitespace-insensitive.
+Hank is a **symbol-delimited** language. It does not use semicolons to terminate statements, and it is largely whitespace-insensitive.
 
 - **No Semicolons**: Statement boundaries are determined by token transitions (e.g., an assignment followed by a new task call).
 - **Whitespace**: Newlines and spaces are ignored by the parser (except as token separators). A script can be written on a single line or spread across many for clarity.
@@ -94,7 +94,7 @@ Identifiers consist of alphanumeric characters and underscores `[a-zA-Z_][a-zA-Z
 **Rule**: An identifier MUST begin with a letter or an underscore. It cannot begin with a digit (leading digits are reserved for Number literals).
 
 ### Existence-is-Truth
-HAL uses a simple truthiness rule:
+Hank uses a simple truthiness rule:
 - A variable evaluating to a concrete value (including `0`, `""`, or `[]`) is **Truthy**.
 - An unassigned or empty identifier evaluates to `Void`, which is strictly **Falsy**.
 
