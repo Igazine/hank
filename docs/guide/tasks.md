@@ -48,16 +48,21 @@ The `^` sigil immediately halts the current task and returns a value to the call
 ### Implicit Return
 If execution reaches the end of a task's body without hitting a `^` operator, the task implicitly returns the result of its final statement. An empty block implicitly returns `Void`.
 
-## Local Task Definitions
+## Inline Task Definitions
 
-Because HAL uses a two-pass execution model, local tasks are hoisted. You can call a task before it appears in the script.
+Every HAL script is a single **Main Task** that acts as a structural container. Modularity is achieved by defining **inline tasks** within this container and assigning them to identifiers.
+
+Architecturally, this structure mirrors a **Class and its Methods**: the Main Task provides the environment context, while inline tasks provide localized units of logic.
+
+### Hoisting
+Because HAL uses a two-pass execution model, inline tasks are hoisted. You can call a task before its definition appears in the script.
 
 ```hal
 () {
   log.print(get_msg()) // Hoisted call
 
   get_msg = () {
-    ^ "Hello from local task"
+    ^ "Hello from inline task"
   }
 }
 ```

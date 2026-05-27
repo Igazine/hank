@@ -4,7 +4,10 @@ HAL uses a strict EBNF grammar to ensure unambiguous parsing across all certifie
 
 ## The Entry Point
 
-Every valid HAL script follows the "Universal Task" structure. A script may contain zero or more macro headers followed by exactly one task definition.
+Every valid HAL script is a single **Main Task**. This outermost block serves as the interface between the script and the host environment.
+
+### Host Arguments
+The parameters defined in the Main Task are **Host Arguments**. These are values passed into the script by the engine when it is invoked (e.g., CLI flags, API parameters, or environment data).
 
 ```hal
 // Example: deploy.hal
@@ -14,6 +17,11 @@ Every valid HAL script follows the "Universal Task" structure. A script may cont
   log.print(str.format("Deploying to %1", target))
 }
 ```
+
+### The Container Pattern
+The Main Task acts as a structural container for the entire script. It is perfectly language-compliant to define multiple **inline tasks** within the Main Task and assign them to identifiers. 
+
+Architecturally, this functions similarly to a **Class and its Methods**: the Main Task provides the shared context and arguments, while inline tasks provide modular, reusable units of logic within that context.
 
 ## Primitive Types
 
