@@ -11,6 +11,15 @@ It serves as a strict, unambiguous, and highly readable alternative to configura
 4. **Explicit Instructions**: No binary operators; every transformation is a Task call.
 5. **Universal Parity**: Bit-perfect execution parity across all target languages.
 
+## Officially Supported Implementations
+
+HAL is designed to be embedded in any host environment. The following implementations are maintained as Tier-1 libraries:
+
+- **Go**: [github.com/Igazine/hal-go](https://github.com/Igazine/hal-go)
+- **Rust**: [github.com/Igazine/hal-rust](https://github.com/Igazine/hal-rust) (Includes **WebAssembly** support)
+- **TypeScript**: [github.com/Igazine/hal-ts](https://github.com/Igazine/hal-ts)
+- **Dart**: [github.com/Igazine/hal-dart](https://github.com/Igazine/hal-dart)
+
 ## Project Structure
 - `/specs`: The formal language and library specifications.
 - `/docs`: Documentation and integration guides.

@@ -39,6 +39,10 @@ There are no reserved keywords for values or control flow definitions. Keywords 
 ### 3. Dumb Variables
 Variables in HAL (Strings, Numbers, Arrays, Objects) are purely inert memory containers. They do not have methods, prototypes, or hidden logic. All operations on data must be performed by passing the variable to an explicit module task.
 
+## Architectural Rigor
+
+Beyond its core pillars, HAL enforces structural purity to eliminate ambiguity.
+
 ### 4. Explicit Instruction Only
 HAL has no binary operators for data manipulation. There is no inline arithmetic (`+`, `-`, `*`, `/`) and no built-in syntax for String or Array concatenation. Every operation that transforms or combines data must be invoked via an explicit Task call (e.g., `math.add(a, b)` or `str.concat(s1, s2)`).
 

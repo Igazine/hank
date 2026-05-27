@@ -29,6 +29,7 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/syntax' },
       { text: 'Standard Library', link: '/stdlib/overview' },
+      { text: 'Implementations', link: '/guide/implementations' },
       { text: 'Host Integration', link: '/runner/architecture' },
       { text: 'Playground', link: '/playground' }
     ],
@@ -40,7 +41,8 @@ export default defineConfig({
             { text: 'Syntax & Types', link: '/guide/syntax' },
             { text: 'Control Flow', link: '/guide/control-flow' },
             { text: 'Universal Tasks', link: '/guide/tasks' },
-            { text: 'Macros (@)', link: '/guide/macros' }
+            { text: 'Macros (@)', link: '/guide/macros' },
+            { text: 'Official Engines', link: '/guide/implementations' }
           ]
         }
       ],
