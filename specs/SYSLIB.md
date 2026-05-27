@@ -1,5 +1,5 @@
 # HAL System Library (SYSLIB) Specification
-**Version:** 1.2.0-alpha
+**Version:** 1.2.0-alpha2
 
 ## 1. Overview
 The HAL System Library provides system-level primitives for high-performance automation. Unlike the Standard Library (STDLIB), these modules are closely tied to the Host Operating System and may not be available in restricted or browser-based environments.
@@ -57,4 +57,4 @@ All paths are relative to `host.cwd()` unless absolute.
 *   **`stat(path)`**: Returns an Object `{ size: Number, isDir: Number/Void, mtime: Number }`.
 
 ---
-*Status: v1.2.0-alpha (System-Bound)*
+*Status: v1.2.0-alpha2 (System-Bound)*

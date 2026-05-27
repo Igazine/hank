@@ -1,5 +1,5 @@
 # HAL Runner Specification
-**Version:** 1.2.0-alpha
+**Version:** 1.2.0-alpha2
 
 ## 1. The Runner Role
 The Runner is the environment-specific host that encapsulates the HAL Interpreter. It provides the "bridge" between the pure, memory-only HAL instruction set and the host's Operating System, filesystem, and network.
@@ -92,4 +92,4 @@ While complex data MUST be flattened to maintain serializability, Host environme
 *   **Unidirectional**: HAL scripts cannot inspect or mutate `Opaque` handles; they serve strictly as handles to be passed back to Native Tasks for Host-side resolution.
 
 ---
-*Status: v1.2.0-alpha (Clean Room Validation Phase)*
+*Status: v1.2.0-alpha2 (Clean Room Validation Phase)*

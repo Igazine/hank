@@ -1,5 +1,5 @@
 # HAL (Hybrid Automation Language) Specification
-**Version:** 1.2.0-alpha
+**Version:** 1.2.0-alpha2
 
 ## 1. Philosophy & Purpose
 HAL is a purely symbolic, instruction-oriented language designed for automation and orchestration. It is not a general-purpose programming language. It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML. 
