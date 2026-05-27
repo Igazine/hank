@@ -19,6 +19,7 @@ HAL is designed to be embedded in any host environment. The following implementa
 - **Rust**: [github.com/Igazine/hal-rust](https://github.com/Igazine/hal-rust) (Includes **WebAssembly** support)
 - **TypeScript**: [github.com/Igazine/hal-ts](https://github.com/Igazine/hal-ts)
 - **Dart**: [github.com/Igazine/hal-dart](https://github.com/Igazine/hal-dart)
+- **Haxe**: [github.com/Igazine/hal-haxe](https://github.com/Igazine/hal-haxe)
 
 ## Project Structure
 - `/specs`: The formal language and library specifications.
