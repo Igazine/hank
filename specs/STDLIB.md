@@ -1,10 +1,10 @@
 # HAL Standard Library Specification
-**Version:** 1.1.0-alpha
+**Version:** 1.2.0-alpha
 
 ## 1. Overview
 This document defines the official HAL Standard Library. Official language implementations (Go, Rust, TS, Haxe) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
 
-**Strict Procedural Purity**: Variables in HAL are purely inert memory containers. They do not have methods. All operations on data types MUST be performed by passing the variable to the appropriate module task (e.g., `str.match(my_string, /pattern/)`, **not** `my_string.match(/pattern/)`).
+**Strict Procedural Purity**: Variables in HAL are purely inert memory containers. They do not have methods. All operations on data types MUST be performed by passing the variable to the appropriate module task (e.g., `str.match(my_string, pattern_handle)`, **not** `my_string.match(pattern_handle)`).
 
 ---
 
@@ -69,9 +69,9 @@ Provides unified output capabilities.
 *   **`eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`.
 
 ### 4.2 `regex` Module
-*   **`parse(pattern, ?flags = "")`**: Compiles a raw String pattern into a HAL `Regex` value.
-*   **`match(string, pattern)`**: Returns `1` if the `string` matches the `pattern` (Regex or String), otherwise `Void`.
-*   **`replace(string, pattern, replacement)`**: Returns a new string with occurrences of `pattern` replaced by by `replacement`.
+*   **`parse(pattern, ?flags = "")`**: Compiles a raw String pattern into an **`Opaque`** (RegExp) handle.
+*   **`match(string, pattern)`**: Returns `1` if the `string` matches the `pattern` (**Opaque** or String), otherwise `Void`.
+*   **`replace(string, pattern, replacement)`**: Returns a new string with occurrences of `pattern` (**Opaque** or String) replaced by `replacement`.
 
 ### 4.3 `logic` Module
 Provides functional logical composition. Note: These tasks do NOT support short-circuiting.
@@ -84,7 +84,7 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 
 ### 5.1 `json` Module
 *   **`parse(string)`**: Parses a JSON-formatted string and returns the corresponding HAL `Object`, `Array`, `Number`, `String`, or `Void`.
-*   **`stringify(value)`**: Serializes a HAL `Value` into a JSON-formatted String.
+*   **`stringify(value)`**: Serializes a HAL `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
 
 ---
-*Status: v1.1.0-alpha (Strict Procedural Purity)*
+*Status: v1.2.0-alpha (Strict Procedural Purity)*

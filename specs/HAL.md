@@ -1,5 +1,5 @@
 # HAL (Hybrid Automation Language) Specification
-**Version:** 1.0.0-alpha
+**Version:** 1.2.0-alpha
 
 ## 1. Philosophy & Purpose
 HAL is a purely symbolic, instruction-oriented language designed for automation and orchestration. It is not a general-purpose programming language. It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML. 
@@ -18,12 +18,11 @@ An implementation MUST internally support the following seven absolute value typ
 3. **String**: UTF-8 character sequence.
 4. **Array**: Ordered list of Values.
 5. **Object**: Unordered key-value map (`String` -> `Value`).
-6. **Regex**: Regular expression pattern and options.
-    - **Usage**: Regex values are opaque primitives intended to be consumed by Host-provided Native Tasks (e.g., `str.match()`). The HAL specification defines the syntax and flags, but the underlying engine and matching logic are implementation-defined by the Runner.
-    - **Supported Flags**: A compliant implementation **MUST** support the following flags:
-        - `i`: Case-insensitive matching.
-        - `m`: Multi-line mode (anchors `^` and `$` match start/end of lines).
-    - **Unrecognized Flags**: Engines **SHOULD** ignore any unrecognized alphabetic flags to maintain script portability across host environments.
+6. **Opaque**: Represents a black-box handle to volatile Host State (e.g., a compiled Regex engine, a File handle, or a Network Socket).
+    - **Generation**: HAL scripts cannot instantiate `Opaque` values directly. They are created and returned exclusively by Host-provided Native Tasks.
+    - **Semantics**: `Opaque` values are strictly Truthy. They are inert and impenetrable to the HAL Interpreter; they can only be passed as arguments back to Native Tasks.
+    - **Labeling**: When a Host creates an `Opaque` value, it SHOULD provide a short string label (e.g., `"RegExp"`) for debugging and string coercion purposes.
+    - **Serialization**: `Opaque` values represent volatile runtime state and are NOT serializable across the Air Gap.
 7. **Task**: A callable unit of execution (Native or User-defined).
 
 ## 3. Lexical Grammar (EBNF)
@@ -46,12 +45,11 @@ FuncDef        ::= "(" ParamList ")" Block
 FuncCall       ::= PrimaryExpr "(" ArgList ")"
 UnaryExpr      ::= "!" Expr | "^" [ Expr ]
 
-Literal        ::= Number | String | Array | Object | Regex
+Literal        ::= Number | String | Array | Object
 Number         ::= [ "-" ] Digit { Digit } [ "." Digit { Digit } ]
 String         ::= '"' { Char } '"' | "'" { Char } "'"
 Array          ::= "[" [ Expr { "," Expr } ] "]"
 Object         ::= "{" [ Identifier ":" Expr { "," Identifier ":" Expr } ] "}"
-Regex          ::= "/" { CharExceptSlash } "/" [ { Alpha } ]
 
 ParamList      ::= [ Param { "," Param } ]
 Param          ::= [ "?" ] Identifier [ "=" Expr ]
@@ -64,7 +62,6 @@ Digit          ::= "0".."9"
 Comment        ::= "//" { AnyCharExceptNewline }
 
 Char                 ::= ? Any valid UTF-8 character ?
-CharExceptSlash      ::= Char - "/"
 AnyCharExceptNewline ::= Char - "\n"
 ```
 
@@ -85,7 +82,7 @@ A compliant Parser MUST emit an AST constructable from the following logical nod
 
 *   **`Block(statements)`**: A sequential list of statements. Evaluates to the result of its final statement, or `Void` if empty.
 *   **`Assign(name, expr)`**: Binds the evaluated result of `expr` to `name` in the current scope. **Evaluates to `Void`.**
-*   **`Literal(value)`**: A concrete `String`, `Number`, `Regex`, `Array`, or `Object`.
+*   **`Literal(value)`**: A concrete `String`, `Number`, `Array`, or `Object`.
 *   **`Ident(name, isCore)`**: A variable lookup. If `isCore` is true (triggered by `#`), lookup MUST happen exclusively in the `coreScope`.
 *   **`Field(object, fieldName)`**: Property retrieval from an Object, Array, or String.
 *   **`FuncDef(params, body)`**: Defines a User Task.
