@@ -44,7 +44,7 @@ Variables in HAL (Strings, Numbers, Arrays, Objects) are purely inert memory con
 Beyond its core pillars, HAL enforces structural purity to eliminate ambiguity.
 
 ### 4. Explicit Instruction Only
-HAL has no binary operators for data manipulation. There is no inline arithmetic (`+`, `-`, `*`, `/`) and no built-in syntax for String or Array concatenation. Every operation that transforms or combines data must be invoked via an explicit Task call (e.g., `math.add(a, b)` or `str.concat(s1, s2)`).
+HAL has no binary operators for data manipulation. There is no inline arithmetic (`+`, `-`, `*`, `/`) and no built-in syntax for String or Array concatenation. Every operation that transforms or combines data must be invoked via an explicit, host-defined Task call (e.g., `math.add(a, b)` or `str.concat(s1, s2)`).
 
 ### 5. Symbol Delimited
 HAL is whitespace-insensitive and semicolon-free. Because every operation is triggered by an explicit symbol or a task call, instructions are unambiguously delimited by their own tokens. Newlines are purely for readability and error reporting.
