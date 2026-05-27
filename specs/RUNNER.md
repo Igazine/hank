@@ -1,5 +1,5 @@
 # HAL Runner Specification
-**Version:** 1.0.0-Draft
+**Version:** 1.0.0-alpha
 
 ## 1. The Runner Role
 The Runner is the environment-specific host that encapsulates the HAL Interpreter. It provides the "bridge" between the pure, memory-only HAL instruction set and the host's Operating System, filesystem, and network.
@@ -92,4 +92,4 @@ The result of bridging a complex object MUST be a HAL **String**.
 *   **Consumption**: A HAL script receives this string and may use standard library tasks (e.g., `json.parse`) to interact with the data, or pass the string back to further Native Tasks as a lookup handle.
 
 ---
-*Status: v1.0.0-Draft (Clean Room Validation Phase)*
+*Status: v1.0.0-alpha (Clean Room Validation Phase)*
