@@ -16,5 +16,8 @@
   obj = { key: "value", nested: { a: 1 } }
   ? (obj.key) { log.print("Objects: OK") }
 
+  // VERIFY: The following line MUST trigger a syntax error in v1.2.0+
+  re = /test/i
+
   log.print("01 Pass")
 }
