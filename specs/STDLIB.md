@@ -1,5 +1,5 @@
 # HAL Standard Library Specification
-**Version:** 1.2.0-alpha3
+**Version:** 1.2.0-alpha4
 
 ## 1. Overview
 This document defines the official HAL Standard Library. Official language implementations (Go, Rust, TS, Haxe) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
@@ -86,6 +86,10 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 ### 5.1 `json` Module
 *   **`parse(string)`**: Parses a JSON-formatted string and returns the corresponding HAL `Object`, `Array`, `Number`, `String`, or `Void`.
 *   **`stringify(value)`**: Serializes a HAL `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
+
+---
+*Status: v1.2.0-alpha2 (Strict Procedural Purity)*
+lue)`**: Serializes a HAL `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
 
 ---
 *Status: v1.2.0-alpha2 (Strict Procedural Purity)*
