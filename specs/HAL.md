@@ -1,5 +1,5 @@
 # Hank Specification
-**Version:** 1.3.0-alpha1
+**Version:** 1.3.0-alpha2
 
 ## 1. Philosophy & Purpose
 Hank is a purely symbolic, instruction-oriented language designed for automation and orchestration. It is not a general-purpose programming language. It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML. 
@@ -120,6 +120,7 @@ Tasks accept arguments mapped to parameters. Parameter definitions control omiss
 *   **Invalid Call**: If a script attempts to invoke a non-Task value as a function, the Interpreter **MUST** throw a runtime error.
 *   **Evaluation Order**: Parameters are processed and bound to the local scope sequentially from **left to right**.
 *   **Extra Arguments**: If a caller provides more arguments than parameters defined in the Task's signature, the Host **MUST** throw a runtime error.
+*   **Smart Callbacks**: Native Tasks that invoke User-defined callbacks (e.g., standard library higher-order tasks like `arr.each`) **SHOULD** dynamically adapt to the callback's defined arity. The Host `ExecutionContext` MUST ensure that Native Tasks do not trigger "Extra Arguments" errors when they attempt to provide optional callback data (such as an index) to a User Task that did not explicitly define a parameter to receive it.
 
 ### 5.6 Logical Negation (`!`)
 *   `!expr` evaluates the truthiness of `expr`.

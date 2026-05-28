@@ -1,5 +1,5 @@
 # Hank System Library (SYSLIB) Specification
-**Version:** 1.3.0-alpha1
+**Version:** 1.3.0-alpha2
 
 ## 1. Overview
 The Hank System Library provides system-level primitives for high-performance automation. Unlike the Standard Library (STDLIB), these modules are closely tied to the Host Operating System and may not be available in restricted or browser-based environments.
