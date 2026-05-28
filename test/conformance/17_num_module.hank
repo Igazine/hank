@@ -1,0 +1,39 @@
+() {
+  log.print("17 Numeric & Bitwise Module")
+
+  // Parsing & Auto-detection
+  ? (math.eq(num.parse("255"), 255)) { log.print("num.parse (dec): OK") }
+  ? (math.eq(num.parse("0xFF"), 255)) { log.print("num.parse (hex): OK") }
+  ? (math.eq(num.parse("0b1010"), 10)) { log.print("num.parse (bin): OK") }
+  ? (math.eq(num.parse("0o77"), 63)) { log.print("num.parse (oct): OK") }
+
+  // Custom Radix (up to 36)
+  ? (math.eq(num.parse("zz", 36), 1295)) { log.print("num.parse (base36): OK") }
+  ? (math.eq(num.format(1295, 36), "zz")) { log.print("num.format (base36): OK") }
+  ? (math.eq(num.format(255, 16), "ff")) { log.print("num.format (hex): OK") }
+
+  // Bitwise Logic
+  // 10 (1010) AND 12 (1100) = 8 (1000)
+  ? (math.eq(num.bitAnd(10, 12), 8)) { log.print("num.bitAnd: OK") }
+  
+  // 10 (1010) OR 12 (1100) = 14 (1110)
+  ? (math.eq(num.bitOr(10, 12), 14)) { log.print("num.bitOr: OK") }
+  
+  // 10 (1010) XOR 12 (1100) = 6 (0110)
+  ? (math.eq(num.bitXor(10, 12), 6)) { log.print("num.bitXor: OK") }
+  
+  // bitNot(0) = -1 (in 64-bit signed)
+  ? (math.eq(num.bitNot(0), -1)) { log.print("num.bitNot: OK") }
+
+  // Shifts
+  // 1 << 4 = 16
+  ? (math.eq(num.shiftL(1, 4), 16)) { log.print("num.shiftL: OK") }
+  
+  // 16 >> 2 = 4
+  ? (math.eq(num.shiftR(16, 2), 4)) { log.print("num.shiftR: OK") }
+  
+  // -1 >> 1 = -1 (sign-propagating)
+  ? (math.eq(num.shiftR(-1, 1), -1)) { log.print("num.shiftR (neg): OK") }
+
+  log.print("17 Pass")
+}
