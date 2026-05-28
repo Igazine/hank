@@ -3,7 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
   title: "Hank",
-  description: "Hybrid Automation Language Documentation",
+  description: "Hybrid Automation/Scripting Language Documentation",
   base: '/hank/',
   cleanUrls: false,
   srcDir: '../',
