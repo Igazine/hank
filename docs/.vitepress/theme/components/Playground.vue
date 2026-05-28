@@ -11,7 +11,7 @@ const code = ref(`() {
   log.print(str.format("10 + 25 = %1", sum))
   
   // Uncomment below to test Macro inclusion from the 'Virtual Files' tab
-  // @utils
+  // @"utils"
   // u = utils()
   // log.print(str.format("5 + 10 = %1", u.add_ten(5)))
 }`)

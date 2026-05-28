@@ -9,7 +9,7 @@ The `?` (If), `:` (Fallback), and `~` (Rescue) sigils form a continuous control 
 ### Branching (`?` and `:`)
 The `?` operator evaluates the truthiness of an expression. If truthy, the associated block is executed. An optional `:` block serves as the fallback if the condition is falsy.
 
-```hal
+```hank
 ? (math.gt(count, 10)) {
   log.print("Large batch")
 } : {
@@ -20,7 +20,7 @@ The `?` operator evaluates the truthiness of an expression. If truthy, the assoc
 ### Error Rescue (~)
 The `~` operator can be appended to any control chain. It intercepts host-level errors thrown within the preceding blocks. The rescue block receives a mandatory string parameter containing the serialized error message.
 
-```hal
+```hank
 ? (1) {
   proc.run("dangerous-command")
 } ~ (err) {
@@ -35,7 +35,7 @@ The `!` operator evaluates the falsiness of an expression.
 - If the expression is **Truthy**, `!expr` returns `Void`.
 - If the expression is **Falsy** (`Void`), `!expr` returns `Number(1)`.
 
-```hal
+```hank
 ? (!env.get("API_KEY")) {
   log.warn("Missing API key, running in guest mode")
 }

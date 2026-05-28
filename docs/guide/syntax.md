@@ -9,7 +9,7 @@ Every valid Hank script is a single **Main Task**. This outermost block serves a
 ### Host Arguments
 The parameters defined in the Main Task are **Host Arguments**. These are values passed into the script by the engine when it is invoked (e.g., CLI flags, API parameters, or environment data).
 
-```hal
+```hank
 // Example: deploy.hank
 @ "utils"
 
@@ -41,7 +41,7 @@ Hank internally supports seven absolute value types:
 
 Assignment binds the evaluated result of an expression to an identifier in the current local scope.
 
-```hal
+```hank
 // Simple assignment
 name = "tamas"
 
@@ -76,7 +76,7 @@ Hank is a **symbol-delimited** language. It does not use semicolons to terminate
 - **No Semicolons**: Statement boundaries are determined by token transitions (e.g., an assignment followed by a new task call).
 - **Whitespace**: Newlines and spaces are ignored by the parser (except as token separators). A script can be written on a single line or spread across many for clarity.
 
-```hal
+```hank
 // Both are identical to the engine:
 () { name = "tamas" log.print(name) }
 
@@ -101,7 +101,7 @@ Hank uses a simple truthiness rule:
 ### Core Protection (#)
 Identifiers can be prefixed with the `#` sigil to force the interpreter to resolve the name directly against the `coreScope`, bypassing all local lexical shadowing.
 
-```hal
+```hank
 log = "local string"
 #log.print(log) // Uses the core log module to print the local variable
 ```

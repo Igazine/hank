@@ -6,7 +6,7 @@ In Hank, every script and imported resource is a Task. This architectural decisi
 
 A task is defined by a parameter list followed by a structural block.
 
-```hal
+```hank
 (a, b) {
   ^ math.add(a, b)
 }
@@ -23,7 +23,7 @@ Tasks support three types of parameters:
 ### Sequential Evaluation
 Parameters are bound from left to right. A default expression may reference any preceding parameter.
 
-```hal
+```hank
 (a, b = a) {
   // If b is omitted, it defaults to the value of a
 }
@@ -38,7 +38,7 @@ Hank strictly enforces arity. If a caller provides more arguments than parameter
 ### Explicit Return (^)
 The `^` sigil immediately halts the current task and returns a value to the caller.
 
-```hal
+```hank
 () {
   ? (os.is_mac()) { ^ "Mac OS" }
   ^ "Other"
@@ -57,7 +57,7 @@ Architecturally, this structure mirrors a **Class and its Methods**: the Main Ta
 ### Hoisting
 Because Hank uses a two-pass execution model, inline tasks are hoisted. You can call a task before its definition appears in the script.
 
-```hal
+```hank
 () {
   log.print(get_msg()) // Hoisted call
 

@@ -4,12 +4,12 @@ The `@` sigil represents a parse-time dependency. It is not an execution-time "i
 
 ## Syntax
 
-```hal
+```hank
 @ "utils"
 @ "path/to/script.hank"
 ```
 
-If an identifier is provided instead of a string (e.g., `@utils`), it is treated as a shorthand for a literal string path.
+The `@` macro strictly requires a String literal path. Passing an unquoted identifier is not allowed.
 
 ## Expansion Mechanism
 
@@ -36,7 +36,7 @@ Compliant Runners must detect circular dependencies (e.g., Task A requires Task 
 
 Because macro expansion results in assignments, the imported tasks are available for hoisting. You can call an imported task before its `@` sigil appears in the file.
 
-```hal
+```hank
 () {
   log.print(math_utils.sum(1, 2)) // Valid due to hoisting
   @ "math_utils"
