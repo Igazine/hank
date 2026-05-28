@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: "Hank"
-  text: "Hybrid Automation Language"
-  tagline: "The pure symbolic instruction set for cross-platform orchestration."
+  text: "Hybrid Automation/Scripting Language"
+  tagline: "The pure symbolic instruction set for cross-platform orchestration and API specifications."
   actions:
     - theme: brand
       text: Get Started
