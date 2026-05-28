@@ -1,5 +1,5 @@
 # Hank Specification
-**Version:** 1.3.0-alpha3
+**Version:** 1.3.0-alpha4
 
 ## 1. Philosophy & Purpose
 Hank is a purely symbolic, instruction-oriented language designed for automation and orchestration. It is not a general-purpose programming language. It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML. 
@@ -33,7 +33,7 @@ Script         ::= { MacroInclude } TaskDef
 TaskDef        ::= FuncDef | Block
 
 Statement      ::= MacroInclude | AssignStmt | FlowControl | Expr
-MacroInclude   ::= "@" ( String | Identifier )
+MacroInclude   ::= "@" String
 AssignStmt     ::= Identifier "=" Expr
 FlowControl    ::= "?" "(" Expr ")" Block [ ":" Block ] [ "~" "(" Identifier ")" Block ]
 Block          ::= "{" { Statement } "}"
@@ -129,10 +129,9 @@ Tasks accept arguments mapped to parameters. Parameter definitions control omiss
 
 ## 6. The `@` Macro (Parse-Time Dependency)
 The `@` sigil is strict Parse-Time Macro Expansion.
-*   **Syntax**: `@ "path/to/script"` or `@scriptName`
+*   **Syntax**: `@ "path/to/script"`
 *   **Mechanism**: When the Parser encounters this sigil, it MUST request the raw string content of the resource from the Runner.
-*   **Identifier Shorthand**: If an `Identifier` is provided instead of a `String` (e.g., `@mytask`), it is treated strictly as a shorthand for a literal string path (e.g., `@ "mytask"`).
-*   **Task Name Derivation**: The identifier assigned to the task is the final segment of the path, strictly stripped of any **`.hank`** extension (e.g., `@ "a/b/c.hank"` -> `c`, `@mytask` -> `mytask`).
+*   **Task Name Derivation**: The identifier assigned to the task is the final segment of the path, strictly stripped of any **`.hank`** extension (e.g., `@ "a/b/c.hank"` -> `c`, `@ "utils"` -> `utils`).
 *   **Structure**: Every imported **`.hank`** file MUST follow the `Script` grammar (zero-or-more macro headers followed by exactly one task).
 *   **Injection**: The Parser parses the resource and injects an `Assign` node into the lexical block where the `@` directive appeared.
 *   **Hoisting Compatibility**: Assignments produced by `@` macro expansion participate in Pass 1 (Hoisting) on equal terms with user-written assignments.

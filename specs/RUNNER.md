@@ -1,5 +1,5 @@
 # Hank Runner Specification
-**Version:** 1.3.0-alpha3
+**Version:** 1.3.0-alpha4
 
 ## 1. The Runner Role
 The Runner is the environment-specific host that encapsulates the Hank Interpreter. It provides the "bridge" between the pure, memory-only Hank instruction set and the host's Operating System, filesystem, and network.
@@ -18,7 +18,7 @@ When a Runner is asked to execute a script, it MUST perform a recursive pre-proc
 *   `macroMap`: A map of **exact raw string literals** found in `@` sigils to their raw string content.
 
 **The Algorithm:**
-1.  **Scan**: Search the script for the `@` sigil followed by an identifier or string.
+1.  **Scan**: Search the script for the `@` sigil followed by a string literal.
 2.  **Resolve Path**:
     *   If the path is absolute, use it directly.
     *   If relative, resolve it against the **directory of the file currently being processed**.
@@ -92,4 +92,4 @@ While complex data MUST be flattened to maintain serializability, Host environme
 *   **Unidirectional**: Hank scripts cannot inspect or mutate `Opaque` handles; they serve strictly as handles to be passed back to Native Tasks for Host-side resolution.
 
 ---
-*Status: v1.3.0-alpha1 (The Hank Era)*
+*Status: v1.3.0-alpha4 (The Hank Era)*

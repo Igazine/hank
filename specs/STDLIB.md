@@ -1,5 +1,5 @@
 # Hank Standard Library Specification
-**Version:** 1.3.0-alpha3
+**Version:** 1.3.0-alpha4
 
 ## 1. Overview
 This document defines the official Hank Standard Library. Official language implementations (Go, Rust, TS, Haxe, Dart) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
