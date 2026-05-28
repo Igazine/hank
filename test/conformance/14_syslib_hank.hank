@@ -23,8 +23,8 @@
   log.print(str.format("Is Root: %1", is_root))
 
   // Signal Module
-  host.signal("Testing Signal")
-  log.print("host.signal(): OK")
+  runtime.signal("Testing Signal")
+  log.print("runtime.signal(): OK")
 
   // FS Module
   test_file = "hank_test.txt"
