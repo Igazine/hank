@@ -1,6 +1,6 @@
 # Hank
 
-Hank is a purely symbolic, instruction-oriented, embeddable language designed for high-performance automation and orchestration. 
+Hank is a compact, purely symbolic (keyword-less), instruction-oriented, embeddable language designed for high-performance automation, orchestration, and API implementation.
 
 It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML, while maintaining an air-gapped, host-agnostic design.
 
