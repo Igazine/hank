@@ -19,11 +19,14 @@ Returns an Array of Strings representing all available keys in the environment m
 ## `runtime` Module (Engine Control)
 Handles the internal state and lifecycle of the Hank machine.
 
-### `runtime.hankt(?code = 0)`
+### `runtime.halt(?code = 0)`
 Immediately stops script execution. The provided `code` is returned to the Host Runner.
 
 ### `runtime.elapsedTime()`
 Returns the number of milliseconds (Number) elapsed since the Hank engine was initialized.
+
+### `runtime.signal(value)`
+Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
 
 ---
 
