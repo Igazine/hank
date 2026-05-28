@@ -1,5 +1,5 @@
 # Hank Standard Library Specification
-**Version:** 1.3.0-alpha2
+**Version:** 1.3.0-alpha3
 
 ## 1. Overview
 This document defines the official Hank Standard Library. Official language implementations (Go, Rust, TS, Haxe, Dart) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
@@ -20,6 +20,7 @@ Provides a key-value state bridge between the Hank script and the Host Runner. T
 Provides interaction with the Hank virtual machine itself.
 *   **`halt(?code = 0)`**: Immediately terminates script execution. The `code` (Number) is returned to the Host.
 *   **`elapsedTime()`**: Returns a high-precision monotonic timestamp (Hank Number) in **milliseconds** relative to the start of the engine.
+*   **`signal(value)`**: Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
 
 ### 2.3 `log` Module
 Provides unified output capabilities.
@@ -89,4 +90,4 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 *   **`stringify(value)`**: Serializes a Hank `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
 
 ---
-*Status: v1.3.0-alpha1 (The Hank Era)*
+*Status: v1.3.0-alpha3 (The Hank Era)*

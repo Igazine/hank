@@ -1,5 +1,5 @@
 # Hank Runner Specification
-**Version:** 1.3.0-alpha2
+**Version:** 1.3.0-alpha3
 
 ## 1. The Runner Role
 The Runner is the environment-specific host that encapsulates the Hank Interpreter. It provides the "bridge" between the pure, memory-only Hank instruction set and the host's Operating System, filesystem, and network.

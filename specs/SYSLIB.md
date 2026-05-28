@@ -1,5 +1,5 @@
 # Hank System Library (SYSLIB) Specification
-**Version:** 1.3.0-alpha2
+**Version:** 1.3.0-alpha3
 
 ## 1. Overview
 The Hank System Library provides system-level primitives for high-performance automation. Unlike the Standard Library (STDLIB), these modules are closely tied to the Host Operating System and may not be available in restricted or browser-based environments.
@@ -14,7 +14,6 @@ Provides metadata and control over the Hank Runner's own process.
 *   **`cwd()`**: Returns the absolute path String of the current working directory.
 *   **`isRoot()`**: Returns `1` if the process has administrative/root privileges, otherwise `Void`.
 *   **`pid()`**: Returns the Process ID (Number) of the host process.
-*   **`signal(value)`**: Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
 
 ### 2.2 `proc` Module (External Processes)
 Provides capabilities to manage and execute other processes.
