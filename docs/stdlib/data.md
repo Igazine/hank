@@ -61,5 +61,32 @@ Returns the value associated with the specified key, or `Void` if it does not ex
 ### `obj.keys(object)`
 Returns an Array of the object's keys (Strings).
 
-### `obj.values(object)`
-Returns an Array of the object's values.
+---
+
+## `num` Module (Number & Bitwise)
+
+Provides utilities for numeric conversion and bitwise operations. All bitwise operations are performed on **signed 64-bit integers**.
+
+### `num.parse(string, ?base = 0)`
+Parses a string into a Number. If `base` is `0`, it auto-detects prefixes (`0x`, `0b`, `0o`). Supports bases 2 through 36.
+
+### `num.format(number, ?base = 10)`
+Converts a Number into its string representation in the specified base (2-36).
+
+### `num.bitAnd(a, b)`
+Returns the bitwise AND of `a` and `b`.
+
+### `num.bitOr(a, b)`
+Returns the bitwise OR of `a` and `b`.
+
+### `num.bitXor(a, b)`
+Returns the bitwise XOR of `a` and `b`.
+
+### `num.bitNot(n)`
+Returns the bitwise NOT of `n`.
+
+### `num.shiftL(n, bits)`
+Returns `n` shifted left by `bits`.
+
+### `num.shiftR(n, bits)`
+Returns `n` shifted right by `bits` (sign-propagating).

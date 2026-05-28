@@ -19,7 +19,7 @@ Variables in Hank are purely inert memory containers. They do not have methods. 
 
 The standard library is grouped into logical modules. Each module is an Object in the `coreScope` containing Task values.
 
-```hal
+```hank
 () {
   log.print(math.add(1, 2, 3))
   s = "  hello  "
