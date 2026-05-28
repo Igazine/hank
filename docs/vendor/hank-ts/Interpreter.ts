@@ -6,7 +6,7 @@ export class Interpreter implements ExecutionContext {
 
     constructor(parentScope: Scope | undefined, coreScope: Scope) {
         this.coreScope = coreScope;
-        this.globalScope = new HankScope(parentScope || coreScope);
+        this.globalScope = new HALScope(parentScope || coreScope);
     }
 
     run(ast: Expr): Value {
@@ -62,7 +62,7 @@ export class Interpreter implements ExecutionContext {
             case 'FuncCall':
                 const target = this.evalInScope(node.target, scope);
                 const args = node.args.map(a => this.evalInScope(a, scope));
-                return this.call(target, args);
+                return this.internalCall(target, args);
             case 'Field':
                 const obj = this.evalInScope(node.object, scope);
                 if (obj.type === ValueType.Object) {
@@ -101,7 +101,7 @@ export class Interpreter implements ExecutionContext {
                         return this.evalInScope(node.success, scope);
                     } catch (e: any) {
                         if (node.rescue) {
-                            const rescueScope = new HankScope(scope);
+                            const rescueScope = new HALScope(scope);
                             if (node.catchVar) {
                                 rescueScope.set(node.catchVar, { type: ValueType.String, value: e.message || String(e) });
                             }
@@ -117,7 +117,17 @@ export class Interpreter implements ExecutionContext {
         }
     }
 
-    call(task: Value, args: Value[]): Value {
+    public call(task: Value, args: Value[]): Value {
+        let finalArgs = args;
+        if (task.type === ValueType.Task && task.task && !task.task.isNative && task.task.params) {
+            if (args.length > task.task.params.length) {
+                finalArgs = args.slice(0, task.task.params.length);
+            }
+        }
+        return this.internalCall(task, finalArgs);
+    }
+
+    private internalCall(task: Value, args: Value[]): Value {
         if (task.type !== ValueType.Task || !task.task) {
             throw new Error(`Target is not a function: ${this.valToString(task)}`);
         }
@@ -128,7 +138,7 @@ export class Interpreter implements ExecutionContext {
             const t = task.task;
             if (args.length > t.params!.length) throw new Error("Too many arguments");
 
-            const callScope = new HankScope(t.closure);
+            const callScope = new HALScope(t.closure);
             for (let i = 0; i < t.params!.length; i++) {
                 const p = t.params![i];
                 let val: Value = { type: ValueType.Void };
@@ -168,7 +178,7 @@ export class Interpreter implements ExecutionContext {
     }
 }
 
-export class HankScope implements Scope {
+export class HALScope implements Scope {
     private values: Map<string, Value> = new Map();
     private parent: Scope | undefined;
 

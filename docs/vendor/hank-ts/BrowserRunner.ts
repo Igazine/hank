@@ -146,7 +146,14 @@ export class BrowserRunner {
                 this.options.onExit?.(code);
                 return { type: ValueType.Void };
             },
-            elapsedTime: () => ({ type: ValueType.Number, value: typeof performance !== 'undefined' ? performance.now() : 0 })
+            elapsedTime: () => ({ type: ValueType.Number, value: typeof performance !== 'undefined' ? performance.now() : 0 }),
+            signal: (args) => {
+                if (args.length > 0) {
+                    const msg = this.valToString(args[0]);
+                    this.options.onOutput?.(`[SIGNAL] ${msg}`, 'stdout');
+                }
+                return { type: ValueType.Void };
+            }
         });
 
         this.registerModule('env', {
