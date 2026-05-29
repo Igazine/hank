@@ -16,11 +16,6 @@ Hank is a purely symbolic, instruction-oriented embeddable language designed to 
 
 Hank is designed to be embedded in any host environment. The following implementations are maintained as Tier-1 libraries:
 
-- **Go**: [![Go CI](https://github.com/Igazine/hank-go/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-go/actions/workflows/ci.yml)
-- **Rust**: [![Rust CI](https://github.com/Igazine/hank-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-rust/actions/workflows/ci.yml)
-- **TypeScript**: [![TS CI](https://github.com/Igazine/hank-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-ts/actions/workflows/ci.yml)
-- **Dart**: [![Dart CI](https://github.com/Igazine/hank-dart/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-dart/actions/workflows/ci.yml)
-- **Haxe**: [![Haxe CI](https://github.com/Igazine/hank-haxe/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-haxe/actions/workflows/ci.yml)
 
 | Engine | Language | Repository | Build Status |
 | --- | --- | --- | --- |
