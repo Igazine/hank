@@ -1,11 +1,8 @@
 # Hank
 
-> [!WARNING]
-> **Note on Stability:** Although Hank's execution model and syntax grammar are highly stable and rigorously tested, the project is currently in the **Alpha** phase. We may introduce breaking changes to the core specifications (such as standard library behavior or Runner APIs) and engine implementations as we refine the ecosystem. Please use Hank with care and check the repository frequently for updates.
+> ⚠️ **Note on Stability:** Although Hank's execution model and syntax grammar are highly stable and rigorously tested, the project is currently in the **Alpha** phase. We may introduce breaking changes to the core specifications (such as standard library behavior or Runner APIs) and engine implementations as we refine the ecosystem. Please use Hank with care and check the repository frequently for updates.
 
-Hank is a compact, purely symbolic (keyword-less), instruction-oriented, embeddable language designed for high-performance automation, orchestration, and API implementation.
-
-It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML, while maintaining an air-gapped, host-agnostic design.
+Hank is a purely symbolic, instruction-oriented embeddable language designed to bring secure, dynamic automation to any host application. Built on a strict air-gapped execution model, Hank has zero built-in I/O, guaranteeing that scripts cannot access the filesystem, network, or OS without explicit delegation. This makes it the perfect predictable environment for game scripting, microservice orchestration, and user-facing plugin systems. With a highly readable, keyword-less syntax and universal cross-platform parity, Hank seamlessly bridges the gap between static configuration files and complex general-purpose programming.
 
 ## Core Pillars
 1. **Air Gapped**: Zero built-in I/O; all environmental interactions are mapped to Host Native Tasks.
