@@ -25,8 +25,8 @@ Hank is designed to be embedded in any host environment. The following implement
 - **Haxe**: [github.com/Igazine/hank-haxe](https://github.com/Igazine/hank-haxe)
 
 ## Project Structure
-- `/specs`: The formal language and library specifications.
-- `/docs`: Documentation and integration guides.
+- `/specs`: The formal language and library specifications (The Testament).
+- `/extensions`: Blueprints for optional, platform-dependent modular power-ups.
 - `/test/conformance`: The universal Hank test suite used to verify engine compliance.
 
 ## Documentation
