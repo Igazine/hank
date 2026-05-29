@@ -30,8 +30,8 @@ Hank is designed to be embedded in any host environment. The following implement
 
 ## Documentation
 
-- **Philosophy & Vision**: [The Hank API Multiverse](https://igazine.github.io/hank/guide/philosophy)
-- **Technical Docs**: [https://igazine.github.io/hank/](https://igazine.github.io/hank/)
+- **Philosophy & Vision**: [The Hank API Multiverse](https://igazine.github.io/hank-docs/guide/philosophy)
+- **Technical Docs**: [https://igazine.github.io/hank-docs/](https://igazine.github.io/hank-docs/)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
