@@ -1,6 +1,7 @@
 # Hank
 
-> ⚠️ **Note on Stability:** Although Hank's execution model and syntax grammar are highly stable and rigorously tested, the project is currently in the **Alpha** phase. We may introduce breaking changes to the core specifications (such as standard library behavior or Runner APIs) and engine implementations as we refine the ecosystem. Please use Hank with care and check the repository frequently for updates.
+> [!WARNING]
+> **Note on Stability:** Although Hank's execution model and syntax grammar are highly stable and rigorously tested, the project is currently in the **Alpha** phase. We may introduce breaking changes to the core specifications (such as standard library behavior or Runner APIs) and engine implementations as we refine the ecosystem. Please use Hank with care and check the repository frequently for updates.
 
 Hank is a compact, purely symbolic (keyword-less), instruction-oriented, embeddable language designed for high-performance automation, orchestration, and API implementation.
 
