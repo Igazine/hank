@@ -65,3 +65,8 @@ export interface TokenData {
 export interface IHankSerializable {
     serializeHank(): string;
 }
+
+export interface IHankExtension {
+    readonly name: string;
+    getModules(): Record<string, Record<string, NativeFunc>>;
+}

@@ -1,10 +1,10 @@
-# Hank System Library (SYSLIB) Specification
-**Version:** 1.3.0-alpha4
+# Hank System Extension (`sys`)
+**Version:** 1.0.0
 
 ## 1. Overview
-The Hank System Library provides system-level primitives for high-performance automation. Unlike the Standard Library (STDLIB), these modules are closely tied to the Host Operating System and may not be available in restricted or browser-based environments.
+The Hank System Extension provides system-level primitives for high-performance automation. This library is 100% optional and carries platform-dependent I/O behaviors. It is closely tied to the Host Operating System and may not be available in restricted or browser-based environments.
 
-Implementations are encouraged to use these signatures to maintain ecosystem predictability for automation scripts.
+To use this extension, the host application must manually register it (e.g., `runner.registerModules(SysExtension.getModules())`).
 
 ---
 
@@ -56,4 +56,4 @@ All paths are relative to `host.cwd()` unless absolute.
 *   **`stat(path)`**: Returns an Object `{ size: Number, isDir: Number/Void, mtime: Number }`.
 
 ---
-*Status: v1.3.0-alpha1 (The Hank Era)*
+*Status: Migrated to Official Extension (v1.0.0)*

@@ -1,5 +1,5 @@
 # Hank Runner Specification
-**Version:** 1.3.0-alpha4
+**Version:** 1.3.0-alpha5
 
 ## 1. The Runner Role
 The Runner is the environment-specific host that encapsulates the Hank Interpreter. It provides the "bridge" between the pure, memory-only Hank instruction set and the host's Operating System, filesystem, and network.
@@ -36,7 +36,13 @@ The Runner MUST provide the completed `macroMap` to the Hank Parser. This ensure
 ## 3. The Core Handshake (Injection)
 The Runner MUST initialize the Interpreter with a `coreScope` pre-populated with Native Tasks.
 
-### 3.1 Native Task Interface
+### 3.1 The Extension Contract
+To maintain architectural consistency, all native capabilities (including the Standard Library) are delivered as **Extensions**. A compliant Runner SHOULD provide a mechanism to register objects adhering to the following interface:
+
+*   **`name` (Getter/Property)**: A String identifier for the extension (e.g., `"StdLib"`, `"SysExtension"`).
+*   **`getModules() -> Map<String, Map<String, NativeFunc>>`**: Returns a nested map where the top-level keys are Module names, and the values are maps of Task names to `NativeFunc` implementations.
+
+### 3.2 Native Task Interface
 A Native Task is a function defined in the host language with the following signature:
 `function(Arguments: Array<Value>, Context: ExecutionContext) -> Value`
 
@@ -50,10 +56,11 @@ A Native Task is a function defined in the host language with the following sign
         *   **Write**: Native tasks may bind values to the scope. All writes are **strictly local** to the current scope.
         *   **Interaction**: Evaluations performed via `eval()` will see any modifications previously made to the `scope` by the Native Task during the same invocation.
 
-### 3.2 Standard Library & Extensibility
-*   **The Standard Library**: A Runner is **NOT** required to implement the standard library. The Hank ecosystem provides a standardized set of foundational modules defined in `specs/STDLIB.md`. Official language implementations (Go, Rust, TS, Haxe, Dart) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or define entirely custom modules (e.g., `str.customTask()`) as their domain requires.
-*   **Module Tasks**: By convention, tasks are grouped into objects to avoid polluting the root namespace. These are represented as `Object` values in `coreScope` containing further `Task` values. Accessed via `Field` retrieval, this is strictly consistent with Hank's "Everything is an Identifier" and "Immutable Objects" rules.
-*   **Global Tasks**: While module namespacing is the standard convention, custom Host implementations **MAY** inject their own tasks directly into the `coreScope` root (e.g., `my_custom_task`) if desired.
+### 3.3 Registration Pattern
+A Runner implementation SHOULD provide a method (e.g., `registerExtension(ext: HankExtension)`) that:
+1.  Iterates through the modules provided by `getModules()`.
+2.  Wraps each module into a Hank **Object** (ensuring all nested values are Hank **Task** values).
+3.  Injects these Objects into the `coreScope`.
 
 ## 4. Execution Lifecycle
 
@@ -92,4 +99,4 @@ While complex data MUST be flattened to maintain serializability, Host environme
 *   **Unidirectional**: Hank scripts cannot inspect or mutate `Opaque` handles; they serve strictly as handles to be passed back to Native Tasks for Host-side resolution.
 
 ---
-*Status: v1.3.0-alpha4 (The Hank Era)*
+*Status: v1.3.0-alpha5 (The Hank Era)*

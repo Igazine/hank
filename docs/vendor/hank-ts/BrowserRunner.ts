@@ -1,4 +1,4 @@
-import { Lexer, Parser, Interpreter, Value, ValueType, HankScope, Scope, ExecutionContext } from './index.js';
+import { Lexer, Parser, Interpreter, Value, ValueType, HankScope, Scope, ExecutionContext, IHankExtension } from './index.js';
 
 /**
  * Options for the BrowserRunner, allowing hooks into host-environment behaviors.
@@ -26,6 +26,16 @@ export class BrowserRunner {
     constructor(options: BrowserRunnerOptions = {}) {
         this.options = options;
         this.registerStd();
+    }
+
+    /**
+     * Registers a Hank Extension.
+     */
+    registerExtension(ext: IHankExtension) {
+        const mods = ext.getModules();
+        for (const [name, tasks] of Object.entries(mods)) {
+            this.registerModule(name, tasks);
+        }
     }
 
     /**
@@ -205,6 +215,32 @@ export class BrowserRunner {
             }
         });
 
+        this.registerModule('num', {
+            parse: (args) => {
+                if (args.length === 0) return { type: ValueType.Void };
+                const s = this.valToString(args[0]);
+                let base = 0;
+                if (args.length > 1 && args[1].type === ValueType.Number) base = args[1].value;
+                if (base === 0) {
+                    if (s.startsWith("0x")) base = 16;
+                    else if (s.startsWith("0b")) base = 2;
+                    else if (s.startsWith("0o")) base = 8;
+                    else base = 10;
+                }
+                const n = parseInt(s, base);
+                if (isNaN(n)) return { type: ValueType.Void };
+                return { type: ValueType.Number, value: n };
+            },
+            format: (args) => {
+                if (args.length === 0 || args[0].type !== ValueType.Number) return { type: ValueType.Void };
+                const n = args[0].value;
+                let base = 10;
+                if (args.length > 1 && args[1].type === ValueType.Number) base = args[1].value;
+                if (base < 2 || base > 36) return { type: ValueType.Void };
+                return { type: ValueType.String, value: n.toString(base) };
+            }
+        });
+
         this.registerModule('regex', {
             parse: (args) => {
                 if (args.length === 0) return { type: ValueType.Void };
@@ -338,8 +374,7 @@ export class BrowserRunner {
                 const key = this.valToString(args[1]);
                 return args[0].value.get(key) || { type: ValueType.Void };
             },
-            keys: (args) => (args.length > 0 && args[0].type === ValueType.Object) ? { type: ValueType.Array, value: Array.from(args[0].value.keys()).map(k => ({ type: ValueType.String, value: k })) } : { type: ValueType.Void },
-            values: (args) => (args.length > 0 && args[0].type === ValueType.Object) ? { type: ValueType.Array, value: Array.from(args[0].value.values()) } : { type: ValueType.Void }
+            keys: (args) => (args.length > 0 && args[0].type === ValueType.Object) ? { type: ValueType.Array, value: Array.from(args[0].value.keys()).map(k => ({ type: ValueType.String, value: k })) } : { type: ValueType.Void }
         });
 
         this.registerModule('json', {

@@ -1,5 +1,5 @@
 # Hank Standard Library Specification
-**Version:** 1.3.0-alpha5
+**Version:** 1.3.0-alpha7
 
 ## 1. Overview
 This document defines the official Hank Standard Library. Official language implementations (Go, Rust, TS, Haxe, Dart) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
@@ -56,16 +56,10 @@ Provides unified output capabilities.
 *   **`get(object, key)`**: Returns the value associated with the specified key, or `Void` if it does not exist.
 *   **`keys(object)`**: Returns an Array of the object's keys (Strings).
 
-### 3.4 `num` Module (Number & Bitwise)
-Provides utilities for numeric conversion and bitwise operations. All bitwise operations are performed on **signed 64-bit integers**.
+### 3.4 `num` Module (Number Conversion)
+Provides utilities for numeric parsing and formatting.
 *   **`parse(string, ?base = 0)`**: Parses a string into a Number. If `base` is `0`, the implementation SHOULD auto-detect prefixes (`0x`, `0b`, `0o`). Supports bases 2 through 36.
 *   **`format(number, ?base = 10)`**: Converts a Number into its string representation in the specified base (2-36).
-*   **`bitAnd(a, b)`**: Returns the bitwise AND of `a` and `b`.
-*   **`bitOr(a, b)`**: Returns the bitwise OR of `a` and `b`.
-*   **`bitXor(a, b)`**: Returns the bitwise XOR of `a` and `b`.
-*   **`bitNot(n)`**: Returns the bitwise NOT of `n`.
-*   **`shiftL(n, bits)`**: Returns `n` shifted left by `bits`.
-*   **`shiftR(n, bits)`**: Returns `n` shifted right by `bits` (sign-propagating).
 
 ---
 
@@ -100,4 +94,15 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 *   **`stringify(value)`**: Serializes a Hank `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
 
 ---
-*Status: v1.3.0-alpha5 (The Hank Era)*
+
+## 6. Official Extensions
+To maintain architectural purity and the "Air Gap Principle", features that depend on the Host Platform or Operating System (such as FileSystem I/O, Networking, or Bitwise operations with platform-specific precision limits) are decoupled from the core Standard Library.
+
+Official language implementations provide these as **Extensions** which must be registered manually by the Host application.
+- **`platform`**: Tasks constrained by execution environment (e.g., bitwise operations in the `bin` module).
+- **`sys`**: Tasks for OS interaction (filesystem, processes, hardware metadata).
+
+Refer to `hank/docs/extensions/` for detailed documentation.
+
+---
+*Status: v1.3.0-alpha7 (The Hank Era)*

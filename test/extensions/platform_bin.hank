@@ -1,0 +1,45 @@
+() {
+  log.print("Extension: Platform (Binary Module)")
+
+  // Bitwise Logic
+  // 10 (1010) AND 12 (1100) = 8 (1000)
+  ? (math.eq(bin.and(10, 12), 8)) { log.print("bin.and: OK") }
+  
+  // 10 (1010) OR 12 (1100) = 14 (1110)
+  ? (math.eq(bin.or(10, 12), 14)) { log.print("bin.or: OK") }
+  
+  // 10 (1010) XOR 12 (1100) = 6 (0110)
+  ? (math.eq(bin.xor(10, 12), 6)) { log.print("bin.xor: OK") }
+  
+  // not(0) = -1 (in 64-bit signed)
+  ? (math.eq(bin.not(0), -1)) { log.print("bin.not: OK") }
+
+  // Shifts
+  // 1 << 4 = 16
+  ? (math.eq(bin.shiftL(1, 4), 16)) { log.print("bin.shiftL: OK") }
+  
+  // 16 >> 2 = 4
+  ? (math.eq(bin.shiftR(16, 2), 4)) { log.print("bin.shiftR: OK") }
+  
+  // -1 >> 1 = -1 (sign-propagating)
+  ? (math.eq(bin.shiftR(-1, 1), -1)) { log.print("bin.shiftR (neg): OK") }
+
+  // Boundary Tests (53-bit Safe Integer Quirk)
+  // Max Safe: 9007199254740991
+  ? (math.eq(bin.and(9007199254740991, 1), 1)) { log.print("bin.and (max safe): OK") }
+  
+  // Error Verification (Out of Bounds)
+  ? (bin.and(9007199254740992, 1)) {
+    log.error("FAIL: Should have thrown out of bounds")
+  } ~ (err) {
+    log.print("bin.and (out of bounds): Caught OK")
+  }
+
+  ? (bin.shiftL(1, 54)) {
+    log.error("FAIL: Should have thrown out of bounds (result)")
+  } ~ (err) {
+    log.print("bin.shiftL (out of bounds): Caught OK")
+  }
+
+  log.print("Platform extension pass")
+}
