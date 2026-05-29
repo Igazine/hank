@@ -18,11 +18,19 @@ It serves as a strict, unambiguous, and highly readable alternative to configura
 
 Hank is designed to be embedded in any host environment. The following implementations are maintained as Tier-1 libraries:
 
-- **Go**: [github.com/Igazine/hank-go](https://github.com/Igazine/hank-go)
-- **Rust**: [github.com/Igazine/hank-rust](https://github.com/Igazine/hank-rust) (Includes **WebAssembly** support)
-- **TypeScript**: [github.com/Igazine/hank-ts](https://github.com/Igazine/hank-ts)
-- **Dart**: [github.com/Igazine/hank-dart](https://github.com/Igazine/hank-dart)
-- **Haxe**: [github.com/Igazine/hank-haxe](https://github.com/Igazine/hank-haxe)
+- **Go**: [![Go CI](https://github.com/Igazine/hank-go/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-go/actions/workflows/ci.yml)
+- **Rust**: [![Rust CI](https://github.com/Igazine/hank-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-rust/actions/workflows/ci.yml)
+- **TypeScript**: [![TS CI](https://github.com/Igazine/hank-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-ts/actions/workflows/ci.yml)
+- **Dart**: [![Dart CI](https://github.com/Igazine/hank-dart/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-dart/actions/workflows/ci.yml)
+- **Haxe**: [![Haxe CI](https://github.com/Igazine/hank-haxe/actions/workflows/ci.yml/badge.svg)](https://github.com/Igazine/hank-haxe/actions/workflows/ci.yml)
+
+| Engine | Language | Repository | Build Status |
+| --- | --- | --- | --- |
+| **Go** | Go | [Igazine/hank-go](https://github.com/Igazine/hank-go) | ![Go CI](https://github.com/Igazine/hank-go/actions/workflows/ci.yml/badge.svg) |
+| **Rust** | Rust | [Igazine/hank-rust](https://github.com/Igazine/hank-rust) | ![Rust CI](https://github.com/Igazine/hank-rust/actions/workflows/ci.yml/badge.svg) |
+| **TS** | TypeScript | [Igazine/hank-ts](https://github.com/Igazine/hank-ts) | ![TS CI](https://github.com/Igazine/hank-ts/actions/workflows/ci.yml/badge.svg) |
+| **Dart** | Dart | [Igazine/hank-dart](https://github.com/Igazine/hank-dart) | ![Dart CI](https://github.com/Igazine/hank-dart/actions/workflows/ci.yml/badge.svg) |
+| **Haxe** | Haxe | [Igazine/hank-haxe](https://github.com/Igazine/hank-haxe) | ![Haxe CI](https://github.com/Igazine/hank-haxe/actions/workflows/ci.yml/badge.svg) |
 
 ## Project Structure
 - `/specs`: The formal language and library specifications (The Testament).
