@@ -63,9 +63,9 @@ Returns an Array of the object's keys (Strings).
 
 ---
 
-## `num` Module (Number & Bitwise)
+## `num` Module (Number Conversion)
 
-Provides utilities for numeric conversion and bitwise operations. All bitwise operations are performed on **signed 64-bit integers**.
+Provides utilities for numeric parsing and formatting.
 
 ### `num.parse(string, ?base = 0)`
 Parses a string into a Number. If `base` is `0`, it auto-detects prefixes (`0x`, `0b`, `0o`). Supports bases 2 through 36.
@@ -73,20 +73,11 @@ Parses a string into a Number. If `base` is `0`, it auto-detects prefixes (`0x`,
 ### `num.format(number, ?base = 10)`
 Converts a Number into its string representation in the specified base (2-36).
 
-### `num.bitAnd(a, b)`
-Returns the bitwise AND of `a` and `b`.
+---
 
-### `num.bitOr(a, b)`
-Returns the bitwise OR of `a` and `b`.
+## Extension Modules
 
-### `num.bitXor(a, b)`
-Returns the bitwise XOR of `a` and `b`.
+For platform-dependent or system-level tasks (such as bitwise operations or filesystem access), refer to the **Official Extensions**:
 
-### `num.bitNot(n)`
-Returns the bitwise NOT of `n`.
-
-### `num.shiftL(n, bits)`
-Returns `n` shifted left by `bits`.
-
-### `num.shiftR(n, bits)`
-Returns `n` shifted right by `bits` (sign-propagating).
+- **`bin` module**: Found in the `platform` extension (for bitwise math).
+- **`fs` module**: Found in the `sys` extension (for file I/O).

@@ -34,24 +34,26 @@ The `ExecutionContext` provided to every native task allows the host to interact
 - **`call(task, args)`**: Invoke a Hank task (native or user-defined).
 - **`scope`**: Read or write to the local lexical scope.
 
-## Registering Modules
+## Registering Extensions
 
-A Runner typically groups tasks into objects to keep the global namespace clean.
+The recommended way to provide native capabilities is via the **Extension** architecture. Host implementations provide pre-built extensions that can be registered with a single call.
 
-```typescript
-const logModule = new Map<string, Value>();
+```haxe
+// Example in Haxe
+var runner = new Runner();
 
-logModule.set("print", VTask({
-  isNative: true,
-  name: "log.print",
-  func: (args) => {
-    console.log(args.map(valToString).join(' '));
-    return VVoid;
-  }
-}));
+// Register the Pure Standard Library
+runner.registerExtension(new StdLib());
 
-runner.coreScope.set("log", VObject(logModule));
+// Register Optional Extensions (e.g. Sys/OS interaction)
+runner.registerExtension(new SysExtension());
 ```
+
+A compliant Runner implementation should provide a `registerExtension` method that iterates through the provided modules and injects them into the `coreScope`.
+
+## Manual Module Registration
+
+If you are not using a formal Extension object, you can group tasks into objects manually to keep the global namespace clean.
 
 ## Handling Host Arguments
 
