@@ -1,5 +1,5 @@
 # Hank Specification
-**Version:** 1.3.0-alpha4
+**Version:** 1.4.0-alpha
 
 ## 1. Philosophy & Purpose
 Hank is a purely symbolic, instruction-oriented language designed for automation and orchestration. It is not a general-purpose programming language. It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML. 
