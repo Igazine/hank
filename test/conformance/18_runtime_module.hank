@@ -1,0 +1,20 @@
+() {
+  log.print("18 Runtime Module")
+
+  // elapsedTime
+  t1 = runtime.elapsedTime()
+  ? (math.gt(t1, 0)) { log.print("runtime.elapsedTime: OK") }
+
+  // while loop
+  // Count from 0 to 5
+  counter = 0
+  cond = () { math.lt(counter, 5) }
+  body = () {
+    counter = math.add(counter, 1)
+  }
+
+  runtime.while(cond, body)
+  ? (math.eq(counter, 5)) { log.print("runtime.while: OK") }
+
+  log.print("18 Pass")
+}

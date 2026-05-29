@@ -1,5 +1,5 @@
 # Hank Standard Library Specification
-**Version:** 1.4.0-alpha
+**Version:** 1.4.0-alpha1
 
 ## 1. Overview
 This document defines the official Hank Standard Library. Official language implementations (Go, Rust, TS, Haxe, Dart) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
@@ -21,6 +21,7 @@ Provides interaction with the Hank virtual machine itself.
 *   **`halt(?code = 0)`**: Immediately terminates script execution. The `code` (Number) is returned to the Host.
 *   **`elapsedTime()`**: Returns a high-precision monotonic timestamp (Hank Number) in **milliseconds** relative to the start of the engine.
 *   **`signal(value)`**: Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
+*   **`while(condition_task, execution_task)`**: Repeatedly invokes `execution_task()` as long as `condition_task()` returns a truthy value. Returns `Void`.
 
 ### 2.3 `log` Module
 Provides unified output capabilities.
@@ -102,7 +103,7 @@ Official language implementations provide these as **Extensions** which must be 
 - **`platform`**: Tasks constrained by execution environment (e.g., bitwise operations in the `bin` module).
 - **`sys`**: Tasks for OS interaction (filesystem, processes, hardware metadata).
 
-Refer to `hank/docs/extensions/` for detailed documentation.
+Refer to `hank/extensions/` for detailed documentation.
 
 ---
-*Status: v1.4.0-alpha (The Hank Era)*
+*Status: v1.4.0-alpha1 (The Hank Era)*
