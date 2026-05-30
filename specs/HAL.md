@@ -40,7 +40,7 @@ TaskDef        ::= FuncDef | Block
 Statement      ::= MacroInclude | AssignStmt | FlowControl | Expr
 MacroInclude   ::= "@" String
 AssignStmt     ::= Identifier "=" Expr
-FlowControl    ::= "?" "(" Expr ")" Block [ ":" Block ] [ "~" [ "(" Identifier ")" ] Block ]
+FlowControl    ::= "?" Expr Block [ ":" Block ] [ "~" [ "(" Identifier ")" ] Block ]
 Block          ::= "{" { Statement } "}"
 
 Expr           ::= PrimaryExpr { "." Identifier [ "(" ArgList ")" ] }
