@@ -7,11 +7,11 @@
     v = "inner"
     log.print(str.format("Nested Write (Lexical): %1", v))
   }(1)
-  ? (regex.match(v, "inner")) { log.print("Outer scope reflects nested write: OK") }
+  ? regex.match(v, "inner") { log.print("Outer scope reflects nested write: OK") }
 
   // Core Shadowing
   log_shadow = "not a task"
-  ? (regex.match(log_shadow, "not a task")) { #log.print("Core task shadowed locally: OK") }
+  ? regex.match(log_shadow, "not a task") { #log.print("Core task shadowed locally: OK") }
 
   // Core Guarding
   #log.print("Core guard sigil (#) bypasses shadowing: OK")

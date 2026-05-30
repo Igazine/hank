@@ -2,20 +2,20 @@
   log.print("02 Unified Gates & Negation")
 
   // Truthiness
-  ? (1) { log.print("1 is Truthy: OK") } : { log.print("FAILED") }
-  ? (0) { log.print("0 is Truthy: OK") } : { log.print("FAILED") }
-  ? ("") { log.print("Empty string is Truthy: OK") } : { log.print("FAILED") }
-  ? ([]) { log.print("Empty array is Truthy: OK") } : { log.print("FAILED") }
+  ? 1 { log.print("1 is Truthy: OK") } : { log.print("FAILED") }
+  ? 0 { log.print("0 is Truthy: OK") } : { log.print("FAILED") }
+  ? "" { log.print("Empty string is Truthy: OK") } : { log.print("FAILED") }
+  ? [] { log.print("Empty array is Truthy: OK") } : { log.print("FAILED") }
 
   // Falsiness
-  ? (missing_var) { log.print("FAILED") } : { log.print("Void is Falsy: OK") }
+  ? missing_var { log.print("FAILED") } : { log.print("Void is Falsy: OK") }
 
   // Negation
-  ? (!missing_var) { log.print("!Void is Truthy: OK") }
-  ? (!1) { log.print("FAILED") } : { log.print("!1 is Falsy: OK") }
+  ? !missing_var { log.print("!Void is Truthy: OK") }
+  ? !1 { log.print("FAILED") } : { log.print("!1 is Falsy: OK") }
 
   // Rescue
-  ? (1) {
+  ? 1 {
     non_existent_task()
   } ~ (err) {
     log.print(str.format("Rescue caught error: %1", err))
@@ -23,7 +23,7 @@
   }
 
   // Full Chain
-  ? (missing_var) {
+  ? missing_var {
     log.print("FAILED")
   } : {
     log.print("Fallback executed: OK")

@@ -3,18 +3,18 @@
 
   s1 = "double quotes"
   s2 = 'single quotes'
-  ? (s1) { log.print("Double quotes: OK") }
-  ? (s2) { log.print("Single quotes: OK") }
+  ? s1 { log.print("Double quotes: OK") }
+  ? s2 { log.print("Single quotes: OK") }
 
   n1 = 123.456
   n2 = -100
-  ? (math.add(n1, n2)) { log.print("Numbers (float and negative): OK") }
+  ? math.add(n1, n2) { log.print("Numbers (float and negative): OK") }
 
   arr = [1, "two", [3]]
-  ? (#arr.length(arr)) { log.print("Arrays: OK") }
+  ? #arr.length(arr) { log.print("Arrays: OK") }
 
   m = [ "key": "value", "nested": [ "a": 1 ] ]
-  ? (m.key) { log.print("Maps: OK") }
+  ? m.key { log.print("Maps: OK") }
 
   // VERIFY: The following line MUST trigger a syntax error in v1.2.0+
   // re = /test/i

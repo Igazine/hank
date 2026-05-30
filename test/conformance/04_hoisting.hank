@@ -3,7 +3,7 @@
 
   // Call before definition
   val = hoisted_task(10)
-  ? (math.eq(val, 20)) { log.print("Task hoisting: OK") }
+  ? math.eq(val, 20) { log.print("Task hoisting: OK") }
 
   hoisted_task = (n) {
     ^ math.add(n, n)
