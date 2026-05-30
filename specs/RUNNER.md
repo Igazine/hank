@@ -52,6 +52,7 @@ A Native Task is a function defined in the host language with the following sign
     *   **`eval(Node: Expr) -> Value`**: Evaluates a pre-parsed Hank AST node.
     *   **`call(Task: Value, Arguments: Array<Value>) -> Value`**: Invokes a Hank Task value.
     *   **`isError(Value: Value) -> Bool`**: Returns true if the value is a native `Error` type.
+    *   **`getLocalization() -> Map<Number, String>`**: Returns the current localization map.
     *   **`scope`**: Provides access to the lexical Scope.
 
 ## 4. Error Management & Localization
@@ -104,4 +105,4 @@ While complex data MUST be flattened to maintain serializability, Host environme
 *   **Unidirectional**: Hank scripts cannot inspect or mutate `Opaque` handles; they serve strictly as handles to be passed back to Native Tasks for Host-side resolution.
 
 ---
-*Status: v1.4.0-alpha2 (The Hank Era)*
+*Status: v1.4.0-alpha (The Hank Era)*

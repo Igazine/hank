@@ -30,9 +30,9 @@
     log.error("FAIL")
   }
 
-  // Deep equality (Object)
-  log.print("Test 5: logic.eq({x: 1}, {x: 1})")
-  ? (logic.eq({x: 1}, {x: 1})) {
+  // Deep equality (Map)
+  log.print("Test 5: logic.eq([ \"x\": 1 ], [ \"x\": 1 ])")
+  ? (logic.eq([ "x": 1 ], [ "x": 1 ])) {
     log.print("PASS")
   } : {
     log.error("FAIL")

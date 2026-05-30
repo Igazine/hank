@@ -30,7 +30,7 @@ Provides safe, purely symbolic loop control.
 ### 2.4 `log` Module
 Provides unified output capabilities.
 *   **`print(...args)`**: Serializes arguments and outputs to the standard stream.
-    - **Recommended Serialization**: Implementations SHOULD represent `Void` as the string `"Void"` and remove trailing `.0` from Numbers to maintain ecosystem consistency. Arrays and Objects MAY be represented by type labels (e.g., `"[Array]"`) or full JSON serialization depending on Host complexity.
+    - **Recommended Serialization**: Implementations SHOULD represent `Void` as the string `"Void"` and remove trailing `.0` from Numbers to maintain ecosystem consistency. Arrays and Maps MAY be represented by type labels (e.g., `"[Array]"`) or full JSON serialization depending on Host complexity.
 *   **`error(...args)`**: Outputs to the error stream.
 *   **`warn(...args)`**: Outputs with a "warning" decoration.
 
@@ -57,11 +57,11 @@ Provides unified output capabilities.
 *   **`reverse(array)`**: Returns a new Array with elements reversed.
 *   **`each(array, task)`**: Iterates over a **shallow snapshot** of the `array`. Invokes `task(item, ?index)` for each element. Returns `Void`.
 
-### 3.3 `obj` Module (Object)
-*   **`get(object, key)`**: Returns the value associated with the specified key, or `Void` if it does not exist.
-*   **`set(object, key, value)`**: Updates the value associated with the specified `key` in the `object`. Returns `Void`.
-    - **Security Rule**: This task MUST ONLY operate on Type 5 `Object` values (primitive key-value maps). If the first argument is a Type 6 `Opaque` handle, the engine MUST throw a **TypeMismatch (Code 4007)** to prevent script-driven mutation of Host memory.
-*   **`keys(object)`**: Returns an Array of the object's keys (Strings).
+### 3.3 `map` Module (Map)
+*   **`get(map, key)`**: Returns the value associated with the specified key, or `Void` if it does not exist.
+*   **`set(map, key, value)`**: Updates the value associated with the specified `key` in the `map`. Returns `Void`.
+    - **Security Rule**: This task MUST ONLY operate on Type 5 `Map` values (primitive key-value maps). If the first argument is a Type 6 `Opaque` handle, the engine MUST throw a **TypeMismatch (Code 4007)** to prevent script-driven mutation of Host memory.
+*   **`keys(map)`**: Returns an Array of the map's keys (Strings).
 
 ### 3.4 `num` Module (Number Conversion)
 Provides utilities for numeric parsing and formatting.
@@ -91,14 +91,13 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 *   **`and(...args)`**: Returns the last argument if all are truthy (not `Void`), otherwise returns `Void`.
 *   **`or(...args)`**: Returns the first truthy argument (not `Void`), otherwise returns `Void`.
 *   **`eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`. Supports all primitive types.
-*   **`void()`**: Alias for `runtime.void()`.
 
 ---
 
 ## 5. Serialization
 
 ### 5.1 `json` Module
-*   **`parse(string)`**: Parses a JSON-formatted string and returns the corresponding Hank `Object`, `Array`, `Number`, `String`, or `Void`.
+*   **`parse(string)`**: Parses a JSON-formatted string and returns the corresponding Hank `Map`, `Array`, `Number`, `String`, or `Void`.
 *   **`stringify(value)`**: Serializes a Hank `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
 
 ---
@@ -124,8 +123,4 @@ Official language implementations provide these as **Extensions** which must be 
 Refer to `hank/extensions/` for detailed documentation.
 
 ---
-*Status: v1.4.0-alpha2 (The Hank Era)*
-cumentation.
-
----
-*Status: v1.4.0-alpha2 (The Hank Era)*
+*Status: v1.4.0-alpha1 (The Hank Era)*

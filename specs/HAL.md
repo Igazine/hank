@@ -13,18 +13,23 @@ Hank bridges declarative configuration with imperative execution by treating dat
 
 
 ## 2. Type System
-An implementation MUST internally support the following seven absolute value types:
+An implementation MUST internally support the following eight absolute value types:
 1. **Void**: Represents the absence of a value. The ONLY Falsy state.
 2. **Number**: 64-bit floating point.
 3. **String**: UTF-8 character sequence.
 4. **Array**: Ordered list of Values.
-5. **Object**: Unordered key-value map (`String` -> `Value`).
+5. **Map**: Unordered key-value map (`String` -> `Value`).
 6. **Opaque**: Represents a black-box handle to volatile Host State (e.g., a compiled Regex engine, a File handle, or a Network Socket).
     - **Generation**: Hank scripts cannot instantiate `Opaque` values directly. They are created and returned exclusively by Host-provided Native Tasks.
     - **Semantics**: `Opaque` values are strictly Truthy. They are inert and impenetrable to the Hank Interpreter; they can only be passed as arguments back to Native Tasks.
     - **Labeling**: When a Host creates an `Opaque` value, it SHOULD provide a short string label (e.g., `"RegExp"`) for debugging and string coercion purposes.
     - **Serialization**: `Opaque` values represent volatile runtime state and are NOT serializable across the Air Gap.
 7. **Task**: A callable unit of execution (Native or User-defined).
+8. **Error**: A structured, immutable payload representing a runtime failure.
+    - **Structure**: An `Error` value MUST internally track a `code` (Number) and an `args` list (Array).
+    - **Generation**: Only the Hank engine can instantiate an `Error` type (safeguarding against spoofing).
+    - **Semantics**: `Error` values are strictly Truthy and inert to evaluation. They can only be passed as arguments or inspected via the `err` module.
+    - **Non-Serializable**: Like `Opaque`, `Error` values represent transient runtime context and MUST NOT be serialized across the Air Gap.
 
 ## 3. Lexical Grammar (EBNF)
 
@@ -46,11 +51,11 @@ FuncDef        ::= "(" ParamList ")" Block
 FuncCall       ::= PrimaryExpr "(" ArgList ")"
 UnaryExpr      ::= "!" Expr | "^" [ Expr ]
 
-Literal        ::= Number | String | Array | Object
+Literal        ::= Number | String | Array | Map
 Number         ::= [ "-" ] Digit { Digit } [ "." Digit { Digit } ]
 String         ::= '"' { Char } '"' | "'" { Char } "'"
 Array          ::= "[" [ Expr { "," Expr } ] "]"
-Object         ::= "{" [ Identifier ":" Expr { "," Identifier ":" Expr } ] "}"
+Map            ::= "[" ( ":" | Expr ":" Expr { "," Expr ":" Expr } ) "]"
 
 ParamList      ::= [ Param { "," Param } ]
 Param          ::= [ "?" ] Identifier [ "=" Expr ]
@@ -73,22 +78,24 @@ AnyCharExceptNewline ::= Char - "\n"
 *   **String Quotes**: Both double (`"`) and single (`'`) quotes are permitted. The string must terminate with the matching quote character.
 *   **Number Literals**: The Lexer **MUST** greedily consume a leading `-` followed immediately by a `Digit` as part of a `Number` literal, regardless of triggering context.
 *   **FuncDef vs Grouped Expr**: A `PrimaryExpr` starting with `(` is parsed as a `FuncDef` ONLY IF the closing `)` is followed immediately by a `{` (ignoring whitespace and newlines). Otherwise, it is parsed as a grouped expression `"(" Expr ")"`.
-*   **Brace Usage**: The `{` character is used for both structural `Blocks` and `Object` literals.
-    - **Structural `Block`**: Valid **only** as a direct component of `FlowControl` (`? () {}`) or `FuncDef` (`() {}`). A `Block` is **not** a `Statement` and cannot appear standalone.
-    - **`Object` Literal**: In all other contexts (e.g., assignments or standalone expressions), `{` initiates an `Object` literal. It **must** follow the `key: value` grammar. Standalone object literals are valid as statements but have no side effects.
-*   **Property Mutation**: Objects and Arrays are strictly immutable via dot-syntax; `Field` access is for retrieval only.
+*   **Collection Disambiguation**: The `[` character initiates both `Array` and `Map` literals.
+    - **`Map` Literal**: If the first element is a colon `[:]` or followed by a colon `[ key : value ]`, it is parsed as a Map.
+    - **`Array` Literal**: In all other cases, it is parsed as an Array.
+*   **Block Syntax**: The `{}` characters are strictly reserved for structural `Blocks` (lists of executable statements). Standalone blocks are NOT valid statements; they appear only as components of `FuncDef` or `FlowControl`.
+*   **Property Mutation**: Maps and Arrays are strictly immutable via dot-syntax; `Field` access is for retrieval only.
 
 ## 4. Abstract Syntax Tree (AST) Contract
 A compliant Parser MUST emit an AST constructable from the following logical nodes:
 
 *   **`Block(statements)`**: A sequential list of statements. Evaluates to the result of its final statement, or `Void` if empty.
 *   **`Assign(name, expr)`**: Binds the evaluated result of `expr` to `name` in the current scope. **Evaluates to the assigned value.**
-*   **`Literal(value)`**: A concrete `String`, `Number`, `Array`, or `Object`.
+*   **`Literal(value)`**: A concrete `String`, `Number`, `Array`, or `Map`.
 *   **`Ident(name, isCore)`**: A variable lookup. If `isCore` is true (triggered by `#`), lookup MUST happen exclusively in the `coreScope`.
-*   **`Field(object, fieldName)`**: Property retrieval from an Object, Array, or String.
+*   **`Field(collection, fieldName)`**: Property retrieval from a Map, Array, or String.
 *   **`FuncDef(params, body)`**: Defines a User Task.
 *   **`FuncCall(target, args)`**: Executes a Task.
 *   **`UnOp(operator, target)`**: Prefix operators (`!`, `^`).
+*   **`Error(code, args)`**: A structured runtime failure node.
 *   **`FlowControl(condition, successBlock, fallbackBlock, rescueBlock, catchVar)`**: The unified flow-control structure.
 
 ## 5. Execution Semantics
@@ -107,7 +114,12 @@ Execution within any `Block` MUST occur in two passes:
 2.  **Pass 2 (Evaluation)**: The Interpreter executes all statements sequentially.
 
 ### 5.3 Unified Gates (Flow Control)
-The `?` (If), `:` (Fallback), and `~` (Rescue) sigils form a unified control chain. A `FlowControl` structure evaluates to the result of the branch that was executed, or `Void` if no branch was taken.
+The `?` (If), `:` (Fallback), and `~` (Rescue) sigils form a unified control chain.
+*   **Evaluation**: If the `condition` evaluates to a Truthy value, the `successBlock` executes. If Falsy, the `fallbackBlock` executes.
+*   **Rescue**: If any non-fatal **Runtime Exception** occurs during the evaluation of the condition or the selected block, the `rescueBlock` executes.
+*   **Catching**: If a `catchVar` is defined, the native `Error` value is bound to that identifier in a new local scope created for the `rescueBlock`. If `catchVar` is omitted, the error is swallowed and execution proceeds.
+*   **Uncaught Errors**: If a `Runtime Exception` occurs and no `rescueBlock` is defined, the Interpreter MUST halt the entire script and return the `Error` value to the Runner.
+*   **Result**: A `FlowControl` structure evaluates to the result of the branch that was executed, or `Void` if no branch was taken.
 
 ### 5.4 The Return Operator (`^`)
 The `^` sigil immediately halts execution of the current Task. `^ value` returns the evaluated value. `^` (empty) returns `Void`.
@@ -139,10 +151,3 @@ The `@` sigil is strict Parse-Time Macro Expansion.
 
 *   **Recursion**: Macro headers MUST be expanded recursively by the Parser during the initial transformation.
 *   **Circular Dependencies**: A compliant Parser **MUST** detect circular macro dependencies and throw a fatal parse-time error.
-cal block where the `@` directive appeared.
-*   **Hoisting Compatibility**: Assignments produced by `@` macro expansion participate in Pass 1 (Hoisting) on equal terms with user-written assignments.
-*   **Scoping**: Any tasks imported via macro headers in a **`.hank`** file are injected into the **same lexical block** as the parent task.
-
-*   **Recursion**: Macro headers MUST be expanded recursively by the Parser during the initial transformation.
-*   **Circular Dependencies**: A compliant Parser **MUST** detect circular macro dependencies and throw a fatal parse-time error.
-cular Dependencies**: A compliant Parser **MUST** detect circular macro dependencies and throw a fatal parse-time error.

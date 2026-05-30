@@ -1,11 +1,11 @@
 () {
   log.print("12 Advanced Data Modules")
 
-  // 1. obj.get (Dynamic Access)
-  o = { name: "tamas", age: 30 }
+  // 1. map.get (Dynamic Access)
+  o = [ "name": "tamas", "age": 30 ]
   key = "name"
-  ? (math.eq(obj.get(o, key), "tamas")) { log.print("obj.get: OK") }
-  ? (!obj.get(o, "missing")) { log.print("obj.get (missing): OK") }
+  ? (math.eq(map.get(o, key), "tamas")) { log.print("map.get: OK") }
+  ? (!map.get(o, "missing")) { log.print("map.get (missing): OK") }
 
   // 2. arr.each (Snapshot Iteration)
   items = [1, 2, 3]
@@ -26,7 +26,7 @@
   })
   // 4. JSON & Opaque State (Non-serializability)
   re = regex.parse("test")
-  json_res = json.stringify({ key: re })
+  json_res = json.stringify([ "key": re ])
   // Should either evaluate to Void or the object without the opaque key
   ? (!json_res) {
     log.print("Opaque non-serializability (Void): OK")
