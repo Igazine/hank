@@ -1,5 +1,5 @@
 () {
-  log.print("18 Runtime Module")
+  log.print("18 Loop & Runtime Module")
 
   // elapsedTime
   t1 = runtime.elapsedTime()
@@ -13,8 +13,20 @@
     arr.push(counter_arr, 1)
   }
 
-  runtime.while(cond, body)
-  ? (math.eq(arr.length(counter_arr), 5)) { log.print("runtime.while: OK") }
+  loop.while(cond, body)
+  ? (math.eq(arr.length(counter_arr), 5)) { log.print("loop.while: OK") }
+
+  // break loop
+  counter_arr2 = []
+  cond2 = () { 1 } // Infinite loop
+  body2 = () {
+    ? (math.eq(arr.length(counter_arr2), 3)) {
+        loop.break()
+    }
+    arr.push(counter_arr2, 1)
+  }
+  loop.while(cond2, body2)
+  ? (math.eq(arr.length(counter_arr2), 3)) { log.print("loop.break: OK") }
 
   log.print("18 Pass")
 }

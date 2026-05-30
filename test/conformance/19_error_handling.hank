@@ -1,0 +1,36 @@
+() {
+  log.print("19 Error Handling (Type 8)")
+
+  // 1. Trigger Runtime Exception (Target Not Function)
+  ? (num = arr.leng()) {
+    log.error("FAIL: Should have jumped to rescue")
+  } ~ (e) {
+    log.print("Rescue: Caught OK")
+    ? (err.isError(e)) { log.print("err.isError: OK") }
+    ? (math.eq(err.code(e), 4001)) { log.print("err.code: OK") }
+    ? (math.gt(str.length(err.message(e)), 0)) { log.print("err.message: OK") }
+  }
+
+  // 2. Trigger Type Mismatch
+  ? (math.add("invalid", 1)) {
+    log.error("FAIL: math.add should throw Type Mismatch")
+  } ~ (e) {
+    ? (math.eq(err.code(e), 4007)) { log.print("Type Mismatch: Caught OK") }
+  }
+
+  // 3. Nested Rescue
+  ? (1) {
+    ? (1) {
+        ? (arr.invalid()) { }
+    }
+  } ~ (e) {
+    log.print("Nested Rescue: OK")
+  }
+
+  // 4. Optional catchVar
+  ? (arr.fail()) { } ~ {
+    log.print("Optional catchVar: OK")
+  }
+
+  log.print("19 Pass")
+}

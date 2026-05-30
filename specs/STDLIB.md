@@ -21,9 +21,13 @@ Provides interaction with the Hank virtual machine itself.
 *   **`halt(?code = 0)`**: Immediately terminates script execution. The `code` (Number) is returned to the Host.
 *   **`elapsedTime()`**: Returns a high-precision monotonic timestamp (Hank Number) in **milliseconds** relative to the start of the engine.
 *   **`signal(value)`**: Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
-*   **`while(condition_task, execution_task)`**: Repeatedly invokes `execution_task()` as long as `condition_task()` returns a truthy value. Returns `Void`.
 
-### 2.3 `log` Module
+### 2.3 `loop` Module (Iteration)
+Provides safe, purely symbolic loop control.
+*   **`while(condition_task, execution_task)`**: Repeatedly invokes `execution_task()` as long as `condition_task()` returns a truthy value. Returns the result of the last successful execution of `execution_task()`, or `Void` if it never ran.
+*   **`break()`**: Immediately halts the execution of the innermost loop.
+
+### 2.4 `log` Module
 Provides unified output capabilities.
 *   **`print(...args)`**: Serializes arguments and outputs to the standard stream.
     - **Recommended Serialization**: Implementations SHOULD represent `Void` as the string `"Void"` and remove trailing `.0` from Numbers to maintain ecosystem consistency. Arrays and Objects MAY be represented by type labels (e.g., `"[Array]"`) or full JSON serialization depending on Host complexity.
@@ -55,6 +59,8 @@ Provides unified output capabilities.
 
 ### 3.3 `obj` Module (Object)
 *   **`get(object, key)`**: Returns the value associated with the specified key, or `Void` if it does not exist.
+*   **`set(object, key, value)`**: Updates the value associated with the specified `key` in the `object`. Returns `Void`.
+    - **Security Rule**: This task MUST ONLY operate on Type 5 `Object` values (primitive key-value maps). If the first argument is a Type 6 `Opaque` handle, the engine MUST throw a **TypeMismatch (Code 4007)** to prevent script-driven mutation of Host memory.
 *   **`keys(object)`**: Returns an Array of the object's keys (Strings).
 
 ### 3.4 `num` Module (Number Conversion)
@@ -85,6 +91,7 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 *   **`and(...args)`**: Returns the last argument if all are truthy (not `Void`), otherwise returns `Void`.
 *   **`or(...args)`**: Returns the first truthy argument (not `Void`), otherwise returns `Void`.
 *   **`eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`. Supports all primitive types.
+*   **`void()`**: Alias for `runtime.void()`.
 
 ---
 
@@ -96,7 +103,18 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 
 ---
 
-## 6. Official Extensions
+## 6. Error Inspection
+
+### 6.1 `err` Module
+Provides tasks to inspect and format the native `Error` type (Type 8).
+*   **`code(error)`**: Returns the numeric error code associated with the error. Throws a Type Mismatch if the argument is not an `Error`.
+*   **`message(error)`**: Returns the human-readable error message. Note: The message is formatted by the Host using current localization rules.
+*   **`args(error)`**: Returns the Array of raw context values associated with the error.
+*   **`isError(value)`**: Returns `1` if the value is of type `Error`, otherwise `Void`.
+
+---
+
+## 7. Official Extensions
 To maintain architectural purity and the "Air Gap Principle", features that depend on the Host Platform or Operating System (such as FileSystem I/O, Networking, or Bitwise operations with platform-specific precision limits) are decoupled from the core Standard Library.
 
 Official language implementations provide these as **Extensions** which must be registered manually by the Host application.
@@ -106,4 +124,8 @@ Official language implementations provide these as **Extensions** which must be 
 Refer to `hank/extensions/` for detailed documentation.
 
 ---
-*Status: v1.4.0-alpha1 (The Hank Era)*
+*Status: v1.4.0-alpha2 (The Hank Era)*
+cumentation.
+
+---
+*Status: v1.4.0-alpha2 (The Hank Era)*

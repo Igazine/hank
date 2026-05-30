@@ -48,43 +48,48 @@ A Native Task is a function defined in the host language with the following sign
 
 *   **Arguments**: An array of Hank values provided by the caller.
 *   **ExecutionContext**: A bridge object providing:
-    *   **`parse(Source: String) -> Expr`**: Lexes and parses a Hank source string. If the source is invalid Hank, it **MUST** throw a host exception (serialized and catchable by a `~` rescue block).
-    *   **`eval(Node: Expr) -> Value`**: Evaluates a pre-parsed Hank AST node using the **current state** of the scope.
-    *   **`call(Task: Value, Arguments: Array<Value>) -> Value`**: Invokes a Hank Task value. If the invoked task throws a runtime error, this method **MUST** throw a host exception (serialized and catchable by a `~` rescue block at the site of the Native Task's invocation).
+    *   **`parse(Source: String) -> Expr`**: Lexes and parses a Hank source string.
+    *   **`eval(Node: Expr) -> Value`**: Evaluates a pre-parsed Hank AST node.
+    *   **`call(Task: Value, Arguments: Array<Value>) -> Value`**: Invokes a Hank Task value.
+    *   **`isError(Value: Value) -> Bool`**: Returns true if the value is a native `Error` type.
     *   **`scope`**: Provides access to the lexical Scope.
-        *   **Read**: Native tasks may retrieve values from the scope.
-        *   **Write**: Native tasks may bind values to the scope. All writes are **strictly local** to the current scope.
-        *   **Interaction**: Evaluations performed via `eval()` will see any modifications previously made to the `scope` by the Native Task during the same invocation.
 
-### 3.3 Registration Pattern
-A Runner implementation SHOULD provide a method (e.g., `registerExtension(ext: HankExtension)`) that:
-1.  Iterates through the modules provided by `getModules()`.
-2.  Wraps each module into a Hank **Object** (ensuring all nested values are Hank **Task** values).
-3.  Injects these Objects into the `coreScope`.
+## 4. Error Management & Localization
 
-## 4. Execution Lifecycle
+### 4.1 The Native Error Flow
+Hank identifies logic failures as **Runtime Exceptions**. These yield a native `Error` value (Type 8) which bubbles up the stack until caught by a `~` rescue block or returned to the Runner.
 
-### 4.1 Working Directory (CWD)
+### 4.2 Localization Protocol (JSON)
+To keep engine implementations language-agnostic, human-readable error messages are NOT stored within the core engine. A Runner is responsible for providing a **Localization Map** (typically loaded from JSON) to the `err` module.
+
+**Localization Map Structure:**
+```json
+{
+  "4001": "Target is not a function: {0}",
+  "4007": "Type Mismatch: Expected {0}, got {1} in {2}"
+}
+```
+The `err.message(error)` task uses the `error.code` to look up the template and inject the `error.args` into the placeholders.
+
+### 4.3 Parse-Time Failures
+Violations of the core grammar (Syntax Errors) are treated as **Fatal** and unrecoverable. Because they occur before a script has a chance to define a rescue block, these failures SHOULD be reported immediately by the Runner in English to aid development.
+
+## 5. Execution Lifecycle
+
+### 5.1 Working Directory (CWD)
 The Runner MUST establish a clear root for script execution. By convention, the Runner SHOULD set the process working directory to the location of the main `.hank` script before starting Pass 1 (Hoisting).
 
-### 4.2 Script Invocation
-1.  **Parse**: The Runner parses the main `.hank` file, which yields a single `Task` value (evaluating any `@` macro assignments in the process).
-2.  **Args**: The Host environment (e.g., an Orchestrator or Host event loop) provides an array of Hank `Value`s as arguments.
+### 5.2 Script Invocation
+1.  **Parse**: The Runner parses the main `.hank` file, which yields a single `Task` value.
+2.  **Args**: The Host environment provides an array of Hank `Value`s as arguments.
 3.  **Call**: The Runner executes the script by invoking `call(parsedTask, hostArguments)`.
 
-### 4.3 Exit Results
+### 5.3 Exit Results
 When the script Task completes, the Runner receives the final `Value`.
 *   **Standard Exit Protocol**:
     *   `Number`: Return the value to the Host environment (e.g., as an OS exit code).
+    *   `Error`: Return the error code or a non-zero exit signal.
     *   `Void` / `Other`: Return a success signal (e.g., code `0`).
-
-## 5. Error Serialization
-When a Host-level failure occurs during a Native Task, the Runner MUST NOT allow the host language to crash.
-1.  **Catch**: Intercept the host exception.
-2.  **Serialize**: Transform the error into a single UTF-8 **String**.
-3.  **Rescue**: Pass that string to the Interpreter's `rescueBlock` if one is active. If not, report and terminate with a non-zero exit code.
-
-**Note on Portability**: The format of the serialized error string is Runner-defined. Scripts that perform pattern-matching on `err` content (e.g., using `match()`) are not guaranteed to be portable across different Runner implementations.
 
 ## 6. The Complex Object Bridge
 Native host objects (Class instances, Structs, Sockets, UI components) are strictly forbidden from entering Hank memory. This preserves the Air Gap and ensures 100% serializability of Data.
@@ -99,4 +104,4 @@ While complex data MUST be flattened to maintain serializability, Host environme
 *   **Unidirectional**: Hank scripts cannot inspect or mutate `Opaque` handles; they serve strictly as handles to be passed back to Native Tasks for Host-side resolution.
 
 ---
-*Status: v1.4.0-alpha (The Hank Era)*
+*Status: v1.4.0-alpha2 (The Hank Era)*

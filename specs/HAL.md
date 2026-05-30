@@ -35,7 +35,7 @@ TaskDef        ::= FuncDef | Block
 Statement      ::= MacroInclude | AssignStmt | FlowControl | Expr
 MacroInclude   ::= "@" String
 AssignStmt     ::= Identifier "=" Expr
-FlowControl    ::= "?" "(" Expr ")" Block [ ":" Block ] [ "~" "(" Identifier ")" Block ]
+FlowControl    ::= "?" "(" Expr ")" Block [ ":" Block ] [ "~" [ "(" Identifier ")" ] Block ]
 Block          ::= "{" { Statement } "}"
 
 Expr           ::= PrimaryExpr { "." Identifier [ "(" ArgList ")" ] }
@@ -139,3 +139,10 @@ The `@` sigil is strict Parse-Time Macro Expansion.
 
 *   **Recursion**: Macro headers MUST be expanded recursively by the Parser during the initial transformation.
 *   **Circular Dependencies**: A compliant Parser **MUST** detect circular macro dependencies and throw a fatal parse-time error.
+cal block where the `@` directive appeared.
+*   **Hoisting Compatibility**: Assignments produced by `@` macro expansion participate in Pass 1 (Hoisting) on equal terms with user-written assignments.
+*   **Scoping**: Any tasks imported via macro headers in a **`.hank`** file are injected into the **same lexical block** as the parent task.
+
+*   **Recursion**: Macro headers MUST be expanded recursively by the Parser during the initial transformation.
+*   **Circular Dependencies**: A compliant Parser **MUST** detect circular macro dependencies and throw a fatal parse-time error.
+cular Dependencies**: A compliant Parser **MUST** detect circular macro dependencies and throw a fatal parse-time error.
