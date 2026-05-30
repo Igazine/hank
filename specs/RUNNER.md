@@ -1,5 +1,5 @@
 # Hank Runner Specification
-**Version:** 1.4.0-alpha
+**Version:** 1.5.0-alpha
 
 ## 1. The Runner Role
 The Runner is the environment-specific host that encapsulates the Hank Interpreter. It provides the "bridge" between the pure, memory-only Hank instruction set and the host's Operating System, filesystem, and network.
@@ -72,7 +72,12 @@ To keep engine implementations language-agnostic, human-readable error messages 
 ```
 The `err.message(error)` task uses the `error.code` to look up the template and inject the `error.args` into the placeholders.
 
-### 4.3 Parse-Time Failures
+### 4.3 Error Code Reservations
+To prevent collisions between engine failures and domain-specific task failures, the following numeric ranges are reserved:
+*   **`1000 - 4999`**: Reserved for the Hank Core Engine (Lexical, Syntax, and Runtime errors).
+*   **`5000+`**: Reserved for Host Applications and custom Native Tasks.
+
+### 4.4 Parse-Time Failures
 Violations of the core grammar (Syntax Errors) are treated as **Fatal** and unrecoverable. Because they occur before a script has a chance to define a rescue block, these failures SHOULD be reported immediately by the Runner in English to aid development.
 
 ## 5. Execution Lifecycle
@@ -105,4 +110,4 @@ While complex data MUST be flattened to maintain serializability, Host environme
 *   **Unidirectional**: Hank scripts cannot inspect or mutate `Opaque` handles; they serve strictly as handles to be passed back to Native Tasks for Host-side resolution.
 
 ---
-*Status: v1.4.0-alpha (The Hank Era)*
+*Status: v1.5.0-alpha (The Hank Era)*

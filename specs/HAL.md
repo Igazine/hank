@@ -1,5 +1,5 @@
 # Hank Specification
-**Version:** 1.4.0-alpha
+**Version:** 1.5.0-alpha
 
 ## 1. Philosophy & Purpose
 Hank is a purely symbolic, instruction-oriented language designed for automation and orchestration. It is not a general-purpose programming language. It serves as a strict, unambiguous, and highly readable alternative to configuration formats like YAML or TOML. 
@@ -54,8 +54,8 @@ UnaryExpr      ::= "!" Expr | "^" [ Expr ]
 Literal        ::= Number | String | Array | Map
 Number         ::= [ "-" ] Digit { Digit } [ "." Digit { Digit } ]
 String         ::= '"' { Char } '"' | "'" { Char } "'"
-Array          ::= "[" [ Expr { "," Expr } ] "]"
-Map            ::= "[" ( ":" | Expr ":" Expr { "," Expr ":" Expr } ) "]"
+Array          ::= "[" [ Expr { "," Expr } [ "," ] ] "]"
+Map            ::= "[" ( ":" | Expr ":" Expr { "," Expr ":" Expr } [ "," ] ) "]"
 
 ParamList      ::= [ Param { "," Param } ]
 Param          ::= [ "?" ] Identifier [ "=" Expr ]
@@ -81,6 +81,7 @@ AnyCharExceptNewline ::= Char - "\n"
 *   **Collection Disambiguation**: The `[` character initiates both `Array` and `Map` literals.
     - **`Map` Literal**: If the first element is a colon `[:]` or followed by a colon `[ key : value ]`, it is parsed as a Map.
     - **`Array` Literal**: In all other cases, it is parsed as an Array.
+*   **Trailing Commas**: Both Arrays and Maps support optional trailing commas to improve Git diff readability.
 *   **Block Syntax**: The `{}` characters are strictly reserved for structural `Blocks` (lists of executable statements). Standalone blocks are NOT valid statements; they appear only as components of `FuncDef` or `FlowControl`.
 *   **Property Mutation**: Maps and Arrays are strictly immutable via dot-syntax; `Field` access is for retrieval only.
 
