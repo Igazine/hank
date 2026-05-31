@@ -1,0 +1,54 @@
+() {
+  log_print("21 Data Manipulation & Functional")
+
+  // logic_isVoid
+  ? logic_isVoid(_) { log_print("logic_isVoid on non-existent identifier: OK") }
+  ? !logic_isVoid(0) { log_print("logic_isVoid on Number: OK") }
+
+  // Array map
+  arr = [1, 2, 3]
+  double = (n) { ^ math_mul(n, 2) }
+  res = arr_map(arr, double)
+  ? math_eq(arr_get(res, 2), 6) { log_print("arr_map: OK") }
+
+  // Array filter
+  arr = [1, 2, 3, 4]
+  is_even = (n) { ^ logic_eq(math_div(n, 2), math_div(n, 2.0)) } // Temporary even check
+  res = arr_filter(arr, (n) { ? math_gt(n, 2) { ^ 1 } ^ _ })
+  ? math_eq(arr_length(res), 2) { log_print("arr_filter: OK") }
+
+  // Array slice
+  arr = [10, 20, 30, 40, 50]
+  res = arr_slice(arr, 1, 3)
+  ? math_eq(arr_length(res), 2) {
+    ? math_eq(arr_get(res, 0), 20) { log_print("arr_slice: OK") }
+  }
+
+  // Array sort
+  arr = [3, 1, 2]
+  arr_sort(arr)
+  ? math_eq(arr_get(arr, 0), 1) { log_print("arr_sort (default): OK") }
+  arr_sort(arr, (a, b) { ^ math_sub(b, a) })
+  ? math_eq(arr_get(arr, 0), 3) { log_print("arr_sort (custom): OK") }
+
+  // Array shift/unshift
+  arr = [2, 3]
+  arr_unshift(arr, 1)
+  ? math_eq(arr_get(arr, 0), 1) { log_print("arr_unshift: OK") }
+  v = arr_shift(arr)
+  ? math_eq(v, 1) { log_print("arr_shift: OK") }
+
+  // Array indexof
+  arr = [10, 20, 30]
+  ? math_eq(arr_indexof(arr, 20), 1) { log_print("arr_indexof (found): OK") }
+  ? logic_isVoid(arr_indexof(arr, 40)) { log_print("arr_indexof (not found): OK") }
+
+  // Map remove
+  m = [ "a": 1, "b": 2 ]
+  res = map_remove(m, "a")
+  ? math_eq(res, 1) {
+    ? logic_isVoid(map_get(m, "a")) { log_print("map_remove: OK") }
+  }
+
+  log_print("21 Pass")
+}
