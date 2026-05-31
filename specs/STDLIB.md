@@ -1,36 +1,37 @@
 # Hank Standard Library Specification
-**Version:** 1.5.0-alpha
+**Version:** 1.5.0
 
 ## 1. Overview
-This document defines the official Hank Standard Library. Official language implementations (Go, Rust, TS, Haxe, Dart) provide these modules as an optional, injectable package. Host applications are encouraged to use this standard library to maintain ecosystem parity, but they are entirely free to modify, extend, or ignore it in favor of their own custom module definitions.
+This document defines the official Hank Standard Library (The StdLib). Compliant Hank implementations (Haxe, TS, Go, Rust, Dart) provide these tasks as part of the core runtime experience. While Hank maintains a strict **Air Gap** (no built-in I/O), the StdLib provides the essential computational logic and data manipulation tasks required for orchestration.
 
-**Strict Procedural Purity**: Variables in Hank are purely inert memory containers. They do not have methods. All operations on data types MUST be performed by passing the variable to the appropriate module task (e.g., `str.match(my_string, pattern_handle)`, **not** `my_string.match(pattern_handle)`).
+**The Flat Namespace Rule**: In accordance with the Hank v1.5.0 architecture, the Standard Library does not use dot-notation or hierarchical modules. All tasks are registered as root-level identifiers using underscores to denote categories (e.g., `math_add`, `str_length`).
+
+**Strict Procedural Purity**: Variables in Hank are purely inert memory containers. They do not have methods. All operations on data types MUST be performed by passing the variable to the appropriate task (e.g., `regex_match(my_string, pattern_handle)`, **not** `my_string.match(pattern_handle)`).
 
 ---
 
-## 2. Environment & Runtime
+## 2. Environment & VM Control
 
-### 2.1 `env` Module (State Bridge)
-Provides a key-value state bridge between the Hank script and the Host Runner. This is the primary mechanism for Inter-Script Communication and signaling.
+### 2.1 `env` (State Bridge)
+Provides a manual key-value state bridge between the Hank script and the Host Runner
 *   **`env_get(key)`**: Returns the value associated with `key`, or `Void`.
-*   **`env_set(key, value)`**: Updates the value associated with `key` in the Host's environment. Triggers a Host-defined side effect (callback). Returns `Void`.
+*   **`env_set(key, value)`**: Updates the value associated with `key` in the Host's environment. Returns `Void`.
 *   **`env_keys()`**: Returns an Array of all available keys (Strings).
 
-### 2.2 `runtime` Module (Engine Control)
-Provides interaction with the Hank virtual machine itself.
-*   **`runtime_halt(?code = 0)`**: Immediately terminates script execution. The `code` (Number) is returned to the Host.
-*   **`runtime_elapsedTime()`**: Returns a high-precision monotonic timestamp (Hank Number) in **milliseconds** relative to the start of the engine.
-*   **`runtime_signal(value)`**: Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
+### 2.2 `runtime` (Execution Control)
+Provides interaction with the Hank virtual machine.
+*   **`runtime_halt(?code = 0)`**: Immediately terminates script execution. The `code` (Number) is returned to the Host as an exit signal.
+*   **`runtime_elapsedTime()`**: Returns a high-precision monotonic timestamp (Number) in **milliseconds** relative to the start of the engine.
+*   **`runtime_signal(value)`**: Emits an event signal to the Host Runner with the provided value. Returns `Void`.
 
-### 2.3 `loop` Module (Iteration)
+### 2.3 `loop` (Iteration)
 Provides safe, purely symbolic loop control.
-*   **`loop_while(condition_task, execution_task)`**: Repeatedly invokes `execution_task()` as long as `condition_task()` returns a truthy value. Returns the result of the last successful execution of `execution_task()`, or `Void` if it never ran.
-*   **`loop_break()`**: Immediately halts the execution of the innermost loop.
+*   **`loop_while(condition_task, execution_task)`**: Repeatedly invokes `execution_task()` as long as `condition_task()` returns a Truthy value (not `Void`). Returns the result of the last successful execution of `execution_task()`, or `Void` if it never ran.
+*   **`loop_break()`**: Immediately halts the execution of the innermost loop. Returns an Opaque control signal.
 
-### 2.4 `log` Module
-Provides unified output capabilities.
+### 2.4 `log` (Output)
+Provides unified output capabilities, typically piped to the Host's console or debug log.
 *   **`log_print(...args)`**: Serializes arguments and outputs to the standard stream.
-    - **Recommended Serialization**: Implementations SHOULD represent `Void` as the string `"Void"` and remove trailing `.0` from Numbers to maintain ecosystem consistency. Arrays and Maps MAY be represented by type labels (e.g., `"[Array]"`) or full JSON serialization depending on Host complexity.
 *   **`log_error(...args)`**: Outputs to the error stream.
 *   **`log_warn(...args)`**: Outputs with a "warning" decoration.
 
@@ -38,18 +39,15 @@ Provides unified output capabilities.
 
 ## 3. Data Manipulation
 
-### 3.1 `str` Module (String)
-*   **`str_length(string)`**: Returns the character count of the string as a Number.
+### 3.1 `str` (String)
+*   **`str_length(string)`**: Returns the character count of the string.
 *   **`str_concat(...args)`**: Joins all arguments into a single String.
 *   **`str_format(template, ...args)`**: Replaces `%1`, `%2`, etc. in the `template` with the corresponding serialized argument.
-*   **`str_split(string, delimiter)`**: Returns an Array of substrings.
-*   **`str_replace(string, search, replacement)`**: Returns a new string with all occurrences replaced.
 *   **`str_trim(string)`**: Returns a new string with leading/trailing whitespace removed.
 
-### 3.2 `arr` Module (Array)
-*   **`arr_length(array)`**: Returns the item count of the array as a Number.
+### 3.2 `arr` (Array)
+*   **`arr_length(array)`**: Returns the item count of the array.
 *   **`arr_get(array, index)`**: Returns the item at the specified index, or `Void` if out of bounds.
-*   **`arr_concat(...arrays)`**: Returns a new Array containing the elements of all arguments.
 *   **`arr_push(array, item)`**: Appends `item` to the end of the `array` (In-place mutation). Returns `Void`.
 *   **`arr_pop(array)`**: Removes and returns the last item of the `array`.
 *   **`arr_shift(array)`**: Removes and returns the first item of the `array`, shifting all other elements down.
@@ -59,28 +57,27 @@ Provides unified output capabilities.
 *   **`arr_reverse(array)`**: Returns a new Array with elements reversed.
 *   **`arr_slice(array, start, ?end)`**: Returns a new Array containing a shallow copy of a portion of the array.
 *   **`arr_sort(array, ?comparator_task)`**: Sorts the array in place. If `comparator_task` is provided, it is invoked as `task(a, b)` and expects a Number result (<0, 0, >0). If omitted, elements are sorted alphanumerically.
-*   **`arr_indexof(array, item)`**: Returns the numeric index of the first occurrence of `item` (using deep-equality `logic_eq` rules), or `Void` if not found.
+*   **`arr_indexof(array, item)`**: Returns the numeric index of the first occurrence of `item` (using deep-equality rules), or `Void` if not found.
 *   **`arr_each(array, task)`**: Iterates over a **shallow snapshot** of the `array`. Invokes `task(item, ?index)` for each element. Returns `Void`.
-*   **`arr_map(array, task)`**: Returns a new Array populated with the results of calling a provided `task(item, ?index)` on every element in the calling array.
-*   **`arr_filter(array, task)`**: Returns a new Array containing all elements for which the provided `task(item, ?index)` returns a Truthy value.
+*   **`arr_map(array, task)`**: Returns a new Array populated with the results of calling `task(item, ?index)` on every element.
+*   **`arr_filter(array, task)`**: Returns a new Array containing all elements for which `task(item, ?index)` returns a Truthy value.
 
-### 3.3 `map` Module (Map)
-*   **`map_get(map, key)`**: Returns the value associated with the specified key, or `Void` if it does not exist.
+### 3.3 `map` (Map)
+*   **`map_get(map, key)`**: Returns the value associated with the specified key, or `Void`.
 *   **`map_set(map, key, value)`**: Updates the value associated with the specified `key` in the `map`. Returns `Void`.
-    - **Security Rule**: This task MUST ONLY operate on Type 5 `Map` values (primitive key-value maps). If the first argument is a Type 6 `Opaque` handle, the engine MUST throw a **TypeMismatch (Code 4007)** to prevent script-driven mutation of Host memory.
-*   **`map_remove(map, key)`**: Removes the specified key and its associated value from the map. Returns `1` if the key was present, otherwise `Void`.
+    - **Security Rule**: This task MUST ONLY operate on Type 5 `Map` values. It cannot be used to mutate the internal properties of `Opaque` handles.
+*   **`map_remove(map, key)`**: Removes the specified key from the map. Returns `1` if the key was present, otherwise `Void`.
 *   **`map_keys(map)`**: Returns an Array of the map's keys (Strings).
 
-### 3.4 `num` Module (Number Conversion)
-Provides utilities for numeric parsing and formatting.
-*   **`num_parse(string, ?base = 0)`**: Parses a string into a Number. If `base` is `0`, the implementation SHOULD auto-detect prefixes (`0x`, `0b`, `0o`). Supports bases 2 through 36.
+### 3.4 `num` (Number)
+*   **`num_parse(string, ?base = 0)`**: Parses a string into a Number. If `base` is `0`, implementation auto-detects prefixes (`0x`, `0b`, `0o`).
 *   **`num_format(number, ?base = 10)`**: Converts a Number into its string representation in the specified base (2-36).
 
 ---
 
-## 4. Logic & Pattern Matching
+## 4. Logic & Reflection
 
-### 4.1 `math` Module
+### 4.1 `math`
 *   **`math_add(...nums)`**: Returns the sum of all arguments.
 *   **`math_sub(a, b)`**: Returns `a - b`.
 *   **`math_mul(...nums)`**: Returns the product of all arguments.
@@ -88,20 +85,13 @@ Provides utilities for numeric parsing and formatting.
 *   **`math_mod(a, b)`**: Returns the remainder of `a / b` (modulo).
 *   **`math_gt(a, b)`**: Returns `1` if `a > b`, otherwise `Void`.
 *   **`math_lt(a, b)`**: Returns `1` if `a < b`, otherwise `Void`.
-*   **`math_eq(a, b)`**: (Deprecated) Alias for `logic_eq`.
 
-### 4.2 `regex` Module
-*   **`regex_parse(pattern, ?flags = "")`**: Compiles a raw String pattern into an **`Opaque`** (RegExp) handle.
-*   **`regex_match(string, pattern)`**: Returns `1` if the `string` matches the `pattern` (**Opaque** or String), otherwise `Void`.
-*   **`regex_replace(string, pattern, replacement)`**: Returns a new string with occurrences of `pattern` (**Opaque** or String) replaced by `replacement`.
+### 4.2 `logic`
+*   **`logic_and(...args)`**: Returns the last argument if all are truthy, otherwise returns `Void`.
+*   **`logic_or(...args)`**: Returns the first truthy argument, otherwise returns `Void`.
+*   **`logic_eq(a, b)`**: Returns `1` if `a == b` (deep value equality), otherwise `Void`.
 
-### 4.3 `logic` Module
-Provides functional logical composition. Note: These tasks do NOT support short-circuiting.
-*   **`logic_and(...args)`**: Returns the last argument if all are truthy (not `Void`), otherwise returns `Void`.
-*   **`logic_or(...args)`**: Returns the first truthy argument (not `Void`), otherwise returns `Void`.
-*   **`logic_eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`. Supports all primitive types.
-
-### 4.4 `type` Module
+### 4.3 `type` (Reflection)
 Provides explicit type-checking corresponding to Hank's 8 internal Value Types. Returns `1` if the value matches the type, otherwise `Void`.
 *   **`type_isVoid(val)`**
 *   **`type_isNumber(val)`**
@@ -114,32 +104,24 @@ Provides explicit type-checking corresponding to Hank's 8 internal Value Types. 
 
 ---
 
-## 5. Serialization
+## 5. Serialization & Error Inspection
 
-### 5.1 `json` Module
-*   **`json_parse(string)`**: Parses a JSON-formatted string and returns the corresponding Hank `Map`, `Array`, `Number`, `String`, or `Void`.
-*   **`json_stringify(value)`**: Serializes a Hank `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
+### 5.1 `json`
+*   **`json_parse(string)`**: Parses a JSON string into Hank primitives.
+*   **`json_stringify(value)`**: Serializes a Hank value into a JSON string. **Note**: encounter of an `Opaque` value SHOULD return `Void`.
 
----
-
-## 6. Error Inspection
-
-### 6.1 `err` Module
-Provides tasks to inspect and format the native `Error` type (Type 8).
-*   **`err_code(error)`**: Returns the numeric error code associated with the error. Throws a Type Mismatch if the argument is not an `Error`.
-*   **`err_message(error)`**: Returns the human-readable error message. Note: The message is formatted by the Host using current localization rules.
-*   **`err_args(error)`**: Returns the Array of raw context values associated with the error.
+### 5.2 `err`
+Provides tasks to inspect the native `Error` type (Type 8).
+*   **`err_code(error)`**: Returns the numeric error code.
+*   **`err_message(error)`**: Returns the localized human-readable error message.
+*   **`err_args(error)`**: Returns the Array of context values associated with the error.
 
 ---
 
-## 7. Official Extensions
-To maintain architectural purity and the "Air Gap Principle", features that depend on the Host Platform or Operating System (such as FileSystem I/O, Networking, or Bitwise operations with platform-specific precision limits) are decoupled from the core Standard Library.
-
-Official language implementations provide these as **Extensions** which must be registered manually by the Host application.
-- **`platform`**: Tasks constrained by execution environment (e.g., bitwise operations in the `bin` module).
-- **`sys`**: Tasks for OS interaction (filesystem, processes, hardware metadata).
-
-Refer to `hank/extensions/` for detailed documentation.
+## 6. Official Extensions
+To maintain architectural purity, features that depend on the Host OS (Filesystem, Processes, Networking) are decoupled from the core StdLib. Compliant engines provide these as **Extensions** which must be registered manually.
+- **`sys`**: OS interaction (Filesystem, Processes, Hardware).
+- **`platform`**: Execution environment constraints (e.g. Bitwise operations).
 
 ---
-*Status: v1.5.0-alpha (The Hank Era)*
+*Status: v1.5.0 (The Testament)*
