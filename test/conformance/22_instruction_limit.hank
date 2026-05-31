@@ -1,14 +1,11 @@
 () {
   log_print("22 Instruction Quota")
 
-  // The runner will be configured with a 1000 instruction limit for this file specifically in the test runner.
-  
-  bomb = () {
-    // Just evaluating an empty block repeatedly
-  }
+  bomb = () {}
+  cond = () { ^ 1 }
   
   // This will throw 4008
-  loop_while(1, bomb)
+  loop_while(cond, bomb)
   
   log_print("FAIL: Should not reach here")
 }
