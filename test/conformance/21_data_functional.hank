@@ -1,9 +1,9 @@
 () {
   log_print("21 Data Manipulation & Functional")
 
-  // logic_isVoid
-  ? logic_isVoid(_) { log_print("logic_isVoid on non-existent identifier: OK") }
-  ? !logic_isVoid(0) { log_print("logic_isVoid on Number: OK") }
+  // type_isVoid
+  ? type_isVoid(_) { log_print("type_isVoid on non-existent identifier: OK") }
+  ? !type_isVoid(0) { log_print("type_isVoid on Number: OK") }
 
   // Array map
   arr = [1, 2, 3]
@@ -41,13 +41,13 @@
   // Array indexof
   arr = [10, 20, 30]
   ? math_eq(arr_indexof(arr, 20), 1) { log_print("arr_indexof (found): OK") }
-  ? logic_isVoid(arr_indexof(arr, 40)) { log_print("arr_indexof (not found): OK") }
+  ? type_isVoid(arr_indexof(arr, 40)) { log_print("arr_indexof (not found): OK") }
 
   // Map remove
   m = [ "a": 1, "b": 2 ]
   res = map_remove(m, "a")
   ? math_eq(res, 1) {
-    ? logic_isVoid(map_get(m, "a")) { log_print("map_remove: OK") }
+    ? type_isVoid(map_get(m, "a")) { log_print("map_remove: OK") }
   }
 
   log_print("21 Pass")

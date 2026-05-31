@@ -6,7 +6,7 @@
     log_error("FAIL: Should have jumped to rescue")
   } ~ (e) {
     log_print("Rescue: Caught OK")
-    ? (err_isError(e)) { log_print("err_isError: OK") }
+    ? (type_isError(e)) { log_print("type_isError: OK") }
     ? (math_eq(err_code(e), 4001)) { log_print("err_code: OK") }
     ? (math_gt(str_length(err_message(e)), 0)) { log_print("err_message: OK") }
   }

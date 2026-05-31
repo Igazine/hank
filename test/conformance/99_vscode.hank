@@ -1,0 +1,13 @@
+() {
+    mytask = () {
+        x = 10
+        ^x
+        name = "John" // Should trigger a Note/Warning
+    }
+
+    othertask = () {
+        z = 20
+        ? (z) { ^z }
+        name = "Jack" // Should not trigger a Note/Warning, because the return happened in the evaluation gate's block, so it's optional return
+    }
+}

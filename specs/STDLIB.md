@@ -99,7 +99,17 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 *   **`logic_and(...args)`**: Returns the last argument if all are truthy (not `Void`), otherwise returns `Void`.
 *   **`logic_or(...args)`**: Returns the first truthy argument (not `Void`), otherwise returns `Void`.
 *   **`logic_eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`. Supports all primitive types.
-*   **`logic_isVoid(val)`**: Returns `1` if the value is strictly `Void`, otherwise `Void`.
+
+### 4.4 `type` Module
+Provides explicit type-checking corresponding to Hank's 8 internal Value Types. Returns `1` if the value matches the type, otherwise `Void`.
+*   **`type_isVoid(val)`**
+*   **`type_isNumber(val)`**
+*   **`type_isString(val)`**
+*   **`type_isArray(val)`**
+*   **`type_isMap(val)`**
+*   **`type_isOpaque(val)`**
+*   **`type_isTask(val)`**
+*   **`type_isError(val)`**
 
 ---
 
@@ -118,7 +128,6 @@ Provides tasks to inspect and format the native `Error` type (Type 8).
 *   **`err_code(error)`**: Returns the numeric error code associated with the error. Throws a Type Mismatch if the argument is not an `Error`.
 *   **`err_message(error)`**: Returns the human-readable error message. Note: The message is formatted by the Host using current localization rules.
 *   **`err_args(error)`**: Returns the Array of raw context values associated with the error.
-*   **`err_isError(value)`**: Returns `1` if the value is of type `Error`, otherwise `Void`.
 
 ---
 
