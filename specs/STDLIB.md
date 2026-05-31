@@ -52,15 +52,23 @@ Provides unified output capabilities.
 *   **`arr_concat(...arrays)`**: Returns a new Array containing the elements of all arguments.
 *   **`arr_push(array, item)`**: Appends `item` to the end of the `array` (In-place mutation). Returns `Void`.
 *   **`arr_pop(array)`**: Removes and returns the last item of the `array`.
+*   **`arr_shift(array)`**: Removes and returns the first item of the `array`, shifting all other elements down.
+*   **`arr_unshift(array, item)`**: Inserts `item` at the beginning of the `array`. Returns `Void`.
 *   **`arr_join(array, ?delimiter = "")`**: Joins all elements into a String.
 *   **`arr_empty(array)`**: Returns `1` if the array length is 0, otherwise `Void`.
 *   **`arr_reverse(array)`**: Returns a new Array with elements reversed.
+*   **`arr_slice(array, start, ?end)`**: Returns a new Array containing a shallow copy of a portion of the array.
+*   **`arr_sort(array, ?comparator_task)`**: Sorts the array in place. If `comparator_task` is provided, it is invoked as `task(a, b)` and expects a Number result (<0, 0, >0). If omitted, elements are sorted alphanumerically.
+*   **`arr_indexof(array, item)`**: Returns the numeric index of the first occurrence of `item` (using deep-equality `logic_eq` rules), or `Void` if not found.
 *   **`arr_each(array, task)`**: Iterates over a **shallow snapshot** of the `array`. Invokes `task(item, ?index)` for each element. Returns `Void`.
+*   **`arr_map(array, task)`**: Returns a new Array populated with the results of calling a provided `task(item, ?index)` on every element in the calling array.
+*   **`arr_filter(array, task)`**: Returns a new Array containing all elements for which the provided `task(item, ?index)` returns a Truthy value.
 
 ### 3.3 `map` Module (Map)
 *   **`map_get(map, key)`**: Returns the value associated with the specified key, or `Void` if it does not exist.
 *   **`map_set(map, key, value)`**: Updates the value associated with the specified `key` in the `map`. Returns `Void`.
     - **Security Rule**: This task MUST ONLY operate on Type 5 `Map` values (primitive key-value maps). If the first argument is a Type 6 `Opaque` handle, the engine MUST throw a **TypeMismatch (Code 4007)** to prevent script-driven mutation of Host memory.
+*   **`map_remove(map, key)`**: Removes the specified key and its associated value from the map. Returns `1` if the key was present, otherwise `Void`.
 *   **`map_keys(map)`**: Returns an Array of the map's keys (Strings).
 
 ### 3.4 `num` Module (Number Conversion)
@@ -91,6 +99,7 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 *   **`logic_and(...args)`**: Returns the last argument if all are truthy (not `Void`), otherwise returns `Void`.
 *   **`logic_or(...args)`**: Returns the first truthy argument (not `Void`), otherwise returns `Void`.
 *   **`logic_eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`. Supports all primitive types.
+*   **`logic_isVoid(val)`**: Returns `1` if the value is strictly `Void`, otherwise `Void`.
 
 ---
 

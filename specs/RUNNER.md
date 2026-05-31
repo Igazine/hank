@@ -77,6 +77,7 @@ The `err.message(error)` task uses the `error.code` to look up the template and 
 ### 4.3 Error Code Reservations
 To prevent collisions between engine failures and domain-specific task failures, the following numeric ranges are reserved:
 *   **`1000 - 4999`**: Reserved for the Hank Core Engine (Lexical, Syntax, and Runtime errors).
+    *   *Examples: `4001` (Target is not a function), `4007` (Type Mismatch), `4008` (Instruction Limit Exceeded).*
 *   **`5000+`**: Reserved for Host Applications and custom Native Tasks.
 
 ### 4.4 Parse-Time Failures
@@ -84,15 +85,22 @@ Violations of the core grammar (Syntax Errors) are treated as **Fatal** and unre
 
 ## 5. Execution Lifecycle
 
-### 5.1 Working Directory (CWD)
+### 5.1 Resource Constraints (Instruction Quota)
+To protect the Host application from infinite loops or malicious Out-of-Memory (OOM) attacks, the Runner MUST support an **Instruction Quota**.
+*   The Host MAY define a `maxInstructions` numeric limit when initializing the Runner (a value of `0` denotes infinite instructions).
+*   The Interpreter MUST maintain an `instructionCount`.
+*   The Interpreter MUST increment this count upon the evaluation of any AST Node.
+*   If `instructionCount` exceeds `maxInstructions`, the Interpreter MUST immediately halt and throw a Fatal Runtime Error (Code 4008: Instruction Limit Exceeded).
+
+### 5.2 Working Directory (CWD)
 The Runner MUST establish a clear root for script execution. By convention, the Runner SHOULD set the process working directory to the location of the main `.hank` script before starting Pass 1 (Hoisting).
 
-### 5.2 Script Invocation
+### 5.3 Script Invocation
 1.  **Parse**: The Runner parses the main `.hank` file, which yields a single `Task` value.
 2.  **Args**: The Host environment provides an array of Hank `Value`s as arguments.
 3.  **Call**: The Runner executes the script by invoking `call(parsedTask, hostArguments)`.
 
-### 5.3 Exit Results
+### 5.4 Exit Results
 When the script Task completes, the Runner receives the final `Value`.
 *   **Standard Exit Protocol**:
     *   `Number`: Return the value to the Host environment (e.g., as an OS exit code).
