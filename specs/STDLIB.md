@@ -12,93 +12,93 @@ This document defines the official Hank Standard Library. Official language impl
 
 ### 2.1 `env` Module (State Bridge)
 Provides a key-value state bridge between the Hank script and the Host Runner. This is the primary mechanism for Inter-Script Communication and signaling.
-*   **`get(key)`**: Returns the value associated with `key`, or `Void`.
-*   **`set(key, value)`**: Updates the value associated with `key` in the Host's environment. Triggers a Host-defined side effect (callback). Returns `Void`.
-*   **`keys()`**: Returns an Array of all available keys (Strings).
+*   **`env_get(key)`**: Returns the value associated with `key`, or `Void`.
+*   **`env_set(key, value)`**: Updates the value associated with `key` in the Host's environment. Triggers a Host-defined side effect (callback). Returns `Void`.
+*   **`env_keys()`**: Returns an Array of all available keys (Strings).
 
 ### 2.2 `runtime` Module (Engine Control)
 Provides interaction with the Hank virtual machine itself.
-*   **`halt(?code = 0)`**: Immediately terminates script execution. The `code` (Number) is returned to the Host.
-*   **`elapsedTime()`**: Returns a high-precision monotonic timestamp (Hank Number) in **milliseconds** relative to the start of the engine.
-*   **`signal(value)`**: Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
+*   **`runtime_halt(?code = 0)`**: Immediately terminates script execution. The `code` (Number) is returned to the Host.
+*   **`runtime_elapsedTime()`**: Returns a high-precision monotonic timestamp (Hank Number) in **milliseconds** relative to the start of the engine.
+*   **`runtime_signal(value)`**: Emits an event signal to the Host Runner with the provided Hank value. Returns `Void`.
 
 ### 2.3 `loop` Module (Iteration)
 Provides safe, purely symbolic loop control.
-*   **`while(condition_task, execution_task)`**: Repeatedly invokes `execution_task()` as long as `condition_task()` returns a truthy value. Returns the result of the last successful execution of `execution_task()`, or `Void` if it never ran.
-*   **`break()`**: Immediately halts the execution of the innermost loop.
+*   **`loop_while(condition_task, execution_task)`**: Repeatedly invokes `execution_task()` as long as `condition_task()` returns a truthy value. Returns the result of the last successful execution of `execution_task()`, or `Void` if it never ran.
+*   **`loop_break()`**: Immediately halts the execution of the innermost loop.
 
 ### 2.4 `log` Module
 Provides unified output capabilities.
-*   **`print(...args)`**: Serializes arguments and outputs to the standard stream.
+*   **`log_print(...args)`**: Serializes arguments and outputs to the standard stream.
     - **Recommended Serialization**: Implementations SHOULD represent `Void` as the string `"Void"` and remove trailing `.0` from Numbers to maintain ecosystem consistency. Arrays and Maps MAY be represented by type labels (e.g., `"[Array]"`) or full JSON serialization depending on Host complexity.
-*   **`error(...args)`**: Outputs to the error stream.
-*   **`warn(...args)`**: Outputs with a "warning" decoration.
+*   **`log_error(...args)`**: Outputs to the error stream.
+*   **`log_warn(...args)`**: Outputs with a "warning" decoration.
 
 ---
 
 ## 3. Data Manipulation
 
 ### 3.1 `str` Module (String)
-*   **`length(string)`**: Returns the character count of the string as a Number.
-*   **`concat(...args)`**: Joins all arguments into a single String.
-*   **`format(template, ...args)`**: Replaces `%1`, `%2`, etc. in the `template` with the corresponding serialized argument.
-*   **`split(string, delimiter)`**: Returns an Array of substrings.
-*   **`replace(string, search, replacement)`**: Returns a new string with all occurrences replaced.
-*   **`trim(string)`**: Returns a new string with leading/trailing whitespace removed.
+*   **`str_length(string)`**: Returns the character count of the string as a Number.
+*   **`str_concat(...args)`**: Joins all arguments into a single String.
+*   **`str_format(template, ...args)`**: Replaces `%1`, `%2`, etc. in the `template` with the corresponding serialized argument.
+*   **`str_split(string, delimiter)`**: Returns an Array of substrings.
+*   **`str_replace(string, search, replacement)`**: Returns a new string with all occurrences replaced.
+*   **`str_trim(string)`**: Returns a new string with leading/trailing whitespace removed.
 
 ### 3.2 `arr` Module (Array)
-*   **`length(array)`**: Returns the item count of the array as a Number.
-*   **`get(array, index)`**: Returns the item at the specified index, or `Void` if out of bounds.
-*   **`concat(...arrays)`**: Returns a new Array containing the elements of all arguments.
-*   **`push(array, item)`**: Appends `item` to the end of the `array` (In-place mutation). Returns `Void`.
-*   **`pop(array)`**: Removes and returns the last item of the `array`.
-*   **`join(array, ?delimiter = "")`**: Joins all elements into a String.
-*   **`empty(array)`**: Returns `1` if the array length is 0, otherwise `Void`.
-*   **`reverse(array)`**: Returns a new Array with elements reversed.
-*   **`each(array, task)`**: Iterates over a **shallow snapshot** of the `array`. Invokes `task(item, ?index)` for each element. Returns `Void`.
+*   **`arr_length(array)`**: Returns the item count of the array as a Number.
+*   **`arr_get(array, index)`**: Returns the item at the specified index, or `Void` if out of bounds.
+*   **`arr_concat(...arrays)`**: Returns a new Array containing the elements of all arguments.
+*   **`arr_push(array, item)`**: Appends `item` to the end of the `array` (In-place mutation). Returns `Void`.
+*   **`arr_pop(array)`**: Removes and returns the last item of the `array`.
+*   **`arr_join(array, ?delimiter = "")`**: Joins all elements into a String.
+*   **`arr_empty(array)`**: Returns `1` if the array length is 0, otherwise `Void`.
+*   **`arr_reverse(array)`**: Returns a new Array with elements reversed.
+*   **`arr_each(array, task)`**: Iterates over a **shallow snapshot** of the `array`. Invokes `task(item, ?index)` for each element. Returns `Void`.
 
 ### 3.3 `map` Module (Map)
-*   **`get(map, key)`**: Returns the value associated with the specified key, or `Void` if it does not exist.
-*   **`set(map, key, value)`**: Updates the value associated with the specified `key` in the `map`. Returns `Void`.
+*   **`map_get(map, key)`**: Returns the value associated with the specified key, or `Void` if it does not exist.
+*   **`map_set(map, key, value)`**: Updates the value associated with the specified `key` in the `map`. Returns `Void`.
     - **Security Rule**: This task MUST ONLY operate on Type 5 `Map` values (primitive key-value maps). If the first argument is a Type 6 `Opaque` handle, the engine MUST throw a **TypeMismatch (Code 4007)** to prevent script-driven mutation of Host memory.
-*   **`keys(map)`**: Returns an Array of the map's keys (Strings).
+*   **`map_keys(map)`**: Returns an Array of the map's keys (Strings).
 
 ### 3.4 `num` Module (Number Conversion)
 Provides utilities for numeric parsing and formatting.
-*   **`parse(string, ?base = 0)`**: Parses a string into a Number. If `base` is `0`, the implementation SHOULD auto-detect prefixes (`0x`, `0b`, `0o`). Supports bases 2 through 36.
-*   **`format(number, ?base = 10)`**: Converts a Number into its string representation in the specified base (2-36).
+*   **`num_parse(string, ?base = 0)`**: Parses a string into a Number. If `base` is `0`, the implementation SHOULD auto-detect prefixes (`0x`, `0b`, `0o`). Supports bases 2 through 36.
+*   **`num_format(number, ?base = 10)`**: Converts a Number into its string representation in the specified base (2-36).
 
 ---
 
 ## 4. Logic & Pattern Matching
 
 ### 4.1 `math` Module
-*   **`add(...nums)`**: Returns the sum of all arguments.
-*   **`sub(a, b)`**: Returns `a - b`.
-*   **`mul(...nums)`**: Returns the product of all arguments.
-*   **`div(a, b)`**: Returns `a / b`.
-*   **`gt(a, b)`**: Returns `1` if `a > b`, otherwise `Void`.
-*   **`lt(a, b)`**: Returns `1` if `a < b`, otherwise `Void`.
-*   **`eq(a, b)`**: (Deprecated) Alias for `logic.eq`.
+*   **`math_add(...nums)`**: Returns the sum of all arguments.
+*   **`math_sub(a, b)`**: Returns `a - b`.
+*   **`math_mul(...nums)`**: Returns the product of all arguments.
+*   **`math_div(a, b)`**: Returns `a / b`.
+*   **`math_gt(a, b)`**: Returns `1` if `a > b`, otherwise `Void`.
+*   **`math_lt(a, b)`**: Returns `1` if `a < b`, otherwise `Void`.
+*   **`math_eq(a, b)`**: (Deprecated) Alias for `logic_eq`.
 
 ### 4.2 `regex` Module
-*   **`parse(pattern, ?flags = "")`**: Compiles a raw String pattern into an **`Opaque`** (RegExp) handle.
-*   **`match(string, pattern)`**: Returns `1` if the `string` matches the `pattern` (**Opaque** or String), otherwise `Void`.
-*   **`replace(string, pattern, replacement)`**: Returns a new string with occurrences of `pattern` (**Opaque** or String) replaced by `replacement`.
+*   **`regex_parse(pattern, ?flags = "")`**: Compiles a raw String pattern into an **`Opaque`** (RegExp) handle.
+*   **`regex_match(string, pattern)`**: Returns `1` if the `string` matches the `pattern` (**Opaque** or String), otherwise `Void`.
+*   **`regex_replace(string, pattern, replacement)`**: Returns a new string with occurrences of `pattern` (**Opaque** or String) replaced by `replacement`.
 
 ### 4.3 `logic` Module
 Provides functional logical composition. Note: These tasks do NOT support short-circuiting.
-*   **`and(...args)`**: Returns the last argument if all are truthy (not `Void`), otherwise returns `Void`.
-*   **`or(...args)`**: Returns the first truthy argument (not `Void`), otherwise returns `Void`.
-*   **`eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`. Supports all primitive types.
+*   **`logic_and(...args)`**: Returns the last argument if all are truthy (not `Void`), otherwise returns `Void`.
+*   **`logic_or(...args)`**: Returns the first truthy argument (not `Void`), otherwise returns `Void`.
+*   **`logic_eq(a, b)`**: Returns `1` if `a == b` (value equality), otherwise `Void`. Supports all primitive types.
 
 ---
 
 ## 5. Serialization
 
 ### 5.1 `json` Module
-*   **`parse(string)`**: Parses a JSON-formatted string and returns the corresponding Hank `Map`, `Array`, `Number`, `String`, or `Void`.
-*   **`stringify(value)`**: Serializes a Hank `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
+*   **`json_parse(string)`**: Parses a JSON-formatted string and returns the corresponding Hank `Map`, `Array`, `Number`, `String`, or `Void`.
+*   **`json_stringify(value)`**: Serializes a Hank `Value` into a JSON-formatted String. **Note**: If an `Opaque` value is encountered, the task MUST either return `Void` or trigger a Host Error, as Opaque state is not serializable.
 
 ---
 
@@ -106,10 +106,10 @@ Provides functional logical composition. Note: These tasks do NOT support short-
 
 ### 6.1 `err` Module
 Provides tasks to inspect and format the native `Error` type (Type 8).
-*   **`code(error)`**: Returns the numeric error code associated with the error. Throws a Type Mismatch if the argument is not an `Error`.
-*   **`message(error)`**: Returns the human-readable error message. Note: The message is formatted by the Host using current localization rules.
-*   **`args(error)`**: Returns the Array of raw context values associated with the error.
-*   **`isError(value)`**: Returns `1` if the value is of type `Error`, otherwise `Void`.
+*   **`err_code(error)`**: Returns the numeric error code associated with the error. Throws a Type Mismatch if the argument is not an `Error`.
+*   **`err_message(error)`**: Returns the human-readable error message. Note: The message is formatted by the Host using current localization rules.
+*   **`err_args(error)`**: Returns the Array of raw context values associated with the error.
+*   **`err_isError(value)`**: Returns `1` if the value is of type `Error`, otherwise `Void`.
 
 ---
 

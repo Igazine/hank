@@ -43,7 +43,7 @@ AssignStmt     ::= Identifier "=" Expr
 FlowControl    ::= "?" Expr Block [ ":" Block ] [ "~" [ "(" Identifier ")" ] Block ]
 Block          ::= "{" { Statement } "}"
 
-Expr           ::= PrimaryExpr { "." Identifier [ "(" ArgList ")" ] }
+Expr           ::= PrimaryExpr
 PrimaryExpr    ::= Literal | IdentExpr | FuncDef | FuncCall | UnaryExpr | "(" Expr ")"
 
 IdentExpr      ::= [ "#" ] Identifier
@@ -83,7 +83,6 @@ AnyCharExceptNewline ::= Char - "\n"
     - **`Array` Literal**: In all other cases, it is parsed as an Array.
 *   **Trailing Commas**: Both Arrays and Maps support optional trailing commas to improve Git diff readability.
 *   **Block Syntax**: The `{}` characters are strictly reserved for structural `Blocks` (lists of executable statements). Standalone blocks are NOT valid statements; they appear only as components of `FuncDef` or `FlowControl`.
-*   **Property Mutation**: Maps and Arrays are strictly immutable via dot-syntax; `Field` access is for retrieval only.
 
 ## 4. Abstract Syntax Tree (AST) Contract
 A compliant Parser MUST emit an AST constructable from the following logical nodes:
@@ -92,7 +91,6 @@ A compliant Parser MUST emit an AST constructable from the following logical nod
 *   **`Assign(name, expr)`**: Binds the evaluated result of `expr` to `name` in the current scope. **Evaluates to the assigned value.**
 *   **`Literal(value)`**: A concrete `String`, `Number`, `Array`, or `Map`.
 *   **`Ident(name, isCore)`**: A variable lookup. If `isCore` is true (triggered by `#`), lookup MUST happen exclusively in the `coreScope`.
-*   **`Field(collection, fieldName)`**: Property retrieval from a Map, Array, or String.
 *   **`FuncDef(params, body)`**: Defines a User Task.
 *   **`FuncCall(target, args)`**: Executes a Task.
 *   **`UnOp(operator, target)`**: Prefix operators (`!`, `^`).

@@ -40,7 +40,7 @@ The Runner MUST initialize the Interpreter with a `coreScope` pre-populated with
 To maintain architectural consistency, all native capabilities (including the Standard Library) are delivered as **Extensions**. A compliant Runner SHOULD provide a mechanism to register objects adhering to the following interface:
 
 *   **`name` (Getter/Property)**: A String identifier for the extension (e.g., `"StdLib"`, `"SysExtension"`).
-*   **`getModules() -> Map<String, Map<String, NativeFunc>>`**: Returns a nested map where the top-level keys are Module names, and the values are maps of Task names to `NativeFunc` implementations.
+*   **`getTasks() -> Map<String, NativeFunc>`**: Returns a flat map of Task names to `NativeFunc` implementations. Task names SHOULD include prefixes (e.g., `"math_add"`) to avoid collisions.
 
 ### 3.2 Native Task Interface
 A Native Task is a function defined in the host language with the following signature:
