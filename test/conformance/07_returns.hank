@@ -1,22 +1,22 @@
 () {
-  log.print("07 Returns (Implicit & Explicit)")
+  log_print("07 Returns (Implicit & Explicit)")
 
   // 1. Implicit Task Return
   t1 = () {
     a = 1
     "task result"
   }
-  ? regex.match(t1(), "task result") { log.print("Implicit Task return: OK") }
+  ? regex_match(t1(), "task result") { log_print("Implicit Task return: OK") }
 
   // 2. Explicit Return
   t2 = (n) {
-    ? math.gt(n, 10) {
+    ? math_gt(n, 10) {
        ^ "early exit"
     }
     ^ "normal exit"
   }
-  ? regex.match(t2(20), "early exit") { log.print("Explicit early return: OK") }
-  ? regex.match(t2(5), "normal exit") { log.print("Explicit normal return: OK") }
+  ? regex_match(t2(20), "early exit") { log_print("Explicit early return: OK") }
+  ? regex_match(t2(5), "normal exit") { log_print("Explicit normal return: OK") }
 
-  log.print("07 Pass")
+  log_print("07 Pass")
 }

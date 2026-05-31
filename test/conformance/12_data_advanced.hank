@@ -1,41 +1,41 @@
 () {
-  log.print("12 Advanced Data Modules")
+  log_print("12 Advanced Data Modules")
 
-  // 1. map.get (Dynamic Access)
+  // 1. map_get (Dynamic Access)
   o = [ "name": "tamas", "age": 30 ]
   key = "name"
-  ? (math.eq(map.get(o, key), "tamas")) { log.print("map.get: OK") }
-  ? (!map.get(o, "missing")) { log.print("map.get (missing): OK") }
+  ? (math_eq(map_get(o, key), "tamas")) { log_print("map_get: OK") }
+  ? (!map_get(o, "missing")) { log_print("map_get (missing): OK") }
 
-  // 2. arr.each (Snapshot Iteration)
+  // 2. arr_each (Snapshot Iteration)
   items = [1, 2, 3]
-  log.print("Starting each with mutation...")
-  arr.each(items, (item, idx) {
-    ? (math.eq(item, 1)) {
-      arr.push(items, 4) // Mutate original array
+  log_print("Starting each with mutation...")
+  arr_each(items, (item, idx) {
+    ? (math_eq(item, 1)) {
+      arr_push(items, 4) // Mutate original array
     }
-    log.print(str.format("Item %1: %2", idx, item))
+    log_print(str_format("Item %1: %2", idx, item))
   })
   // items should now be [1, 2, 3, 4] but only 3 iterations should have occurred.
-  ? (math.eq(arr.length(items), 4)) { log.print("Original array mutated: OK") }
+  ? (math_eq(arr_length(items), 4)) { log_print("Original array mutated: OK") }
 
-  // 3. arr.each (Local Param Scope)
+  // 3. arr_each (Local Param Scope)
   // We use ?idx to satisfy strict arity enforcement
-  arr.each([10], (val, ?idx) {
+  arr_each([10], (val, ?idx) {
     val = 20 // Local reassignment
   })
   // 4. JSON & Opaque State (Non-serializability)
-  re = regex.parse("test")
-  json_res = json.stringify([ "key": re ])
+  re = regex_parse("test")
+  json_res = json_stringify([ "key": re ])
   // Should either evaluate to Void or the object without the opaque key
   ? (!json_res) {
-    log.print("Opaque non-serializability (Void): OK")
+    log_print("Opaque non-serializability (Void): OK")
   } : {
     // If it returns a string, it must not contain the opaque reference in a way that breaks parity
-    ? (!regex.match(json_res, "test")) {
-        log.print("Opaque non-serializability (Omitted): OK")
+    ? (!regex_match(json_res, "test")) {
+        log_print("Opaque non-serializability (Omitted): OK")
     }
   }
 
-  log.print("12 Pass")
+  log_print("12 Pass")
 }

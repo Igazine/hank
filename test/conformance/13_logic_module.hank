@@ -1,17 +1,17 @@
 () {
-  log.print("13 Logic Module (and, or)")
+  log_print("13 Logic Module (and, or)")
 
-  // logic.and tests
-  ? math.eq(logic.and(1, 2, 3), 3) { log.print("logic.and(all truthy): OK") }
-  ? !logic.and(1, Void, 3) { log.print("logic.and(contains Void): OK") }
-  ? math.eq(logic.and("hello"), "hello") { log.print("logic.and(single arg): OK") }
-  ? !logic.and() { log.print("logic.and(empty): OK") }
+  // logic_and tests
+  ? math_eq(logic_and(1, 2, 3), 3) { log_print("logic_and(all truthy): OK") }
+  ? !logic_and(1, Void, 3) { log_print("logic_and(contains Void): OK") }
+  ? math_eq(logic_and("hello"), "hello") { log_print("logic_and(single arg): OK") }
+  ? !logic_and() { log_print("logic_and(empty): OK") }
 
-  // logic.or tests
-  ? math.eq(logic.or(Void, 0, 1), 0) { log.print("logic.or(finds first truthy, even 0): OK") }
-  ? math.eq(logic.or("a", "b"), "a") { log.print("logic.or(first truthy): OK") }
-  ? !logic.or(Void, Void) { log.print("logic.or(all Void): OK") }
-  ? !logic.or() { log.print("logic.or(empty): OK") }
+  // logic_or tests
+  ? math_eq(logic_or(Void, 0, 1), 0) { log_print("logic_or(finds first truthy, even 0): OK") }
+  ? math_eq(logic_or("a", "b"), "a") { log_print("logic_or(first truthy): OK") }
+  ? !logic_or(Void, Void) { log_print("logic_or(all Void): OK") }
+  ? !logic_or() { log_print("logic_or(empty): OK") }
 
-  log.print("13 Pass")
+  log_print("13 Pass")
 }

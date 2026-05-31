@@ -1,23 +1,23 @@
 () {
-  log.print("01 Literals & Lexical Grammar")
+  log_print("01 Literals & Lexical Grammar")
 
   s1 = "double quotes"
   s2 = 'single quotes'
-  ? s1 { log.print("Double quotes: OK") }
-  ? s2 { log.print("Single quotes: OK") }
+  ? s1 { log_print("Double quotes: OK") }
+  ? s2 { log_print("Single quotes: OK") }
 
   n1 = 123.456
   n2 = -100
-  ? math.add(n1, n2) { log.print("Numbers (float and negative): OK") }
+  ? math_add(n1, n2) { log_print("Numbers (float and negative): OK") }
 
   arr = [1, "two", [3]]
-  ? #arr.length(arr) { log.print("Arrays: OK") }
+  ? #arr_length(arr) { log_print("Arrays: OK") }
 
   m = [ "key": "value", "nested": [ "a": 1 ] ]
-  ? m.key { log.print("Maps: OK") }
+  ? map_get(m, "key") { log_print("Maps: OK") }
 
   // VERIFY: The following line MUST trigger a syntax error in v1.2.0+
   // re = /test/i
 
-  log.print("01 Pass")
+  log_print("01 Pass")
 }

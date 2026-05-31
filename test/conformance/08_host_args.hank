@@ -1,4 +1,4 @@
 (name, ?greeting = "Hello") {
-  log.print(str.format("%1, %2", greeting, name))
-  log.print("08 Pass")
+  log_print(str_format("%1, %2", greeting, name))
+  log_print("08 Pass")
 }

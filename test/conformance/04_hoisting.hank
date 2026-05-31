@@ -1,13 +1,13 @@
 () {
-  log.print("04 Two-Pass Hoisting")
+  log_print("04 Two-Pass Hoisting")
 
   // Call before definition
   val = hoisted_task(10)
-  ? math.eq(val, 20) { log.print("Task hoisting: OK") }
+  ? math_eq(val, 20) { log_print("Task hoisting: OK") }
 
   hoisted_task = (n) {
-    ^ math.add(n, n)
+    ^ math_add(n, n)
   }
 
-  log.print("04 Pass")
+  log_print("04 Pass")
 }

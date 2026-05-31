@@ -1,27 +1,27 @@
 () {
-  log.print("16 Chained Assignments")
+  log_print("16 Chained Assignments")
 
   // Chained assignment
   a = b = c = 6
   
-  log.print(str.format("a: %1", a))
-  log.print(str.format("b: %1", b))
-  log.print(str.format("c: %1", c))
+  log_print(str_format("a: %1", a))
+  log_print(str_format("b: %1", b))
+  log_print(str_format("c: %1", c))
 
-  ? logic.and(logic.eq(a, 6), logic.eq(b, 6), logic.eq(c, 6)) {
-    log.print("Chained assignment: OK")
+  ? logic_and(logic_eq(a, 6), logic_eq(b, 6), logic_eq(c, 6)) {
+    log_print("Chained assignment: OK")
   } : {
-    log.error("Chained assignment: FAIL")
+    log_error("Chained assignment: FAIL")
   }
 
   // Assignment as expression
   res = (x = 10)
-  log.print(str.format("x: %1, res: %2", x, res))
-  ? logic.eq(res, 10) {
-    log.print("Assignment expression: OK")
+  log_print(str_format("x: %1, res: %2", x, res))
+  ? logic_eq(res, 10) {
+    log_print("Assignment expression: OK")
   } : {
-    log.error("Assignment expression: FAIL")
+    log_error("Assignment expression: FAIL")
   }
 
-  log.print("16 Pass")
+  log_print("16 Pass")
 }

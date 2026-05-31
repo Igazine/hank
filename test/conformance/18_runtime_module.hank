@@ -1,32 +1,32 @@
 () {
-  log.print("18 Loop & Runtime Module")
+  log_print("18 Loop & Runtime Module")
 
   // elapsedTime
-  t1 = runtime.elapsedTime()
-  ? (math.gt(t1, 0)) { log.print("runtime.elapsedTime: OK") }
+  t1 = runtime_elapsedTime()
+  ? (math_gt(t1, 0)) { log_print("runtime_elapsedTime: OK") }
 
   // while loop
   // Count from 0 to 5 using array length to mutate state across closures
   counter_arr = []
-  cond = () { math.lt(arr.length(counter_arr), 5) }
+  cond = () { math_lt(arr_length(counter_arr), 5) }
   body = () {
-    arr.push(counter_arr, 1)
+    arr_push(counter_arr, 1)
   }
 
-  loop.while(cond, body)
-  ? (math.eq(arr.length(counter_arr), 5)) { log.print("loop.while: OK") }
+  loop_while(cond, body)
+  ? (math_eq(arr_length(counter_arr), 5)) { log_print("loop_while: OK") }
 
   // break loop
   counter_arr2 = []
   cond2 = () { 1 } // Infinite loop
   body2 = () {
-    ? (math.eq(arr.length(counter_arr2), 3)) {
-        loop.break()
+    ? (math_eq(arr_length(counter_arr2), 3)) {
+        loop_break()
     }
-    arr.push(counter_arr2, 1)
+    arr_push(counter_arr2, 1)
   }
-  loop.while(cond2, body2)
-  ? (math.eq(arr.length(counter_arr2), 3)) { log.print("loop.break: OK") }
+  loop_while(cond2, body2)
+  ? (math_eq(arr_length(counter_arr2), 3)) { log_print("loop_break: OK") }
 
-  log.print("18 Pass")
+  log_print("18 Pass")
 }

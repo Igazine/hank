@@ -1,18 +1,18 @@
 () {
-  log.print("20 Grammar Hardening & Edge Cases")
+  log_print("20 Grammar Hardening & Edge Cases")
 
   // 1. Multiple decimal points MUST fail
-  // ? 1.2.3 { log.error("FAIL: Multiple dots allowed") } ~ { log.print("Multiple dots: Caught OK") }
+  // ? 1.2.3 { log_error("FAIL: Multiple dots allowed") } ~ { log_print("Multiple dots: Caught OK") }
 
   // 2. Illegal identifier suffixes MUST fail
-  // ? 100a { log.error("FAIL: Illegal suffix allowed") } ~ { log.print("Illegal suffix: Caught OK") }
+  // ? 100a { log_error("FAIL: Illegal suffix allowed") } ~ { log_print("Illegal suffix: Caught OK") }
 
   // 3. Standalone blocks MUST fail
-  // ? { 1 } { log.error("FAIL: Standalone block allowed") } ~ { log.print("Standalone block: Caught OK") }
+  // ? { 1 } { log_error("FAIL: Standalone block allowed") } ~ { log_print("Standalone block: Caught OK") }
 
   // NOTE: The above are commented out because they are FATAL SYNTAX ERRORS.
   // Conformance runners should attempt to parse files containing these 
   // and verify they DO NOT parse successfully.
   
-  log.print("20 Pass (Conceptual)")
+  log_print("20 Pass (Conceptual)")
 }

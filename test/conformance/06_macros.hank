@@ -2,14 +2,14 @@
 @ "resources/recursive_a"
 
 () {
-  log.print("06 Parse-Time Macros (@)")
+  log_print("06 Parse-Time Macros (@)")
 
   // Shorthand and derivation
-  ? math.eq(sum(10, 20), 30) { log.print("Macro inclusion & task derivation: OK") }
+  ? math_eq(sum(10, 20), 30) { log_print("Macro inclusion & task derivation: OK") }
 
   // Recursion
   recursive_a("hello from recursion")
-  log.print("Recursive macro expansion: OK")
+  log_print("Recursive macro expansion: OK")
 
   // Evaluation result (Void)
   // We test that a task concluding with a macro call returns Void.
@@ -17,7 +17,7 @@
     @ "resources/sum"
   }
   res = test_void()
-  ? !res { log.print("MacroInclude (via Task result) evaluates to Void: OK") }
+  ? !res { log_print("MacroInclude (via Task result) evaluates to Void: OK") }
 
-  log.print("06 Pass")
+  log_print("06 Pass")
 }

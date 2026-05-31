@@ -1,16 +1,16 @@
 () {
-  log.print("17 Number Conversion Module")
+  log_print("17 Number Conversion Module")
 
   // Parsing & Auto-detection
-  ? math.eq(num.parse("255"), 255) { log.print("num.parse (dec): OK") }
-  ? math.eq(num.parse("0xFF"), 255) { log.print("num.parse (hex): OK") }
-  ? math.eq(num.parse("0b1010"), 10) { log.print("num.parse (bin): OK") }
-  ? math.eq(num.parse("0o77"), 63) { log.print("num.parse (oct): OK") }
+  ? math_eq(num_parse("255"), 255) { log_print("num_parse (dec): OK") }
+  ? math_eq(num_parse("0xFF"), 255) { log_print("num_parse (hex): OK") }
+  ? math_eq(num_parse("0b1010"), 10) { log_print("num_parse (bin): OK") }
+  ? math_eq(num_parse("0o77"), 63) { log_print("num_parse (oct): OK") }
 
   // Custom Radix (up to 36)
-  ? math.eq(num.parse("zz", 36), 1295) { log.print("num.parse (base36): OK") }
-  ? math.eq(num.format(1295, 36), "zz") { log.print("num.format (base36): OK") }
-  ? math.eq(num.format(255, 16), "ff") { log.print("num.format (hex): OK") }
+  ? math_eq(num_parse("zz", 36), 1295) { log_print("num_parse (base36): OK") }
+  ? math_eq(num_format(1295, 36), "zz") { log_print("num_format (base36): OK") }
+  ? math_eq(num_format(255, 16), "ff") { log_print("num_format (hex): OK") }
 
-  log.print("17 Pass")
+  log_print("17 Pass")
 }

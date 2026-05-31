@@ -1,32 +1,32 @@
 () {
-  log.print("05 Task Parameters")
+  log_print("05 Task Parameters")
 
   // 1. Required
   req = (a) { ^ a }
-  ? req(1) { log.print("Required parameter: OK") }
+  ? req(1) { log_print("Required parameter: OK") }
 
   // 2. Optional
   opt = (?a) { ^ a }
-  ? !opt() { log.print("Optional parameter (omitted): OK") }
-  ? opt(1) { log.print("Optional parameter (provided): OK") }
+  ? !opt() { log_print("Optional parameter (omitted): OK") }
+  ? opt(1) { log_print("Optional parameter (provided): OK") }
 
   // 3. Default
   def = (a = 100) { ^ a }
   val = def()
-  ? math.eq(val, 100) { log.print("Default parameter (omitted): OK") }
-  ? math.eq(def(200), 200) { log.print("Default parameter (provided): OK") }
+  ? math_eq(val, 100) { log_print("Default parameter (omitted): OK") }
+  ? math_eq(def(200), 200) { log_print("Default parameter (provided): OK") }
 
   // 4. Sequential Referencing
   ref = (a, b = a) { ^ b }
-  ? math.eq(ref(50), 50) { log.print("Default parameter forward referencing: OK") }
+  ? math_eq(ref(50), 50) { log_print("Default parameter forward referencing: OK") }
 
   // 5. Arity Enforcement
   ? 1 {
     def(1, 2) // Too many args
-    log.print("Arity Failure: Host did not throw error")
+    log_print("Arity Failure: Host did not throw error")
   } ~ (err) {
-    log.print(str.format("Arity Enforcement: OK (%1)", err))
+    log_print(str_format("Arity Enforcement: OK (%1)", err))
   }
 
-  log.print("05 Pass")
+  log_print("05 Pass")
 }
