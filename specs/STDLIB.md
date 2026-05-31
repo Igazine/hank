@@ -85,6 +85,7 @@ Provides utilities for numeric parsing and formatting.
 *   **`math_sub(a, b)`**: Returns `a - b`.
 *   **`math_mul(...nums)`**: Returns the product of all arguments.
 *   **`math_div(a, b)`**: Returns `a / b`.
+*   **`math_mod(a, b)`**: Returns the remainder of `a / b` (modulo).
 *   **`math_gt(a, b)`**: Returns `1` if `a > b`, otherwise `Void`.
 *   **`math_lt(a, b)`**: Returns `1` if `a < b`, otherwise `Void`.
 *   **`math_eq(a, b)`**: (Deprecated) Alias for `logic_eq`.
