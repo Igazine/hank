@@ -1,7 +1,7 @@
 # Hank
 
-> [!WARNING]
-> **Note on Stability:** Although Hank's execution model and syntax grammar are highly stable and rigorously tested, the project is currently in the **Alpha** phase. We may introduce breaking changes to the core specifications (such as standard library behavior or Runner APIs) and engine implementations as we refine the ecosystem. Please use Hank with care and check the repository frequently for updates.
+> [!IMPORTANT]
+> **Version 1.5.0**: This is the first official release of the Hank ecosystem. While the language is production-ready, we recommend following the [Standard Library Specification](specs/STDLIB.md) closely as we continue to expand the native task namespaces.
 
 Hank is a purely symbolic, instruction-oriented embeddable language designed to bring secure, dynamic automation to any host application. Built on a strict air-gapped execution model, Hank has zero built-in I/O, guaranteeing that scripts cannot access the filesystem, network, or OS without explicit delegation. This makes it the perfect predictable environment for game scripting, microservice orchestration, and user-facing plugin systems. With a highly readable, keyword-less syntax and universal cross-platform parity, Hank seamlessly bridges the gap between static configuration files and complex general-purpose programming.
 
@@ -11,6 +11,17 @@ Hank is a purely symbolic, instruction-oriented embeddable language designed to 
 3. **Dumb Variables**: Inert data containers without methods or prototypes.
 4. **Explicit Instructions**: No binary operators; every transformation is a Task call.
 5. **Universal Parity**: Bit-perfect execution parity across all target languages.
+
+## Official Tooling
+
+### Hank for VSCode
+The recommended way to develop Hank scripts is using the official **[Hank VSCode Extension](https://github.com/Igazine/hank-vscode)**.
+
+*   **Intelligent Autocomplete**: Context-aware suggestions for all native and custom tasks.
+*   **Rich Hover Documentation**: Instant tooltips with signatures and usage examples.
+*   **Cross-File Navigation**: Go to Definition (Ctrl+Click) support, even across macro includes.
+*   **Semantic Insights**: Real-time explanations for Shadowing and Evaluate-Then-Bind behaviors.
+*   **Embedded Execution**: Run scripts instantly via the "Play" button with live log streaming.
 
 ## Officially Supported Implementations
 
