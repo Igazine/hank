@@ -25,7 +25,7 @@ The recommended way to develop Hank scripts is using the official **[Hank VSCode
 
 ## Officially Supported Implementations
 
-Hank is designed to be embedded in any host environment. The following implementations are maintained as Tier-1 libraries:
+Hank is designed to be embedded in any host environment, therefore it does not have a default implementation or a runner. The following implementations are maintained as Tier-1 libraries:
 
 
 | Engine | Language | Repository | Build Status |
